@@ -16,11 +16,11 @@
 package org.kuali.kra.protocol.actions.copy;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.sys.framework.auth.SystemAuthorizationService;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
-import org.kuali.kra.bo.CustomAttributeDocument;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.ProtocolDocumentBase;
 import org.kuali.kra.protocol.actions.ProtocolActionBase;
@@ -109,16 +109,12 @@ public abstract class ProtocolCopyServiceImplBase<GenericProtocolDocument extend
         this.kraAuthorizationService = kraAuthorizationService;
     }
     
-    /**
-     * @see org.kuali.kra.protocol.actions.copy.ProtocolCopyService#copyProtocol(org.kuali.kra.protocol.ProtocolDocumentBase)
-     */
+    @Override
     public GenericProtocolDocument copyProtocol(GenericProtocolDocument srcDoc) throws Exception {
         return copyProtocol(srcDoc, getProtocolNumberServiceHook().generateProtocolNumber(), false);
     }
     
-    /**
-     * @see org.kuali.kra.protocol.actions.copy.ProtocolCopyService#copyProtocol(org.kuali.kra.protocol.ProtocolDocumentBase, java.lang.String)
-     */
+    @Override
     public GenericProtocolDocument copyProtocol(GenericProtocolDocument srcDoc, String protocolNumber, boolean isAmendmentRenewal) throws Exception {
         GenericProtocolDocument newDoc = createNewProtocol(srcDoc, protocolNumber, isAmendmentRenewal);
         

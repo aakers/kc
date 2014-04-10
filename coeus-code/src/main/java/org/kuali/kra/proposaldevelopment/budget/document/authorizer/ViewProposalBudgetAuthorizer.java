@@ -15,12 +15,12 @@
  */
 package org.kuali.kra.proposaldevelopment.budget.document.authorizer;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.workflow.KcWorkflowService;
 import org.kuali.kra.budget.document.BudgetDocument;
 import org.kuali.kra.budget.document.authorization.BudgetTask;
 import org.kuali.kra.budget.document.authorizer.BudgetAuthorizer;
 import org.kuali.kra.infrastructure.PermissionConstants;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 
 /**
  * The Budget View Authorizer checks to see if the user has 
@@ -32,10 +32,7 @@ public class ViewProposalBudgetAuthorizer extends BudgetAuthorizer {
 
     private KcWorkflowService kraWorkflowService;
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.budget.document.authorizer.BudgetAuthorizer#isAuthorized(java.lang.String, org.kuali.kra.budget.document.authorization.BudgetTask)
-     */
+    @Override
     public boolean isAuthorized(String userId, BudgetTask task) {
         
         BudgetDocument budgetDocument = task.getBudgetDocument();

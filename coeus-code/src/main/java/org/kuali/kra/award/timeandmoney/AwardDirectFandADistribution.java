@@ -16,7 +16,7 @@
 package org.kuali.kra.award.timeandmoney;
 
 import org.kuali.kra.award.AwardAssociate;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 import java.sql.Date;
 
@@ -25,9 +25,7 @@ import java.sql.Date;
  */
 public class AwardDirectFandADistribution extends AwardAssociate {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 1548622355738763084L;
 
     private Long awardDirectFandADistributionId;
@@ -42,18 +40,18 @@ public class AwardDirectFandADistribution extends AwardAssociate {
 
     private Date endDate;
 
-    private KualiDecimal directCost;
+    private ScaleTwoDecimal directCost;
 
-    private KualiDecimal indirectCost;
+    private ScaleTwoDecimal indirectCost;
 
     public AwardDirectFandADistribution() {
-        setDirectCost(new KualiDecimal(0.00));
-        setIndirectCost(new KualiDecimal(0.00));
+        setDirectCost(new ScaleTwoDecimal(0.00));
+        setIndirectCost(new ScaleTwoDecimal(0.00));
     }
 
     public AwardDirectFandADistribution(int budgetPeriodNum, Date periodStartDate, Date periodEndDate) {
-        setDirectCost(new KualiDecimal(0.00));
-        setIndirectCost(new KualiDecimal(0.00));
+        setDirectCost(new ScaleTwoDecimal(0.00));
+        setIndirectCost(new ScaleTwoDecimal(0.00));
         setBudgetPeriod(budgetPeriodNum);
         setStartDate(periodStartDate);
         setEndDate(periodEndDate);
@@ -152,7 +150,7 @@ public class AwardDirectFandADistribution extends AwardAssociate {
      * Gets the directCost attribute. 
      * @return Returns the directCost.
      */
-    public KualiDecimal getDirectCost() {
+    public ScaleTwoDecimal getDirectCost() {
         return directCost;
     }
 
@@ -160,7 +158,7 @@ public class AwardDirectFandADistribution extends AwardAssociate {
      * Sets the directCost attribute value.
      * @param directCost The directCost to set.
      */
-    public void setDirectCost(KualiDecimal directCost) {
+    public void setDirectCost(ScaleTwoDecimal directCost) {
         this.directCost = directCost;
     }
 
@@ -168,7 +166,7 @@ public class AwardDirectFandADistribution extends AwardAssociate {
      * Gets the indirectCost attribute. 
      * @return Returns the indirectCost.
      */
-    public KualiDecimal getIndirectCost() {
+    public ScaleTwoDecimal getIndirectCost() {
         return indirectCost;
     }
 
@@ -176,7 +174,7 @@ public class AwardDirectFandADistribution extends AwardAssociate {
      * Sets the indirectCost attribute value.
      * @param indirectCost The indirectCost to set.
      */
-    public void setIndirectCost(KualiDecimal indirectCost) {
+    public void setIndirectCost(ScaleTwoDecimal indirectCost) {
         this.indirectCost = indirectCost;
     }
 
@@ -188,16 +186,11 @@ public class AwardDirectFandADistribution extends AwardAssociate {
         return serialVersionUID;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.awardDirectFandADistributionId = null;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -213,9 +206,6 @@ public class AwardDirectFandADistribution extends AwardAssociate {
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -31,12 +31,15 @@ import edu.mit.irb.irbnamespace.SubmissionDetailsDocument.SubmissionDetails;
 import edu.mit.irb.irbnamespace.SubmissionDetailsDocument.SubmissionDetails.ActionType;
 import edu.mit.irb.irbnamespace.SubmissionDetailsDocument.SubmissionDetails.SubmissionChecklistInfo;
 import edu.mit.irb.irbnamespace.SubmissionDetailsDocument.SubmissionDetails.SubmissionChecklistInfo.Checklists;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.committee.impl.bo.CommitteeMembershipBase;
 import org.kuali.coeus.common.committee.impl.meeting.CommScheduleActItemBase;
 import org.kuali.coeus.common.committee.impl.meeting.CommitteeScheduleAttendanceBase;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.print.stream.xml.PrintBaseXmlStream;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
 import org.kuali.coeus.common.framework.unit.Unit;
@@ -54,7 +57,6 @@ import org.kuali.kra.irb.personnel.ProtocolPerson;
 import org.kuali.kra.irb.personnel.ProtocolPersonRole;
 import org.kuali.kra.irb.personnel.ProtocolPersonRolodex;
 import org.kuali.kra.irb.protocol.funding.ProtocolFundingSource;
-import org.kuali.kra.printing.xmlstream.PrintBaseXmlStream;
 import org.kuali.kra.protocol.actions.ProtocolActionBase;
 import org.kuali.kra.protocol.personnel.ProtocolPersonBase;
 
@@ -63,6 +65,9 @@ import java.text.ParseException;
 import java.util.*;
 
 public class ScheduleXmlStream extends PrintBaseXmlStream {
+
+    private static final Log LOG = LogFactory.getLog(ScheduleXmlStream.class);
+
     private CommitteeMembershipService committeeMembershipService;
     private KcPersonService kcPersonService;
     private IrbPrintXmlUtilService irbPrintXmlUtilService;
@@ -454,7 +459,7 @@ public class ScheduleXmlStream extends PrintBaseXmlStream {
             }
         }
         catch (ParseException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
 
         currentSchedule.setMaxProtocols(new BigInteger(String.valueOf(scheduleDetailsBean.getMaxProtocols())));

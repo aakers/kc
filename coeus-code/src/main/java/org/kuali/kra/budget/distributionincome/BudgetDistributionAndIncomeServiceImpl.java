@@ -16,7 +16,7 @@
 package org.kuali.kra.budget.distributionincome;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.Budget.FiscalYearSummary;
 import org.kuali.kra.budget.document.BudgetDocument;
@@ -50,9 +50,7 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
         return (budget.getFinalVersionFlag() && budgetStatusCompleteValue.equals(budget.getBudgetStatus()));
     }
     
-    /**
-     * @see org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeService#initializeCollectionDefaults(org.kuali.kra.budget.core.Budget)
-     */
+    @Override
     public void initializeCollectionDefaults(Budget budget) {
         if ( !isBudgetFinalAndComplete(budget) ) {
            initializeCostSharingCollectionDefaults(budget);
@@ -60,9 +58,7 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
         }
     }
 
-    /**
-     * @see org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeService#initializeCostSharingCollectionDefaults(org.kuali.kra.budget.core.Budget)
-     */
+    @Override
     public void initializeCostSharingCollectionDefaults(Budget budget) {
         if (budget.isCostSharingApplicable() && budget.isCostSharingAvailable() && budget.getBudgetCostShares().size() == 0
                 && !isBudgetFinalAndComplete(budget)) {
@@ -80,9 +76,7 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
         }
     }
     
-    /**
-     * @see org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeService#initializeUnrecoveredFandACollectionDefaults(org.kuali.kra.budget.core.Budget)
-     */
+    @Override
     public void initializeUnrecoveredFandACollectionDefaults(Budget budget) {
         if(budget.isUnrecoveredFandAApplicable() && budget.isUnrecoveredFandAAvailable() && budget.getBudgetUnrecoveredFandAs().size() == 0 && !isBudgetFinalAndComplete(budget)) {
            for(FiscalYearSummary fiscalYearSummary: budget.getFiscalYearUnrecoveredFandATotals()) {
@@ -92,14 +86,14 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
        }
     }
     
-    protected BudgetDecimal findApplicableRatesForFiscalYearUFAndA(Budget budget, FiscalYearSummary fiscalYearSummary, boolean onCampus) {
+    protected ScaleTwoDecimal findApplicableRatesForFiscalYearUFAndA(Budget budget, FiscalYearSummary fiscalYearSummary, boolean onCampus) {
         /**
          * Per KRACOEUS-5515 switching rate class code.
          */
         //String unrecoveredFandARateClassCode = budget.getUrRateClassCode();
         String unrecoveredFandARateClassCode = budget.getOhRateClassCode();
         if(unrecoveredFandARateClassCode == null || unrecoveredFandARateClassCode.trim().length() == 0) {
-            return BudgetDecimal.ZERO;
+            return ScaleTwoDecimal.ZERO;
         } else {
             return findApplicableRateForRateClassCodeUFAndA(budget, fiscalYearSummary.getFiscalYear(), unrecoveredFandARateClassCode, onCampus);
         }
@@ -110,9 +104,9 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
      * Not sure to change it in 'Budget' because there are so many things unknow.
      * so create here just for UFAnd A
      */
-    protected BudgetDecimal findApplicableRateForRateClassCodeUFAndA(Budget budget, Integer fiscalYear,
+    protected ScaleTwoDecimal findApplicableRateForRateClassCodeUFAndA(Budget budget, Integer fiscalYear,
             String unrecoveredFandARateClassCode, boolean findOnCampusRate) {
-        BudgetDecimal applicableRate = BudgetDecimal.ZERO;
+        ScaleTwoDecimal applicableRate = ScaleTwoDecimal.ZERO;
         BudgetRate appliedRate = null;
         for (BudgetRate budgetRate : budget.getBudgetRates()) {
             if (StringUtils.equalsIgnoreCase(budgetRate.getRateClassCode(), unrecoveredFandARateClassCode)
@@ -128,7 +122,7 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
             }
         }
         if (appliedRate != null) {
-            applicableRate = new BudgetDecimal(appliedRate.getApplicableRate().bigDecimalValue());
+            applicableRate = new ScaleTwoDecimal(appliedRate.getApplicableRate().bigDecimalValue());
         }
         return applicableRate;
     }
@@ -139,11 +133,11 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
      * @return A BudgetCostShare
      */
     protected BudgetCostShare createBudgetCostShare(FiscalYearSummary fiscalYearSummary) {
-        return new BudgetCostShare(fiscalYearSummary.getFiscalYear(), fiscalYearSummary.getCostShare(), new BudgetDecimal(0.00), null);
+        return new BudgetCostShare(fiscalYearSummary.getFiscalYear(), fiscalYearSummary.getCostShare(), new ScaleTwoDecimal(0.00), null);
     }
     
-    protected BudgetCostShare createBudgetCostShare(int projectPeriod, BudgetDecimal costShare) {
-        return new BudgetCostShare(projectPeriod, costShare, new BudgetDecimal(0.00), null);
+    protected BudgetCostShare createBudgetCostShare(int projectPeriod, ScaleTwoDecimal costShare) {
+        return new BudgetCostShare(projectPeriod, costShare, new ScaleTwoDecimal(0.00), null);
     }
     
     /**
@@ -153,7 +147,7 @@ public class BudgetDistributionAndIncomeServiceImpl implements BudgetDistributio
      * @param onCampusFlag The on-CampusContract flag
      * @return
      */
-    protected BudgetUnrecoveredFandA createBudgetUnrecoveredFandA(FiscalYearSummary fiscalYearSummary, BudgetDecimal applicableRate, String onCampusFlag) {
-        return new BudgetUnrecoveredFandA(fiscalYearSummary.getFiscalYear(), BudgetDecimal.ZERO, applicableRate, onCampusFlag, null);
+    protected BudgetUnrecoveredFandA createBudgetUnrecoveredFandA(FiscalYearSummary fiscalYearSummary, ScaleTwoDecimal applicableRate, String onCampusFlag) {
+        return new BudgetUnrecoveredFandA(fiscalYearSummary.getFiscalYear(), ScaleTwoDecimal.ZERO, applicableRate, onCampusFlag, null);
     }
 }

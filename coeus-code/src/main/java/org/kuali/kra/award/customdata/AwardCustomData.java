@@ -15,18 +15,16 @@
  */
 package org.kuali.kra.award.customdata;
 
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttribute;
 import org.kuali.kra.award.AwardAssociate;
-import org.kuali.kra.bo.CustomAttribute;
-import org.kuali.kra.bo.DocumentCustomData;
 
 /**
  * This class is the BO representation of an Award Custom Data.
  */
 public class AwardCustomData extends AwardAssociate implements DocumentCustomData {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 4125090813618033094L;
 
     private Long awardCustomDataId;
@@ -77,9 +75,7 @@ public class AwardCustomData extends AwardAssociate implements DocumentCustomDat
         return value;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.awardCustomDataId = null;
     }
@@ -92,9 +88,6 @@ public class AwardCustomData extends AwardAssociate implements DocumentCustomDat
         this.value = value;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -106,9 +99,6 @@ public class AwardCustomData extends AwardAssociate implements DocumentCustomDat
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -18,10 +18,10 @@ package org.kuali.kra.irb.customdata;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.impl.custom.CustomDataRule;
 import org.kuali.kra.irb.ProtocolAction;
 import org.kuali.kra.irb.ProtocolForm;
 import org.kuali.kra.rule.event.SaveCustomDataEvent;
-import org.kuali.kra.rules.CustomDataRule;
 import org.kuali.rice.kns.web.struts.form.KualiDocumentFormBase;
 import org.kuali.rice.krad.exception.ValidationException;
 
@@ -35,9 +35,6 @@ public class ProtocolCustomDataAction extends ProtocolAction {
     
     private static final String CUSTOM_ATTRIBUTE_NAME = "IRBCustomDataAttribute";
 
-    /**
-     * @see org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -45,9 +42,7 @@ public class ProtocolCustomDataAction extends ProtocolAction {
         return super.execute(mapping, form, request, response);
     }
     
-    /**
-     * @see org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+    @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form, 
             HttpServletRequest request, HttpServletResponse response) throws Exception { 
         ProtocolForm protocolForm = (ProtocolForm) form;
@@ -68,9 +63,6 @@ public class ProtocolCustomDataAction extends ProtocolAction {
     }
     
 
-    /**
-     * @see org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase#postDocumentSave(org.kuali.core.web.struts.form.KualiDocumentFormBase)
-     */
     @Override
     public void postDocumentSave(KualiDocumentFormBase form) throws Exception {
         super.postDocumentSave(form);

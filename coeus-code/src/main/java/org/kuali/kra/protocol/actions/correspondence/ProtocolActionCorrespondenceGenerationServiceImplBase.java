@@ -17,11 +17,11 @@ package org.kuali.kra.protocol.actions.correspondence;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.printing.print.PrintableAttachment;
-import org.kuali.kra.printing.service.PersonSignatureService;
-import org.kuali.kra.printing.service.PrintingService;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.person.signature.PersonSignatureService;
+import org.kuali.coeus.common.framework.print.PrintableAttachment;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.common.framework.print.PrintingService;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.actions.ProtocolActionBase;
 import org.kuali.kra.protocol.correspondence.ProtocolCorrespondence;
@@ -101,7 +101,7 @@ public abstract class ProtocolActionCorrespondenceGenerationServiceImplBase impl
         buildAndAttachProtocolCorrespondence(protocol, data, correspTypeCode);
     }
     
-    /**{@inheritDoc}**/
+    @Override
     public void generateCorrespondenceDocumentAndAttach(ProtocolActionsCorrespondenceBase printableCorrespondence) 
             throws PrintingException {
             if (printableCorrespondence.getXSLTemplates().size() > 0) {

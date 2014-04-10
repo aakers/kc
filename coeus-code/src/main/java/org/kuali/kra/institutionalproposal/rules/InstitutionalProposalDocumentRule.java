@@ -17,6 +17,7 @@ package org.kuali.kra.institutionalproposal.rules;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.audit.KcDocumentBaseAuditRule;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
 import org.kuali.coeus.sys.framework.rule.KcBusinessRule;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
@@ -33,7 +34,6 @@ import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposalCostShare;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposalScienceKeyword;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposalUnrecoveredFandA;
-import org.kuali.kra.service.SponsorService;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -44,9 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalDocumentRule extends KcTransactionalDocumentRuleBase implements KcBusinessRule {
     
     public static final String DOCUMENT_ERROR_PATH = "document";

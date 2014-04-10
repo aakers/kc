@@ -17,9 +17,9 @@ package org.kuali.kra.web.struts.form;
 
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.framework.unit.UnitService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kns.web.struts.form.KualiForm;
 
@@ -39,9 +39,7 @@ public class UnitHierarchyForm extends KualiForm {
     
     private boolean displayWholeTree = false;
     
-    /**
-     * Constructs a UnitHierarchyForm.
-     */
+
     public UnitHierarchyForm() {        
         resetUnits();
     }

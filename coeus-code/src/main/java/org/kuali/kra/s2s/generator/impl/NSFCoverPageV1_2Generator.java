@@ -24,11 +24,11 @@ import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
 import gov.grants.apply.system.attachmentsV10.AttachmentGroupMin1Max100DataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonYnq;
+import org.kuali.coeus.propdev.impl.ynq.ProposalYnq;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonYnq;
-import org.kuali.kra.proposaldevelopment.bo.ProposalYnq;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.s2s.util.S2SConstants;
 
 import java.util.ArrayList;
@@ -65,9 +65,9 @@ public class NSFCoverPageV1_2Generator extends NSFCoverPageBaseGenerator {
 		nsfCoverPage12.setFormVersion(S2SConstants.FORMVERSION_1_2);
 		setFundingOpportunityNumber(nsfCoverPage12);
 		if (pdDoc.getDevelopmentProposal().getS2sOpportunity() != null) {
-			nsfCoverPage12.setDueDate(dateTimeService.getCalendar(pdDoc
+			nsfCoverPage12.setDueDate(pdDoc
 					.getDevelopmentProposal().getS2sOpportunity()
-					.getClosingDate()));
+					.getClosingDate());
 		}
 		nsfCoverPage12.setNSFUnitConsideration(getNSFUnitConsideration());
 		nsfCoverPage12.setPIInfo(getPIInfo());
@@ -281,7 +281,6 @@ public class NSFCoverPageV1_2Generator extends NSFCoverPageBaseGenerator {
 	 *            which needs to be converted to the document type of the
 	 *            required generator
 	 * @return {@link XmlObject} document of the required generator type
-	 * @see org.kuali.kra.s2s.generator.S2SFormGenerator#getFormObject(XmlObject)
 	 */
 	public XmlObject getFormObject(XmlObject xmlObject) {
 		NSFCoverPage12 nsfCoverPage12 = (NSFCoverPage12) xmlObject;

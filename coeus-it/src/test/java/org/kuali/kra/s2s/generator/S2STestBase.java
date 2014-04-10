@@ -20,13 +20,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentService;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
-import org.kuali.kra.proposaldevelopment.service.ProposalDevelopmentService;
 import org.kuali.kra.s2s.generator.bo.AttachmentData;
 import org.kuali.kra.s2s.service.S2SValidatorService;
+import org.kuali.kra.s2s.util.AuditError;
 import org.kuali.kra.test.infrastructure.KcIntegrationTestBase;
-import org.kuali.rice.kns.util.AuditError;
 import org.kuali.rice.krad.UserSession;
 import org.kuali.rice.krad.bo.DocumentHeader;
 import org.kuali.rice.krad.bo.PersistableBusinessObject;
@@ -72,7 +72,6 @@ public abstract class S2STestBase<T> extends KcIntegrationTestBase {
         generatorObject.setAuditErrors(errors);
         generatorObject.setAttachments(new ArrayList<AttachmentData>());
         XmlObject object=generatorObject.getFormObject(document);
-        System.out.println(object);
         getService(S2SValidatorService.class).validate(object, errors);
         for (AuditError auditError : errors) {
             assertNull(auditError.getMessageKey()+":"+auditError.getErrorKey(),auditError.getErrorKey());
@@ -140,7 +139,7 @@ public abstract class S2STestBase<T> extends KcIntegrationTestBase {
             assertNotNull(document.getDevelopmentProposal());
             return document;
         } catch (Throwable e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             tearDown();
             throw new RuntimeException(e);
         }

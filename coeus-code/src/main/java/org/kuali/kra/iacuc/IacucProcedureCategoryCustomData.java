@@ -15,7 +15,7 @@
  */
 package org.kuali.kra.iacuc;
 
-import org.kuali.kra.bo.CustomAttribute;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttribute;
 
 public class IacucProcedureCategoryCustomData extends CustomAttribute { 
     
@@ -62,7 +62,6 @@ public class IacucProcedureCategoryCustomData extends CustomAttribute {
         this.sortId = sortId;
     }
 
-    /**  {@inheritDoc} */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -71,7 +70,6 @@ public class IacucProcedureCategoryCustomData extends CustomAttribute {
         return result;
     }
 
-    /**  {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

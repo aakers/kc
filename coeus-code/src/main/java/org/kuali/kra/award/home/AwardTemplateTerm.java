@@ -15,14 +15,12 @@
  */
 package org.kuali.kra.award.home;
 
+import org.kuali.coeus.common.framework.sponsor.term.SponsorTerm;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.bo.SponsorTerm;
 
 public class AwardTemplateTerm extends KcPersistableBusinessObjectBase {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 737831469929642714L;
 
     private Integer awardTemplateTermId;

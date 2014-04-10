@@ -64,6 +64,7 @@ import org.kuali.kra.irb.actions.genericactions.ProtocolGenericActionService;
 import org.kuali.kra.irb.actions.grantexemption.ProtocolGrantExemptionBean;
 import org.kuali.kra.irb.actions.grantexemption.ProtocolGrantExemptionEvent;
 import org.kuali.kra.irb.actions.grantexemption.ProtocolGrantExemptionService;
+import org.kuali.kra.irb.actions.modifysubmission.ProtocolModifySubmissionBean;
 import org.kuali.kra.irb.actions.noreview.ProtocolReviewNotRequiredBean;
 import org.kuali.kra.irb.actions.noreview.ProtocolReviewNotRequiredEvent;
 import org.kuali.kra.irb.actions.noreview.ProtocolReviewNotRequiredService;
@@ -174,9 +175,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
                                                                                         ProtocolSubmissionType.REQUEST_TO_REOPEN_ENROLLMENT,
                                                                                         ProtocolSubmissionType.REQUEST_FOR_DATA_ANALYSIS_ONLY});
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isExpeditedApprovalAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isExpeditedApprovalAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolExpeditedApproveBean expeditedActionBean = (ProtocolExpeditedApproveBean) ((ActionHelper) protocolForm.getActionHelper()).getProtocolExpeditedApprovalBean();
@@ -187,9 +186,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isFullApprovalAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isFullApprovalAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolApproveBean protocolApproveBean = (ProtocolApproveBean) protocolForm.getActionHelper().getProtocolFullApprovalBean();
@@ -200,9 +197,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCreateRenewalAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isCreateRenewalAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -213,9 +208,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isAssignToAgendaAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isAssignToAgendaAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -230,9 +223,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCreateAmendmentAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isCreateAmendmentAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolAmendmentBean protocolAmendmentBean = (ProtocolAmendmentBean) protocolForm.getActionHelper().getProtocolAmendmentBean();
@@ -243,9 +234,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCreateRenewalWithAmendmentAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isCreateRenewalWithAmendmentAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolAmendmentBean protocolAmendmentBean = (ProtocolAmendmentBean) protocolForm.getActionHelper().getProtocolRenewAmendmentBean();
@@ -256,9 +245,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isWithdrawProtocolAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isWithdrawProtocolAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -270,9 +257,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isResponseApprovalAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isResponseApprovalAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolApproveBean actionBean = ((ActionHelper) protocolForm.getActionHelper()).getProtocolResponseApprovalBean();
@@ -295,17 +280,13 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCloseProtocolAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isCloseProtocolAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolCloseBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.CLOSE_PROTOCOL, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCloseEnrollmentAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isCloseEnrollmentAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolCloseEnrollmentBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.CLOSE_ENROLLMENT_PROTOCOL, protocolForm, actionBean);
@@ -320,9 +301,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isDeferProtocolAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isDeferProtocolAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolDeferBean();
@@ -337,9 +316,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isDisapproveProtocolAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isDisapproveProtocolAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolDisapproveBean();
@@ -350,17 +327,13 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isExpireProtocolAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isExpireProtocolAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolExpireBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.EXPIRE_PROTOCOL, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isGrantExemptionAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isGrantExemptionAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGrantExemptionBean actionBean = ((ActionHelper) protocolForm.getActionHelper()).getProtocolGrantExemptionBean();
@@ -371,9 +344,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isIrbAcknowledgementAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isIrbAcknowledgementAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolIrbAcknowledgementBean();
@@ -384,25 +355,19 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isPermitDataAnalysisAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isPermitDataAnalysisAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolPermitDataAnalysisBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.PERMIT_DATA_ANALYSIS, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isReopenEnrollmentAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isReopenEnrollmentAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolReopenEnrollmentBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.REOPEN_PROTOCOL, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isReturnForSMRAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isReturnForSMRAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolSMRBean();
@@ -413,9 +378,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isReturnForSRRAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isReturnForSRRAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolSRRBean();
@@ -426,9 +389,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isReturnToPIAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isReturnToPIAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolReturnToPIBean();
@@ -439,33 +400,25 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isSuspendAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isSuspendAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolSuspendBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.SUSPEND_PROTOCOL, protocolForm, actionBean);
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isSuspendByDsmbAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isSuspendByDsmbAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = protocolForm.getActionHelper().getProtocolSuspendByDsmbBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.SUSPEND_PROTOCOL_BY_DSMB, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isTerminateAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isTerminateAuthorized(ProtocolForm protocolForm) {
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolTerminateBean();
         return isGenericProtocolActionAuthorized(GenericProtocolAuthorizer.TERMINATE_PROTOCOL, protocolForm, actionBean);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isManageCommentsAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isManageCommentsAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -477,9 +430,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isOpenProtocolForAdminCorrectionAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isOpenProtocolForAdminCorrectionAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -494,9 +445,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isSubmitCommitteeDecisionAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isSubmitCommitteeDecisionAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -509,9 +458,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isAbandonAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isAbandonAuthorized(ProtocolForm protocolForm) {
         boolean requestAuthorized = false;
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
@@ -519,9 +466,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isProtocolReviewNotRequiredAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isProtocolReviewNotRequiredAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolReviewNotRequiredBean actionBean = ((ActionHelper) protocolForm.getActionHelper()).getProtocolReviewNotRequiredBean();
@@ -532,9 +477,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isAssignReviewersAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isAssignReviewersAuthorized(ProtocolForm protocolForm) {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         boolean requestAuthorized = false;
@@ -549,16 +492,12 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return requestAuthorized;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#isCloseEnrollmentAuthorized(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public boolean isWithdrawRequestActionAuthorized(ProtocolForm protocolForm) {
         return hasPermission(TaskName.PROTOCOL_WITHDRAW_SUBMISSION, (Protocol) protocolForm.getProtocolDocument().getProtocol());
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#grantExpeditedApproval(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     @SuppressWarnings("deprecation")
     public void grantExpeditedApproval(ProtocolForm protocolForm) throws Exception {
         // set the task name to prevent entered data from being overwritten (in case of user errors) due to bean refresh in the action helper's prepare view 
@@ -610,9 +549,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         }
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#grantFullApproval(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     @SuppressWarnings("deprecation")
     public void grantFullApproval(ProtocolForm protocolForm) throws Exception {
         ProtocolApproveBean protocolApproveBean = (ProtocolApproveBean) protocolForm.getActionHelper().getProtocolFullApprovalBean();
@@ -635,9 +572,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         }
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#submitForReviewAndNotifyUser(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public boolean submitForReviewAndPromptToNotifyUser(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument protocolDocument = (ProtocolDocument) protocolForm.getProtocolDocument();
@@ -672,9 +607,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         }
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#createRenewalAndPromptToNotifyUser(org.kuali.kra.irb.ProtocolForm, java.lang.String)
-     */
+    @Override
     public String createRenewal(ProtocolForm protocolForm) throws Exception {
         String newDocId = getProtocolAmendRenewService().createRenewal(protocolForm.getProtocolDocument(), protocolForm.getActionHelper().getRenewalSummary());
         generateActionCorrespondence(ProtocolActionType.RENEWAL_CREATED, protocolForm.getProtocolDocument().getProtocol());
@@ -686,9 +619,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#assignToAgenda(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String assignToAgenda(ProtocolForm protocolForm) throws Exception {
         ProtocolAssignToAgendaBean actionBean = (ProtocolAssignToAgendaBean) protocolForm.getActionHelper().getAssignToAgendaBean();
         getProtocolAssignToAgendaService().assignToAgenda(protocolForm.getProtocolDocument().getProtocol(), actionBean);
@@ -713,9 +644,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         }
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#createAmendment(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String createAmendment(ProtocolForm protocolForm) throws Exception {
         String newDocId = getProtocolAmendRenewService().createAmendment(protocolForm.getProtocolDocument(),
                 protocolForm.getActionHelper().getProtocolAmendmentBean());
@@ -726,9 +655,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#createRenewalWithAmendment(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String createRenewalWithAmendment(ProtocolForm protocolForm) throws Exception {
         String newDocId = getProtocolAmendRenewService().createRenewalWithAmendment(protocolForm.getProtocolDocument(),
                 protocolForm.getActionHelper().getProtocolRenewAmendmentBean());
@@ -741,9 +668,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#withdrawProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String withdrawProtocol(ProtocolForm protocolForm) throws Exception {
         ProtocolBase previousProtocol = protocolForm.getProtocolDocument().getProtocol();
         boolean isVersion = ProtocolStatus.IN_PROGRESS.equals(previousProtocol.getProtocolStatusCode()) || 
@@ -771,9 +696,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#grantResponseApproval(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String grantResponseApproval(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolApproveBean actionBean = ((ActionHelper) protocolForm.getActionHelper()).getProtocolResponseApprovalBean();
@@ -786,9 +709,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#performRequestAction(org.kuali.kra.irb.ProtocolForm, java.lang.String)
-     */
+    @Override
     public String performRequestAction(ProtocolForm protocolForm, String taskName) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         protocolForm.getActionHelper().preSaveSubmissionQuestionnaires();
@@ -816,9 +737,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#withdrawRequestAction(org.kuali.kra.irb.ProtocolForm, java.lang.String)
-     */
+    @Override
     public String withdrawRequestAction(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         ProtocolRequestAction requestAction = ProtocolRequestAction.valueOfTaskName(TaskName.PROTOCOL_WITHDRAW_SUBMISSION);
@@ -852,9 +771,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#closeProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String closeProtocol(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -873,9 +790,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#closeEnrollment(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String closeEnrollment(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -887,9 +802,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#deferProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String deferProtocol(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -903,9 +816,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#disapproveProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String disapproveProtocol(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -919,9 +830,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#expireProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String expireProtocol(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -935,9 +844,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#grantExemption(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String grantExemption(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         Protocol protocol = (Protocol) document.getProtocol();
@@ -951,9 +858,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#irbAcknowledgement(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String irbAcknowledgement(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -966,9 +871,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_ACTIONS_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#permitDataAnalysis(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String permitDataAnalysis(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -980,9 +883,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#reopenEnrollment(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String reopenEnrollment(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -994,9 +895,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#returnForSMR(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String returnForSMR(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1010,9 +909,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
 
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#returnForSRR(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String returnForSRR(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1026,9 +923,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#returnToPI(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String returnToPI(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1042,9 +937,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#suspend(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String suspend(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1058,9 +951,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#suspendByDsmb(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String suspendByDsmb(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1074,9 +965,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#terminate(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String terminate(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = protocolForm.getProtocolDocument();
         Protocol protocol = document.getProtocol();
@@ -1091,9 +980,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#manageComments(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String manageComments(ProtocolForm protocolForm) throws Exception {
         ProtocolGenericActionBean actionBean = (ProtocolGenericActionBean) protocolForm.getActionHelper().getProtocolManageReviewCommentsBean();
         generateActionCorrespondence(ProtocolActionType.MANAGE_REVIEW_COMMENTS, protocolForm.getProtocolDocument().getProtocol());
@@ -1102,9 +989,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#openProtocolForAdminCorrection(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String openProtocolForAdminCorrection(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument protocolDocument = protocolForm.getProtocolDocument();
         protocolDocument.getProtocol().setCorrectionMode(true); 
@@ -1118,9 +1003,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#submitCommitteeDecision(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     @SuppressWarnings("deprecation")
     public String submitCommitteeDecision(ProtocolForm protocolForm) throws Exception {
         CommitteeDecision actionBean = (CommitteeDecision) protocolForm.getActionHelper().getCommitteeDecision();
@@ -1132,9 +1015,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return Constants.MAPPING_BASIC;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#abandon(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String abandon(ProtocolForm protocolForm) throws Exception {
         getProtocolAbandonService().abandonProtocol(protocolForm.getProtocolDocument().getProtocol(),
                 protocolForm.getActionHelper().getProtocolAbandonBean());
@@ -1147,16 +1028,13 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#notifyIrbProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String notifyIrbProtocol(ProtocolForm protocolForm) throws Exception {
         String returnPath = Constants.MAPPING_BASIC;
         protocolForm.getActionHelper().preSaveSubmissionQuestionnaires();
         List<AnswerHeader> answerHeaders = protocolForm.getActionHelper().getProtocolNotifyIrbBean().getQuestionnaireHelper().getAnswerHeaders();
         if (isMandatoryQuestionnaireComplete(answerHeaders, "actionHelper.protocolNotifyIrbBean.datavalidation")) {
-            getProtocolNotifyIrbService().submitIrbNotification(protocolForm.getProtocolDocument().getProtocol(),
-                    protocolForm.getActionHelper().getProtocolNotifyIrbBean());
+            getProtocolNotifyIrbService().submitIrbNotification(protocolForm.getProtocolDocument().getProtocol(), protocolForm.getActionHelper().getProtocolNotifyIrbBean());
             protocolForm.getQuestionnaireHelper().setAnswerHeaders(new ArrayList<AnswerHeader>());
             LOG.info("notifyIrbProtocol " + protocolForm.getProtocolDocument().getDocumentNumber());
             generateActionCorrespondence(ProtocolActionType.NOTIFY_IRB, protocolForm.getProtocolDocument().getProtocol());
@@ -1167,9 +1045,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return returnPath;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#assignReviewers(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String assignReviewers(ProtocolForm protocolForm) throws Exception {
         String returnPath = Constants.MAPPING_BASIC;
@@ -1217,9 +1093,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return returnPath;
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#notifyCommitteeProtocol(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String notifyCommitteeProtocol(ProtocolForm protocolForm) throws Exception {
         // set the task name to prevent entered data from being overwritten (in case of user errors) due to bean refresh in the action helper's prepare view 
         protocolForm.getActionHelper().setCurrentTask(TaskName.NOTIFY_COMMITTEE);
@@ -1238,9 +1112,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_ACTIONS_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#protocolReviewNotRequired(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public String protocolReviewNotRequired(ProtocolForm protocolForm) throws Exception {
         ProtocolDocument document = (ProtocolDocument) protocolForm.getProtocolDocument();
         ProtocolReviewNotRequiredBean actionBean = ((ActionHelper) protocolForm.getActionHelper()).getProtocolReviewNotRequiredBean();
@@ -1252,30 +1124,22 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
         return getRedirectPathAfterProtocolAction(protocolForm, notificationBean, IrbConstants.PROTOCOL_TAB);
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#assignedReviewComplete(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public void assignedReviewComplete(ProtocolForm protocolForm) throws Exception {
         generateActionCorrespondence(ProtocolActionType.REVIEW_COMPLETE, protocolForm.getProtocolDocument().getProtocol());
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#assignedReviewRejected(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public void assignedReviewRejected(ProtocolForm protocolForm) throws Exception {
         generateActionCorrespondence(ProtocolActionType.REVIEW_REJECTED, protocolForm.getProtocolDocument().getProtocol());
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#assignedReviewDeleted(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public void assignedReviewDeleted(ProtocolForm protocolForm) throws Exception {
         generateActionCorrespondence(ProtocolActionType.REVIEW_DELETED, protocolForm.getProtocolDocument().getProtocol());
     }
     
-    /**
-     * @see org.kuali.kra.irb.actions.IrbProtocolActionRequestService#generateFundingSource(org.kuali.kra.irb.ProtocolForm)
-     */
+    @Override
     public void generateFundingSource(ProtocolForm protocolForm) throws Exception {
         generateActionCorrespondence(ProtocolActionType.FUNDING_SOURCE, protocolForm.getProtocolDocument().getProtocol());
     }
@@ -1322,7 +1186,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
                     allRecipients.add(copiedRecipient);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
             }
             int i = 1;
@@ -1346,7 +1210,7 @@ public class IrbProtocolActionRequestServiceImpl extends ProtocolActionRequestSe
                         allRecipients.add(copiedRecipient);
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
+                        LOG.error(e.getMessage(), e);
                     }
                 }
                 i++;

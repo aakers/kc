@@ -30,7 +30,7 @@ import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.paymentreports.awardreports.AwardReportTerm;
 import org.kuali.kra.award.service.AwardScheduleGenerationService;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.krad.service.KualiRuleService;
 import org.kuali.rice.krad.util.ObjectUtils;
@@ -40,9 +40,7 @@ import org.kuali.rice.krad.util.ObjectUtils;
  */
 public class PaymentScheduleBean implements Serializable {    
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -5513993757805685581L;
     private AwardPaymentSchedule newAwardPaymentSchedule;
     private transient KualiRuleService ruleService;
@@ -120,7 +118,7 @@ public class PaymentScheduleBean implements Serializable {
             newAwardPaymentSchedule = new AwardPaymentSchedule();
             java.sql.Date sqldate = new java.sql.Date(date.getTime());
             newAwardPaymentSchedule.setDueDate(sqldate);    
-            newAwardPaymentSchedule.setAmount(KualiDecimal.ZERO);
+            newAwardPaymentSchedule.setAmount(ScaleTwoDecimal.ZERO);
                     // need to set this or 
                     newAwardPaymentSchedule.setAwardReportTermDescription(getSummary(art));
                     //award -> awardPaymentTerm -> AwardPaymentSchedule(awardPaymentTermId)
@@ -152,23 +150,17 @@ public class PaymentScheduleBean implements Serializable {
         return description;
     }
     
-    /**
-     * @return
-     */
+
     public Award getAward() {
         return form.getAwardDocument().getAward();
     }
 
-    /**
-     * @return
-     */
+
     public AwardDocument getAwardDocument() {
         return form.getAwardDocument();
     }
     
-    /**
-     * @return
-     */
+
     public Object getData() {
         return getNewAwardPaymentSchedule();
     }
@@ -200,10 +192,7 @@ public class PaymentScheduleBean implements Serializable {
         this.ruleService = ruleService;
     }
     
-    /**
-     * 
-     * @return
-     */
+
     AddAwardPaymentScheduleRuleEvent generateAddEvent() {        
         AddAwardPaymentScheduleRuleEvent event = new AddAwardPaymentScheduleRuleEvent(
                                                             "paymentScheduleBean.newAwardPaymentSchedule",

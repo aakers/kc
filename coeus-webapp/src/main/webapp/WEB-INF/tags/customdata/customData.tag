@@ -40,7 +40,7 @@
 <div class="tab-container" align="center">
 	<h3>
 		<span class="subhead-left">${displayName}</span>
-		<span class="subhead-right"><kul:help businessObjectClassName="org.kuali.kra.bo.CustomAttribute" altText="help"/></span>
+		<span class="subhead-right"><kul:help businessObjectClassName="org.kuali.coeus.common.framework.custom.attr.CustomAttribute" altText="help"/></span>
 	</h3>
 	<div align="left" style="padding:12px;"><strong> Full Group Name: </strong>${fullName}</div>
 	<table cellpadding=0 cellspacing="0" class="result-table">
@@ -86,7 +86,7 @@
 
 						<c:if test="${not empty customAttributeDocument.customAttribute.lookupClass}">
 						 <c:choose>
-						   <c:when test="${customAttributeDocument.customAttribute.lookupClass eq 'org.kuali.kra.bo.ArgValueLookup'}">
+						   <c:when test="${customAttributeDocument.customAttribute.lookupClass eq 'org.kuali.coeus.common.framework.custom.arg.ArgValueLookup'}">
 							<kul:lookup boClassName="${customAttributeDocument.customAttribute.lookupClass}" 
 								lookupParameters="'${customAttributeDocument.customAttribute.lookupReturn}':argumentName"
 								readOnlyFields="argumentName"

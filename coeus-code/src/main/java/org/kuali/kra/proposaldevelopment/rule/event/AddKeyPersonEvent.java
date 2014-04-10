@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.proposaldevelopment.rule.event;
 
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.rule.AddKeyPersonRule;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -49,16 +49,12 @@ public class AddKeyPersonEvent extends KeyPersonEventBase implements KeyPersonEv
         this((ProposalDevelopmentDocument) document, person);
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return AddKeyPersonRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((AddKeyPersonRule) rule).processAddKeyPersonBusinessRules((ProposalDevelopmentDocument) getDocument(), getProposalPerson());
     }

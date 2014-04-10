@@ -24,6 +24,13 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.committee.impl.meeting.CommitteeScheduleMinuteBase;
 import org.kuali.coeus.common.committee.impl.meeting.MinuteEntryType;
 import org.kuali.coeus.common.framework.attachment.AttachmentFile;
+import org.kuali.coeus.common.framework.print.AbstractPrint;
+import org.kuali.coeus.common.framework.print.Printable;
+import org.kuali.coeus.common.framework.print.PrintableAttachment;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.common.framework.print.util.PrintingUtils;
+import org.kuali.coeus.common.framework.print.watermark.WatermarkConstants;
+import org.kuali.coeus.common.framework.print.watermark.WatermarkService;
 import org.kuali.coeus.common.notification.impl.bo.NotificationType;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
 import org.kuali.coeus.sys.framework.auth.task.ApplicationTask;
@@ -47,7 +54,6 @@ import org.kuali.kra.irb.actions.amendrenew.ProtocolAmendmentBean;
 import org.kuali.kra.irb.actions.assignagenda.ProtocolAssignToAgendaBean;
 import org.kuali.kra.irb.actions.assignagenda.ProtocolAssignToAgendaService;
 import org.kuali.kra.irb.actions.assigncmtsched.ProtocolAssignCmtSchedBean;
-import org.kuali.kra.irb.actions.assigncmtsched.ProtocolAssignCmtSchedEvent;
 import org.kuali.kra.irb.actions.assigncmtsched.ProtocolAssignCmtSchedService;
 import org.kuali.kra.irb.actions.copy.ProtocolCopyService;
 import org.kuali.kra.irb.actions.correspondence.ProtocolActionCorrespondenceGenerationService;
@@ -72,6 +78,7 @@ import org.kuali.kra.irb.actions.request.ProtocolRequestBean;
 import org.kuali.kra.irb.actions.reviewcomments.*;
 import org.kuali.kra.irb.actions.risklevel.*;
 import org.kuali.kra.irb.actions.submit.ProtocolSubmission;
+import org.kuali.kra.irb.actions.submit.ProtocolSubmissionStatus;
 import org.kuali.kra.irb.actions.submit.ProtocolSubmitAction;
 import org.kuali.kra.irb.actions.submit.ProtocolSubmitActionEvent;
 import org.kuali.kra.irb.actions.submit.ValidProtocolActionAction;
@@ -87,13 +94,7 @@ import org.kuali.kra.irb.onlinereview.ProtocolReviewAttachment;
 import org.kuali.kra.irb.questionnaire.print.IrbCorrespondencePrintingService;
 import org.kuali.kra.irb.summary.ProtocolSummary;
 import org.kuali.kra.meeting.CommitteeScheduleMinute;
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.printing.print.AbstractPrint;
-import org.kuali.kra.printing.print.PrintableAttachment;
-import org.kuali.kra.printing.service.WatermarkService;
-import org.kuali.kra.printing.util.PrintingUtils;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.actions.ProtocolOnlineReviewCommentable;
 import org.kuali.kra.protocol.actions.notify.ProtocolActionAttachment;
@@ -101,7 +102,6 @@ import org.kuali.kra.protocol.actions.print.ProtocolSummaryPrintOptions;
 import org.kuali.kra.protocol.noteattachment.ProtocolAttachmentBase;
 import org.kuali.kra.protocol.noteattachment.ProtocolNotepadBase;
 import org.kuali.kra.protocol.summary.AttachmentSummary;
-import org.kuali.kra.util.watermark.WatermarkConstants;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.kim.api.identity.PersonService;
@@ -157,7 +157,7 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
     }};
 
 
-    /** {@inheritDoc} */
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ProtocolForm protocolForm = (ProtocolForm) form;
@@ -215,13 +215,13 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
-    /** {@inheritDoc} */
+    @Override
     public ActionForward activate(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
             HttpServletResponse response) throws Exception {
         return new AuditActionHelper().setAuditMode(mapping, (ProtocolForm) form, true);
     }
 
-    /** {@inheritDoc} */
+    @Override
     public ActionForward deactivate(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
             HttpServletResponse response) throws Exception {
         return new AuditActionHelper().setAuditMode(mapping, (ProtocolForm) form, false);
@@ -1114,16 +1114,7 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
     }
     
     
-    /**
-     * 
-     * This method...
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
+
     public ActionForward assignToAgenda(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = mapping.findForward(Constants.MAPPING_BASIC);
         ProtocolForm protocolForm = (ProtocolForm) form;
@@ -1510,7 +1501,6 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
 
     /**
      * Reopens enrollment for this Protocol.
-     * This method...
      * @param mapping
      * @param form
      * @param request
@@ -1801,7 +1791,11 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
                     }
         
                     if (performAssignment) {
+                        if(StringUtils.equals(protocolSubmission.getSubmissionStatusCode(), ProtocolSubmissionStatus.IN_AGENDA)) {
+                            getProtocolAssignCmtSchedService().assignToCommitteeAndSchedulePostAgendaAssignment((Protocol) protocolForm.getProtocolDocument().getProtocol(), actionBean);
+                        }else {
                         getProtocolAssignCmtSchedService().assignToCommitteeAndSchedule((Protocol) protocolForm.getProtocolDocument().getProtocol(), actionBean);
+                    }
                     }
                         
                 }
@@ -2485,16 +2479,7 @@ public class ProtocolProtocolActionsAction extends ProtocolAction implements Aud
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
-    /**
-     * 
-     * This method...
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
+
     public ActionForward saveNotes(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
             HttpServletResponse response) throws Exception {
         ProtocolForm protocolForm = (ProtocolForm) form;

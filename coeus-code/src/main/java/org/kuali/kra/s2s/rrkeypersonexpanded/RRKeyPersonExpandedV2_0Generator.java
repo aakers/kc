@@ -28,17 +28,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.person.KcPerson;
-import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
+import org.kuali.coeus.common.framework.rolodex.RolodexService;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonComparator;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonDegree;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.s2s.generator.impl.RRKeyPersonExpandedBaseGenerator;
+import org.kuali.kra.s2s.util.AuditError;
 import org.kuali.kra.s2s.util.S2SConstants;
-import org.kuali.kra.service.SponsorService;
-import org.kuali.rice.kns.util.AuditError;
-import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -215,7 +217,7 @@ public class RRKeyPersonExpandedV2_0Generator extends
 			profile.setCredential(PI.getEraCommonsUserName());
 		} else {
             if (KcServiceLocator.getService(SponsorService.class).isSponsorNihMultiplePi(pdDoc.getDevelopmentProposal())) {
-                getAuditErrors().add(new AuditError(Constants.NO_FIELD, S2SConstants.ERROR_ERA_COMMON_USER_NAME + PI.getFullName(), 
+                getAuditErrors().add(new AuditError(Constants.NO_FIELD, S2SConstants.ERROR_ERA_COMMON_USER_NAME + PI.getFullName(),
                         Constants.GRANTS_GOV_PAGE + "." + Constants.GRANTS_GOV_PANEL_ANCHOR));             
             }
         }
@@ -229,9 +231,8 @@ public class RRKeyPersonExpandedV2_0Generator extends
 	 */
 	private void setDepartmentNameToProfile(Profile profile, ProposalPerson PI) {
 		if(PI.getHomeUnit() != null) {
-            KcPersonService kcPersonService = KcServiceLocator.getService(KcPersonService.class);
-            KcPerson kcPersons = kcPersonService.getKcPersonByPersonId(PI.getPersonId());
-            String departmentName =  kcPersons.getOrganizationIdentifier();
+            KcPerson kcPerson = PI.getPerson();
+            String departmentName =  kcPerson.getOrganizationIdentifier();
             profile.setDepartmentName(departmentName);
         }
         else
@@ -264,8 +265,8 @@ public class RRKeyPersonExpandedV2_0Generator extends
              rolodex = null;
         } else if (PI.getRolodexId() != null) {
             pIPersonOrRolodexId = PI.getRolodexId().toString();
-            BusinessObjectService businessObjectService = KcServiceLocator.getService(BusinessObjectService.class);
-            rolodex = businessObjectService.findBySinglePrimaryKey(Rolodex.class,pIPersonOrRolodexId);
+            RolodexService rolodexService = KcServiceLocator.getService(RolodexService.class);
+            rolodex = rolodexService.getRolodex(Integer.valueOf(pIPersonOrRolodexId));
         }
 	}
 

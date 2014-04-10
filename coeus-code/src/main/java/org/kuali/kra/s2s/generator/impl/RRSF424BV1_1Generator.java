@@ -18,26 +18,24 @@ package org.kuali.kra.s2s.generator.impl;
 import gov.grants.apply.forms.rrsf424SF424BV11.AssuranceType;
 import gov.grants.apply.forms.rrsf424SF424BV11.AssurancesDocument;
 import gov.grants.apply.forms.rrsf424SF424BV11.AuthorizedRepresentativeDocument.AuthorizedRepresentative;
+
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.bo.ProposalSite;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.location.ProposalSite;
 import org.kuali.kra.s2s.S2SException;
 import org.kuali.kra.s2s.generator.S2SBaseFormGenerator;
 import org.kuali.kra.s2s.generator.bo.DepartmentalPerson;
 import org.kuali.kra.s2s.service.S2SUtilService;
 import org.kuali.kra.s2s.util.S2SConstants;
-import org.kuali.rice.core.api.datetime.DateTimeService;
 
-/**
- * This class...
- */
+import java.util.Calendar;
+
+
 public class RRSF424BV1_1Generator extends S2SBaseFormGenerator {
 
     private static final String NON_CONSTRUCTION = "Non-Construction";
-    /**
-     * @see org.kuali.kra.s2s.generator.S2SFormGenerator#getFormObject(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
-     */
+    @Override
     public AssurancesDocument getFormObject(ProposalDevelopmentDocument proposalDevelopmentDocument) throws S2SException {
         AssurancesDocument assurcesDocument = AssurancesDocument.Factory.newInstance();
         DevelopmentProposal propDevFormBean = proposalDevelopmentDocument.getDevelopmentProposal();
@@ -48,11 +46,8 @@ public class RRSF424BV1_1Generator extends S2SBaseFormGenerator {
         ProposalSite applicantOrganization = propDevFormBean.getApplicantOrganization();
         rrSF424B.setApplicantOrganizationName(applicantOrganization.getOrganization().getOrganizationName());
         rrSF424B.setAuthorizedRepresentative(getAuthorizedRepresentative(proposalDevelopmentDocument));
-        rrSF424B.setSubmittedDate(getDateTimeService().getCurrentCalendar());
+        rrSF424B.setSubmittedDate(Calendar.getInstance());
         return assurcesDocument;
-    }
-    private DateTimeService getDateTimeService() {
-        return KcServiceLocator.getService(DateTimeService.class);
     }
     /**
      * 

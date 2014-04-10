@@ -18,20 +18,16 @@ package org.kuali.kra.institutionalproposal.contacts;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.institutionalproposal.web.struts.form.InstitutionalProposalForm;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonRole;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonRole;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalProjectPersonnelBean extends InstitutionalProposalContactsBean {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 6251507517307475952L;
 
     private InstitutionalProposalPersonUnit[] newInstitutionalProposalPersonUnits;
@@ -118,9 +114,7 @@ public class InstitutionalProposalProjectPersonnelBean extends InstitutionalProp
         return newInstitutionalProposalPersonUnits;
     }
     
-    /**
-     * @return
-     */
+
     public InstitutionalProposalPerson getNewProjectPerson() {
         return (InstitutionalProposalPerson) newInstitutionalProposalContact;
     }
@@ -190,17 +184,11 @@ public class InstitutionalProposalProjectPersonnelBean extends InstitutionalProp
         return new InstitutionalProposalPerson();
     }
     
-    /**
-     * @see org.kuali.kra.InstitutionalProposal.contacts.InstitutionalProposalContactsBean#getContactRoleType()
-     */
     @Override
     protected Class<? extends ContactRole> getContactRoleType() {
         return ProposalPersonRole.class;
     }
 
-    /**
-     * @see org.kuali.kra.InstitutionalProposal.contacts.InstitutionalProposalContactsBean#init()
-     */
     @Override
     protected void init() {
         super.init();

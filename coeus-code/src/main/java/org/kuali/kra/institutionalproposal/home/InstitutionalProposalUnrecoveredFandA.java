@@ -20,7 +20,7 @@ import org.kuali.coeus.common.framework.sequence.owner.SequenceOwner;
 import org.kuali.kra.award.home.ValuableItem;
 import org.kuali.kra.institutionalproposal.IndirectcostRateType;
 import org.kuali.kra.institutionalproposal.InstitutionalProposalAssociate;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposalAssociate implements ValuableItem, SequenceAssociate {
 
@@ -28,7 +28,7 @@ public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposal
 
     private Long proposalUnrecoveredFandAId;
 
-    private KualiDecimal applicableIndirectcostRate;
+    private ScaleTwoDecimal applicableIndirectcostRate;
 
     private Integer indirectcostRateTypeCode;
 
@@ -36,7 +36,7 @@ public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposal
 
     private boolean onCampusFlag;
 
-    private KualiDecimal underrecoveryOfIndirectcost;
+    private ScaleTwoDecimal underrecoveryOfIndirectcost;
 
     private String sourceAccount;
 
@@ -54,11 +54,11 @@ public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposal
         this.proposalUnrecoveredFandAId = proposalUnrecoveredFandAId;
     }
 
-    public KualiDecimal getApplicableIndirectcostRate() {
+    public ScaleTwoDecimal getApplicableIndirectcostRate() {
         return applicableIndirectcostRate;
     }
 
-    public void setApplicableIndirectcostRate(KualiDecimal applicableIndirectcostRate) {
+    public void setApplicableIndirectcostRate(ScaleTwoDecimal applicableIndirectcostRate) {
         this.applicableIndirectcostRate = applicableIndirectcostRate;
     }
 
@@ -86,11 +86,11 @@ public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposal
         this.onCampusFlag = onCampusFlag;
     }
 
-    public KualiDecimal getUnderrecoveryOfIndirectcost() {
+    public ScaleTwoDecimal getUnderrecoveryOfIndirectcost() {
         return underrecoveryOfIndirectcost;
     }
 
-    public void setUnderrecoveryOfIndirectcost(KualiDecimal underrecoveryOfIndirectcost) {
+    public void setUnderrecoveryOfIndirectcost(ScaleTwoDecimal underrecoveryOfIndirectcost) {
         this.underrecoveryOfIndirectcost = underrecoveryOfIndirectcost;
     }
 
@@ -110,28 +110,22 @@ public class InstitutionalProposalUnrecoveredFandA extends InstitutionalProposal
         this.indirectcostRateType = idcRateType;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#getSequenceOwner()
-     */
+    @Override
     public SequenceOwner getSequenceOwner() {
         return getInstitutionalProposal();
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#setSequenceOwner(org.kuali.coeus.common.framework.sequence.owner.SequenceOwner)
-     */
+    @Override
     public void setSequenceOwner(SequenceOwner newlyVersionedOwner) {
         setInstitutionalProposal((InstitutionalProposal) newlyVersionedOwner);
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.proposalUnrecoveredFandAId = null;
     }
 
-    public KualiDecimal getAmount() {
+    public ScaleTwoDecimal getAmount() {
         return underrecoveryOfIndirectcost;
     }
 }

@@ -18,13 +18,13 @@ package org.kuali.kra.proposaldevelopment.rules;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentUtils;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.ProposalDevelopmentUtils;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonRole;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonRole;
 import org.kuali.kra.proposaldevelopment.questionnaire.ProposalPersonModuleQuestionnaireBean;
 import org.kuali.kra.questionnaire.answer.AnswerHeader;
 import org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService;
@@ -141,8 +141,7 @@ public class KeyPersonnelCertificationRule extends KcTransactionalDocumentRuleBa
         ProposalPersonRole personRole = person.getRole();
         if (personRole.getRoleCode().equals(Constants.CO_INVESTIGATOR_ROLE)
                 || personRole.getRoleCode().equals(Constants.PRINCIPAL_INVESTIGATOR_ROLE)
-                || (personRole.getRoleCode().equals(Constants.KEY_PERSON_ROLE) && StringUtils.isNotBlank(person.getOptInCertificationStatus())
-                        && person.getOptInCertificationStatus().equals("Y"))) {
+                || (personRole.getRoleCode().equals(Constants.KEY_PERSON_ROLE) && person.getOptInCertificationStatus())) {
                 return true;
         }
         

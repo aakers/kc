@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.kuali.coeus.common.notification.impl.NotificationRendererBase;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.AwardAmountInfo;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 
 import java.text.SimpleDateFormat;
@@ -48,10 +48,7 @@ public class AwardNotificationRenderer extends NotificationRendererBase {
         this.award = award;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.coeus.common.notification.impl.NotificationRenderer#getReplacementParameters()
-     */
+    @Override
     public Map<String, String> getDefaultReplacementParameters() {
         return getAwardReplacementParameters(award);
     }
@@ -129,7 +126,7 @@ public class AwardNotificationRenderer extends NotificationRendererBase {
             result.put("{OBLIGATION_EXPIRATION_DATE}", "");            
         }
         if (awardAmountInfo != null) {
-            KualiDecimal totalAmount = KualiDecimal.ZERO;
+            ScaleTwoDecimal totalAmount = ScaleTwoDecimal.ZERO;
             if (awardAmountInfo.getObligatedTotalDirect() != null) {
                 totalAmount = totalAmount.add(awardAmountInfo.getObligatedTotalDirect());
             }
@@ -141,7 +138,7 @@ public class AwardNotificationRenderer extends NotificationRendererBase {
             result.put("{OBLIGATED_TOTAL_AMOUNT}", "0.00");            
         }
         if (awardAmountInfo != null) {
-            KualiDecimal totalAmount = KualiDecimal.ZERO;
+            ScaleTwoDecimal totalAmount = ScaleTwoDecimal.ZERO;
             if (awardAmountInfo.getAnticipatedTotalAmount() != null) {
                 totalAmount = totalAmount.add(awardAmountInfo.getAnticipatedTotalAmount());
             }

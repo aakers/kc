@@ -49,9 +49,7 @@ import java.util.*;
  * 
  * This class implemented the questionnaire answer related methods.
  */
-/**
- * This class...
- */
+
 public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerService {
 
     private static final String MODULE_ITEM_CODE = "moduleItemCode";
@@ -132,13 +130,14 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
                         answerHeaderMap.get(questionnaireId).setActiveQuestionnaire(false);
                     }
                 }
+                answerHeaderMap.get(questionnaireId).setLabel(questionnaireUsage.getQuestionnaireLabel());
             }
             else {
 
                 if ((!moduleQuestionnaireBean.isFinalDoc() && getQuestionnaireService().isCurrentQuestionnaire(questionnaireUsage.getQuestionnaire()))
                         && questionnaireUsage.getQuestionnaire().isActive()) {
                     // filter out an not saved and usage is not include in current qn
-                    answerHeaders.add(setupAnswerForQuestionnaire(questionnaireUsage.getQuestionnaire(), moduleQuestionnaireBean));
+                    answerHeaders.add(setupAnswerForQuestionnaire(questionnaireUsage, moduleQuestionnaireBean));
                 }
 
             }
@@ -157,17 +156,14 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
         for (QuestionnaireUsage questionnaireUsage : usages) {
             if (questionnaireUsage.getQuestionnaire().getQuestionnaireId().equals(questionnaire.getQuestionnaireId())
                     && questionnaireUsage.getQuestionnaire().getSequenceNumber() > questionnaire.getSequenceNumber()) {
-                answerHeader = setupAnswerForQuestionnaire(questionnaireUsage.getQuestionnaire(), moduleQuestionnaireBean);
+                answerHeader = setupAnswerForQuestionnaire(questionnaireUsage, moduleQuestionnaireBean);
             }
         }
         return answerHeader;
     }
 
 
-    /**
-     * 
-     * @see org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService#versioningQuestionnaireAnswer(org.kuali.kra.questionnaire.answer.ModuleQuestionnaireBean)
-     */
+    @Override
     public List<AnswerHeader> versioningQuestionnaireAnswer(ModuleQuestionnaireBean moduleQuestionnaireBean,
             Integer newSequenceNumber) {
         List<AnswerHeader> newAnswerHeaders = new ArrayList<AnswerHeader>();
@@ -284,9 +280,7 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
     }
     
     
-    /**
-     * @see org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService#checkIfQuestionnaireIsActiveForModule(java.lang.Integer, java.lang.String, java.lang.String)
-     */
+    @Override
     public boolean checkIfQuestionnaireIsActiveForModule(Integer questionnaireId, String moduleItemCode, String moduleSubItemCode) {
         boolean isActive = false;
         Questionnaire latestQnnrInstance = getLatestQuestionnaireVersion(questionnaireId);
@@ -349,10 +343,7 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
     }
 
 
-    /**
-     * 
-     * @see org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService#preSave(java.util.List)
-     */
+    @Override
     public void preSave(List<AnswerHeader> answerHeaders) {
         for (AnswerHeader answerHeader : answerHeaders) {
             int i = 0;
@@ -446,7 +437,8 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
     /*
      * initialize answer fields based on question
      */
-    protected AnswerHeader setupAnswerForQuestionnaire(Questionnaire questionnaire, ModuleQuestionnaireBean moduleQuestionnaireBean) {
+    protected AnswerHeader setupAnswerForQuestionnaire(QuestionnaireUsage questionnaireUsage, ModuleQuestionnaireBean moduleQuestionnaireBean) {
+    	Questionnaire questionnaire = questionnaireUsage.getQuestionnaire();
         AnswerHeader answerHeader = new AnswerHeader(moduleQuestionnaireBean, questionnaire.getQuestionnaireRefIdAsLong());
         answerHeader.setQuestionnaire(questionnaire);
         List<Answer> answers = new ArrayList<Answer>();
@@ -462,7 +454,7 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
         }
         answerHeader.setAnswers(answers);
         setupChildAnswerIndicator(answerHeader);
-
+        answerHeader.setLabel(questionnaireUsage.getQuestionnaireLabel());
         return answerHeader;
     }   
 
@@ -504,10 +496,7 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
         return answers;
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService#setupChildAnswerIndicator(java.util.List)
-     */
+    @Override
     public void setupChildAnswerIndicator(AnswerHeader answerHeader) {
         List<Answer> answers = answerHeader.getAnswers();
         List<List<Answer>> parentAnswers = setupParentAnswers(answers);
@@ -837,10 +826,7 @@ public class QuestionnaireAnswerServiceImpl implements QuestionnaireAnswerServic
     }
     
     
-    /**
-     * 
-     * @see org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService#getAnswerHeadersForProtocol(java.lang.String)
-     */
+    @Override
     public List<AnswerHeader> getAnswerHeadersForProtocol(String protocolNumber) {
         boolean isAmendmentOrRenewal = protocolNumber.contains("A") || protocolNumber.contains("R");
         String originalProtocolNumber = protocolNumber;

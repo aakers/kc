@@ -17,9 +17,10 @@ package org.kuali.kra.lookup.keyvalue;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
+import org.kuali.coeus.common.framework.custom.arg.ArgValueLookup;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.service.CustomAttributeService;
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.kns.service.DataDictionaryService;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 public class LookupReturnValuesFinder extends UifKeyValuesFinderBase {
     private static final Log LOG = LogFactory.getLog(LookupReturnValuesFinder.class);
-    private static final String ARGVALUELOOKUPE_CLASS = "org.kuali.kra.bo.ArgValueLookup";
+    private static final String ARGVALUELOOKUPE_CLASS = ArgValueLookup.class.getName();
 
     @Override
     public List<KeyValue> getKeyValues() {

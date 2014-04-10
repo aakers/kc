@@ -15,9 +15,9 @@
  */
 package org.kuali.kra.award.printing.print;
 
+import org.kuali.coeus.common.framework.print.AbstractPrint;
+import org.kuali.coeus.common.framework.print.util.PrintingUtils;
 import org.kuali.kra.award.printing.AwardPrintType;
-import org.kuali.kra.printing.print.AbstractPrint;
-import org.kuali.kra.printing.util.PrintingUtils;
 
 import javax.xml.transform.Source;
 import java.util.ArrayList;
@@ -33,10 +33,6 @@ import java.util.List;
  * 
  */
 public class AwardTemplatePrint extends AbstractPrint {
-
-	/**
-     * Comment for <code>serialVersionUID</code>
-     */
     private static final long serialVersionUID = 7247867016510379530L;
 
     /**

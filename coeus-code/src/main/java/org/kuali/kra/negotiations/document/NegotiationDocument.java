@@ -16,8 +16,8 @@
 package org.kuali.kra.negotiations.document;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
 import org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.negotiations.bo.Negotiation;
 import org.kuali.kra.negotiations.bo.NegotiationActivity;
@@ -32,16 +32,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class...
- */
+
 @NAMESPACE(namespace=Constants.MODULE_NAMESPACE_NEGOTIATION)
 @COMPONENT(component=ParameterConstants.DOCUMENT_COMPONENT)
 public class NegotiationDocument extends KcTransactionalDocumentBase implements Serializable {
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 2635757819118105L;
 
     public static final String DOCUMENT_TYPE_CODE = "NGT";
@@ -50,10 +46,7 @@ public class NegotiationDocument extends KcTransactionalDocumentBase implements 
     private String docStatusCode;
     
     
-    /**
-     * 
-     * Constructs a NegotiationDocument.java.
-     */
+
     public NegotiationDocument() {
         negotiationList = new ArrayList<Negotiation>();
         negotiationList.add(new Negotiation());
@@ -68,10 +61,6 @@ public class NegotiationDocument extends KcTransactionalDocumentBase implements 
         return new NegotiationDocument();
     }
     
-    /**
-     * 
-     * @see org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase#initialize()
-     */
     @Override
     public void initialize() {
         super.initialize();
@@ -92,9 +81,6 @@ public class NegotiationDocument extends KcTransactionalDocumentBase implements 
         this.docStatusCode = docStatusCode;
     }
 
-    /**
-     * @see org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase#getDocumentTypeCode()
-     */
     @Override
     public String getDocumentTypeCode() {
         return DOCUMENT_TYPE_CODE;
@@ -135,12 +121,8 @@ public class NegotiationDocument extends KcTransactionalDocumentBase implements 
         return isComplete;
     }
     
-    /**
-     * 
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
         

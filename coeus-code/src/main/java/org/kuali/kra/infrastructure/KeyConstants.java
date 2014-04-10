@@ -965,6 +965,7 @@ public final class KeyConstants {
     public static final String ERROR_REQUIRED_SUBAWARD_DATE_FOLLOWUP = "error.required.subaward.closeout.date.followup";
     public static final String ERROR_REQUIRED_SUBAWARD_FUNDING_SOURCE_AWARD_NUMBER= "error.required.subaward.funding.source.award.number";
     public static final String ERROR_REQUIRED_SUBAWARD_CONTACT_PERSON_EXIST= "error.subAwardSponsorContact.person.exists";
+    public static final String ERROR_REQUIRED_SUBAWARD_TEMPLATE_INFO_CARRY_FORWARD_REQUESTS_SENT_TO= "error.required.subaward.templateinfo.carryForwardRequestsSentTo";
     public static final String ERROR_REQUIRED_SUBAWARD_FUNDING_SOURCE_AWARD_NUMBER_DUPLICATE= "error.required.subaward.funding.source.award.number.duplicate";
     public static final String SUBAWARD_ERROR_END_DATE_GREATER_THAN_START = "subaward.error.end.date.greater.than.start";
     public static final String ERROR_AMOUNT_INFO_OBLIGATED_AMOUNT_GREATER_THAN_ANTICIPATED_AMOUNT = "subaward.error.obligated.amount.greater.than.anticipated.amount";
@@ -980,6 +981,11 @@ public final class KeyConstants {
     public static final String ERROR_INVALID_SITEINVESTIGATOR_ID = "error.invalid.siteinvestigator.id";
     public static final String ERROR_INVALID_REQUISITIONER = "error.invalid.requisitioner";
     public static final String ERROR_SUBAWARD_INVOICE_AMOUNT_RELEASED_ZERO = "subaward.error.amount.released.zero";
+    public static final String ERROR_PERIOD_OF_PERFORMANCE_START_DATE_SHOULD_BE_GREATER_THAN_ERROR_PERIOD_OF_PERFORMANCE_END_DATE = "period.of.performance.startdate.should.greater.than.period.of.performance.enddate";
+    public static final String SUBAWARD_ATTACHMENT_TYPE_CODE_REQUIRED = "error.Subaward.attachment.typeRequired";
+    public static final String SUBAWARD_ATTACHMENT_FILE_REQUIRED = "error.Subaward.attachment.fileRequired";
+    public static final String SUBAWARD_ATTACHMENT_DESCRIPTION_REQUIRED = "error.Subaward.attachment.descriptionRequired";
+    public static final String ERROR_REQUIRED_SUBAWARD_REPORT_TYPE_CODE = "error.required.subaward.report.type.code";
     //negotiations
     public static final String NEGOTIATION_STATUS_USED = "error.negotiations.codeAlreadyUsed";
     public static final String NEGOTIATION_CHANGE_ASSOCIATION_TYPE_MESSAGE="negotiation.message.changeAssociationType";

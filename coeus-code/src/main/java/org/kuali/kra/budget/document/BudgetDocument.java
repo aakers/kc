@@ -21,12 +21,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.auth.perm.Permissionable;
 import org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.authorization.KraAuthorizationConstants;
 import org.kuali.kra.award.document.AwardDocument;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.bo.DocumentNextvalue;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetParent;
@@ -37,7 +40,6 @@ import org.kuali.kra.krms.KcKrmsConstants;
 import org.kuali.kra.krms.KrmsRulesContext;
 import org.kuali.kra.krms.service.impl.KcKrmsFactBuilderServiceHelper;
 import org.kuali.kra.proposaldevelopment.budget.bo.ProposalDevelopmentBudgetExt;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants.COMPONENT;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants.NAMESPACE;
@@ -53,9 +55,8 @@ import org.kuali.rice.krms.api.engine.Facts.Builder;
 @COMPONENT(component=ParameterConstants.DOCUMENT_COMPONENT)
 public class BudgetDocument<T extends BudgetParent> extends KcTransactionalDocumentBase implements Copyable, SessionDocument,Permissionable,BudgetDocumentTypeChecker, KrmsRulesContext {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+    private static final Log LOG = LogFactory.getLog(BudgetDocument.class);
+
     private static final long serialVersionUID = 6716733800206633452L;
 
     private static final String DOCUMENT_TYPE_CODE = "BUDG";
@@ -84,7 +85,7 @@ public class BudgetDocument<T extends BudgetParent> extends KcTransactionalDocum
                 ObjectUtils.setObjectPropertyDeep(budgetPeriod, "budgetId", Long.class, budgetId);
             }
         }catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -134,9 +135,6 @@ public class BudgetDocument<T extends BudgetParent> extends KcTransactionalDocum
     }
     
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void prepareForSave() {
         super.prepareForSave();
@@ -213,9 +211,6 @@ public class BudgetDocument<T extends BudgetParent> extends KcTransactionalDocum
         }
         return budgets.get(0);
     }
-    /**
-     * @see org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase#getDocumentTypeCode()
-     */
     @Override
     public String getDocumentTypeCode() {
         return DOCUMENT_TYPE_CODE;
@@ -253,7 +248,6 @@ public class BudgetDocument<T extends BudgetParent> extends KcTransactionalDocum
         this.parentDocumentTypeCode = parentDocumentTypeCode;
     }
 
-    /** {@inheritDoc} */
     @Override
     public String getCustomLockDescriptor(Person user) {
         String activeLockRegion = (String) GlobalVariables.getUserSession().retrieveObject(KraAuthorizationConstants.ACTIVE_LOCK_REGION);

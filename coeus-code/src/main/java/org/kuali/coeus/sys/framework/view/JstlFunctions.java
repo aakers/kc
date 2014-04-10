@@ -16,8 +16,10 @@
 package org.kuali.coeus.sys.framework.view;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.keyvalues.KeyValuesFinder;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,7 @@ public final class JstlFunctions {
                         <c:set var="roleStyle" value="background-color:#FFD5D5"/>
                     </c:if>
                     <html:select property="${proposalPerson}.proposalPersonRoleId" tabindex="0" style="${roleStyle}">
-                    <c:forEach items="${krafn:getOptionList('org.kuali.kra.proposaldevelopment.lookup.keyvalue.ProposalPersonRoleValuesFinder', paramMap)}" var="option">
+                    <c:forEach items="${krafn:getOptionList('org.kuali.coeus.propdev.impl.person.ProposalPersonRoleValuesFinder', paramMap)}" var="option">
                     <c:choose>
                         <c:when test="${KualiForm.document.proposalPersons[personIndex].proposalPersonRoleId == option.key}">
                         <option value="${option.key}" selected>${option.label}</option>
@@ -72,6 +74,28 @@ public final class JstlFunctions {
     @SuppressWarnings("unchecked")
     public static List getOptionList(String valuesFinderClassName, Map params) {
         return setupValuesFinder(valuesFinderClassName, (Map<String, Object>) params).getKeyValues();
+    }
+
+    /**
+     * Returns the BigDecimal value wrapped inside the given ScaleTwoDecimal in order to get correct type coercion for Jetty.
+     * Here is an example of how the code is used in a JSP/tag file:
+     * <code>
+     * <c:set var="cumTotalCost" value="${cumTotalCost + krafn:getBigDecimal(budgetPeriodObj.totalCost)}" />
+     * </code>
+     */
+    public static BigDecimal getBigDecimal(ScaleTwoDecimal scaleTwoDecimal) {
+        return scaleTwoDecimal.bigDecimalValue();
+    }
+
+    /**
+     * Returns the float value of a given ScaleTwoDecimal.
+     * Here is an example of how the code is used in a JSP/tag file:
+     * <code>
+     * <c:set var="cumTotalCost" value="${cumTotalCost + krafn:getFloatValue(budgetPeriodObj.totalCost)}" />
+     * </code>
+     */
+    public static float getFloatValue(ScaleTwoDecimal scaleTwoDecimal) {
+        return scaleTwoDecimal.floatValue();
     }
     
     /**

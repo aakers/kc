@@ -17,6 +17,8 @@ package org.kuali.kra.award.printing.xmlstream;
 
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.kra.award.customdata.AwardCustomData;
 import org.kuali.kra.award.document.AwardDocument;
@@ -27,7 +29,6 @@ import org.kuali.kra.award.paymentreports.paymentschedule.AwardPaymentSchedule;
 import org.kuali.kra.award.printing.AwardPrintParameters;
 import org.kuali.kra.award.printing.AwardPrintType;
 import org.kuali.kra.award.specialreview.AwardSpecialReview;
-import org.kuali.kra.bo.versioning.VersionHistory;
 import org.kuali.kra.printing.schema.AwardNoticeDocument;
 import org.kuali.kra.printing.schema.AwardNoticeDocument.AwardNotice.PrintRequirement;
 import org.kuali.kra.printing.schema.AwardType;
@@ -39,7 +40,6 @@ import org.kuali.kra.printing.schema.AwardType.AwardSpecialReviews;
 import org.kuali.kra.printing.schema.AwardType.AwardTransferringSponsors;
 import org.kuali.kra.printing.schema.AwardType.AwardTransferringSponsors.TransferringSponsor;
 import org.kuali.kra.printing.schema.SpecialReviewType;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.kra.timeandmoney.document.TimeAndMoneyDocument;
 import org.kuali.kra.timeandmoney.service.TimeAndMoneyActionSummaryService;
 import org.kuali.kra.timeandmoney.transactions.AwardAmountTransaction;
@@ -322,47 +322,7 @@ public class AwardDeltaXmlStream extends AwardBaseStream {
 		transferringSponsors.setTransferringSponsorArray(transferringSponsorList.toArray(new TransferringSponsor[0]));
 		return transferringSponsors;
 	}
-//    private AwardTransferringSponsors getAwardTransferringSponsors() {
-//        AwardTransferringSponsors transferringSponsors = AwardTransferringSponsors.Factory
-//                .newInstance();
-//        List<TransferringSponsor> transferringSponsorList = new LinkedList<TransferringSponsor>();
-//        String transferSponsorIndicator = award.getTransferSponsorIndicator();
-//        if (transferSponsorIndicator != null
-//                && !transferSponsorIndicator.equals(EMPTY_STRING)) {
-//            transferSponsorIndicator = transferSponsorIndicator.length() == 1 ? transferSponsorIndicator
-//                    : transferSponsorIndicator.substring(1, 2);
-//            if (transferSponsorIndicator.equals(TRANSFERSPONSOR_MODIFIED_VALUE)) {
-//                List<AwardTransferringSponsor> awardTransferringSponsorList = award
-//                        .getAwardTransferringSponsors();
-//                TransferringSponsor transferringSponsor = null;
-//                for (AwardTransferringSponsor awardTransferringSponsor : awardTransferringSponsorList) {
-//                    transferringSponsor = getAwardTransferringSponsor(awardTransferringSponsor);
-//                    transferringSponsorList.add(transferringSponsor);
-//                }
-//                List<AwardTransferringSponsor> prevTransferringSponsorList = null;
-//                if (prevAward != null) {
-//                    prevTransferringSponsorList = prevAward
-//                            .getAwardTransferringSponsors();
-//                }
-//                if (prevTransferringSponsorList != null) {
-//                    for (AwardTransferringSponsor awardTransferringSponsor : prevTransferringSponsorList) {
-//                        transferringSponsor = getPrevAwardTransferringSponsorBean(awardTransferringSponsor);
-//                        transferringSponsorList.add(transferringSponsor);
-//                    }
-//                }
-//            }
-//        }
-//        transferringSponsors
-//                .setTransferringSponsorArray(transferringSponsorList
-//                        .toArray(new TransferringSponsor[0]));
-//        return transferringSponsors;
-//    }
 
-    /**
-     * This method...
-     * @param awardTransferringSponsor
-     * @param awardTransferringSponsors
-     */
     private boolean checkSponsorCodeChange(AwardTransferringSponsor awardTransferringSponsor,
             List<AwardTransferringSponsor> awardTransferringSponsors) {
         for (AwardTransferringSponsor currentAwardTransferringSponsor : awardTransferringSponsors) {

@@ -15,17 +15,15 @@
  */
 package org.kuali.kra.budget.core;
 
+import org.kuali.coeus.common.framework.type.ActivityType;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.budget.personnel.PersonRolodex;
-import org.kuali.kra.proposaldevelopment.bo.ActivityType;
 
 import java.sql.Date;
 import java.util.List;
 
-/**
- * This class...
- */
+
 public interface BudgetParent {
     public String getBudgetStatus();
     public void setBudgetStatus(String budgetStatus);

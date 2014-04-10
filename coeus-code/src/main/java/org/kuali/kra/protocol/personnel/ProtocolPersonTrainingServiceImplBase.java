@@ -16,7 +16,7 @@
 package org.kuali.kra.protocol.personnel;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kuali.kra.bo.PersonTraining;
+import org.kuali.coeus.common.framework.person.attr.PersonTraining;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
@@ -36,18 +36,14 @@ public abstract class ProtocolPersonTrainingServiceImplBase implements ProtocolP
     private DateTimeService dateTimeService;
     
     
-    /**
-     * @see org.kuali.kra.protocol.personnel.ProtocolPersonTrainingService#isPersonTrained(java.lang.String)
-     */
+    @Override
     public void updatePersonTrained(List<ProtocolPersonBase> protocolPersons) {
         for(ProtocolPersonBase protocolPerson : protocolPersons) {
             setTrainedFlag(protocolPerson);
         }
     }
     
-    /**
-     * @see org.kuali.kra.protocol.personnel.ProtocolPersonTrainingService#setTrainedFlag(org.kuali.kra.protocol.personnel.ProtocolPersonBase)
-     */
+    @Override
     public void setTrainedFlag(ProtocolPersonBase protocolPerson) {
         protocolPerson.setTrained(isTrained(protocolPerson.getPersonId()));
     }

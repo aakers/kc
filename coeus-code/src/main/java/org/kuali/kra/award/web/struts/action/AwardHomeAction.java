@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
 import org.kuali.coeus.common.specialreview.impl.rule.event.SaveSpecialReviewLinkEvent;
 import org.kuali.coeus.common.specialreview.impl.service.SpecialReviewService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
@@ -30,12 +32,10 @@ import org.kuali.kra.award.home.keywords.AwardScienceKeyword;
 import org.kuali.kra.award.specialreview.AwardSpecialReview;
 import org.kuali.kra.bo.FundingSourceType;
 import org.kuali.kra.bo.SpecialReviewType;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.service.KeywordsService;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kew.api.exception.WorkflowException;
@@ -251,10 +251,10 @@ public class AwardHomeAction extends AwardAction {
          * the following two null overrides are per KCAWD-1001
          */
         if (awardDocument.getAward().getAwardAmountInfos().get(0).getAnticipatedTotalAmount() == null) {
-            awardDocument.getAward().getAwardAmountInfos().get(0).setAnticipatedTotalAmount(new KualiDecimal(0));
+            awardDocument.getAward().getAwardAmountInfos().get(0).setAnticipatedTotalAmount(new ScaleTwoDecimal(0));
         }
         if (awardDocument.getAward().getAwardAmountInfos().get(0).getAmountObligatedToDate() == null) {
-            awardDocument.getAward().getAwardAmountInfos().get(0).setAmountObligatedToDate(new KualiDecimal(0));
+            awardDocument.getAward().getAwardAmountInfos().get(0).setAmountObligatedToDate(new ScaleTwoDecimal(0));
         }
         
         awardForm.getProjectPersonnelBean().updateLeadUnit();
@@ -326,9 +326,6 @@ public class AwardHomeAction extends AwardAction {
         return returnValue;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ActionForward close(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // The user is prompted to save when the document is closed.  If they say yes, it will save the document but won't call back to the Action.save.
@@ -356,14 +353,7 @@ public class AwardHomeAction extends AwardAction {
 
         return super.performLookup(mapping, form, request, response);
     }
-    
-    
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
     @SuppressWarnings("unchecked")
     protected KeywordsService getKeywordService(){
         return KcServiceLocator.getService(KeywordsService.class);

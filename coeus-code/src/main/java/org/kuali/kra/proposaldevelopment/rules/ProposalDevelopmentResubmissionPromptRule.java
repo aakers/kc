@@ -17,8 +17,8 @@ package org.kuali.kra.proposaldevelopment.rules;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.proposaldevelopment.rule.ResubmissionPromptRule;
-import org.kuali.kra.proposaldevelopment.rule.event.ResubmissionRuleEvent;
+import org.kuali.coeus.propdev.impl.resubmit.ResubmissionPromptRule;
+import org.kuali.coeus.propdev.impl.resubmit.ResubmissionRuleEvent;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
 
 /**
@@ -28,11 +28,7 @@ public class ProposalDevelopmentResubmissionPromptRule extends KcTransactionalDo
 
     private static final String REBUSMISSION_OPTION = "resubmissionOption";
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.proposaldevelopment.rule.ResubmissionPromptRule#processResubmissionPromptBusinessRules(
-     *      org.kuali.kra.proposaldevelopment.rule.event.ResubmissionRuleEvent)
-     */
+    @Override
     public boolean processResubmissionPromptBusinessRules(ResubmissionRuleEvent resubmissionRuleEvent) {
         boolean rulePassed = true;
         

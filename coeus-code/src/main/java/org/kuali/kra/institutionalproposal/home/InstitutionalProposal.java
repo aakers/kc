@@ -22,9 +22,14 @@ import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.sequence.owner.SequenceOwner;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
+import org.kuali.coeus.common.framework.sponsor.Sponsorable;
+import org.kuali.coeus.common.framework.type.ActivityType;
+import org.kuali.coeus.common.framework.type.ProposalType;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.common.framework.unit.UnitService;
 import org.kuali.coeus.common.framework.unit.admin.UnitAdministrator;
+import org.kuali.coeus.common.framework.unit.admin.UnitAdministratorType;
+import org.kuali.coeus.common.framework.version.VersionStatus;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.SkipVersioning;
@@ -33,7 +38,6 @@ import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.award.home.ValuableItem;
 import org.kuali.kra.award.home.fundingproposal.AwardFundingProposal;
 import org.kuali.kra.bo.*;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.document.KeywordsManager;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.institutionalproposal.ProposalIpReviewJoin;
@@ -50,12 +54,9 @@ import org.kuali.kra.institutionalproposal.proposallog.service.ProposalLogServic
 import org.kuali.kra.institutionalproposal.specialreview.InstitutionalProposalSpecialReview;
 import org.kuali.kra.negotiations.bo.Negotiable;
 import org.kuali.kra.negotiations.bo.NegotiationPersonDTO;
-import org.kuali.kra.proposaldevelopment.bo.ActivityType;
-import org.kuali.kra.proposaldevelopment.bo.ProposalType;
 import org.kuali.kra.proposaldevelopment.bo.ProposalUnitCreditSplit;
 import org.kuali.kra.service.FiscalYearMonthService;
-import org.kuali.kra.service.Sponsorable;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.ObjectUtils;
 
@@ -86,7 +87,7 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
     private Integer rolodexId;
     private String noticeOfOpportunityCode;
     private Integer gradStudHeadcount;
-    private KualiDecimal gradStudPersonMonths;
+    private ScaleTwoDecimal gradStudPersonMonths;
     private boolean typeOfAccount;
     private String activityTypeCode;
     private Date requestedStartDateInitial;
@@ -95,10 +96,10 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
     private Date requestedEndDateTotal;
     private String fiscalMonth;
     private String fiscalYear;
-    private KualiDecimal totalDirectCostInitial;
-    private KualiDecimal totalDirectCostTotal;
-    private KualiDecimal totalIndirectCostInitial;
-    private KualiDecimal totalIndirectCostTotal;
+    private ScaleTwoDecimal totalDirectCostInitial;
+    private ScaleTwoDecimal totalDirectCostTotal;
+    private ScaleTwoDecimal totalIndirectCostInitial;
+    private ScaleTwoDecimal totalIndirectCostTotal;
     private String numberOfCopies;
     private Date deadlineDate;
     private String deadlineTime;
@@ -195,10 +196,10 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         Calendar cl = Calendar.getInstance();
         setCreateTimeStamp(new Date(cl.getTime().getTime()));
         // setProposalNumber("1");
-        setTotalDirectCostInitial(new KualiDecimal(0));
-        setTotalDirectCostTotal(new KualiDecimal(0));
-        setTotalIndirectCostInitial(new KualiDecimal(0));
-        setTotalIndirectCostTotal(new KualiDecimal(0));
+        setTotalDirectCostInitial(new ScaleTwoDecimal(0));
+        setTotalDirectCostTotal(new ScaleTwoDecimal(0));
+        setTotalIndirectCostInitial(new ScaleTwoDecimal(0));
+        setTotalIndirectCostTotal(new ScaleTwoDecimal(0));
         newDescription = getDefaultNewDescription();
         setProposalSequenceStatus(VersionStatus.PENDING.toString());
         setStatusCode(1);// default value for all IP's
@@ -319,10 +320,7 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         awardFundingProposals.add(afp);
     }
 
-    /**
-     * This method...
-     * @param institutionaProposalNotepad
-     */
+
     public void add(InstitutionalProposalNotepad institutionalProposalNotepad) {
         institutionalProposalNotepad.setEntryNumber(getInstitutionalProposalNotepads().size() + 1);
         institutionalProposalNotepad.setProposalNumber(this.getProposalNumber());
@@ -330,19 +328,13 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         institutionalProposalNotepad.setInstitutionalProposal(this);
     }
 
-    /**
-     * This method...
-     * @param institutionalProposalCostShare
-     */
+
     public void add(InstitutionalProposalCostShare institutionalProposalCostShare) {
         institutionalProposalCostShare.setInstitutionalProposal(this);
         institutionalProposalCostShares.add(institutionalProposalCostShare);
     }
 
-    /**
-     * This method...
-     * @param institutionalProposalUnrecoveredFandA
-     */
+
     public void add(InstitutionalProposalUnrecoveredFandA institutionalProposalUnrecoveredFandA) {
         institutionalProposalUnrecoveredFandA.setInstitutionalProposal(this);
         institutionalProposalUnrecoveredFandAs.add(institutionalProposalUnrecoveredFandA);
@@ -352,8 +344,8 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
      * This method 
      * @return
      */
-    public KualiDecimal getTotalInitialCost() {
-        KualiDecimal returnValue = new KualiDecimal(0);
+    public ScaleTwoDecimal getTotalInitialCost() {
+        ScaleTwoDecimal returnValue = new ScaleTwoDecimal(0);
         returnValue = returnValue.add(totalDirectCostInitial);
         returnValue = returnValue.add(totalIndirectCostInitial);
         return returnValue;
@@ -364,8 +356,8 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
      * 
      * @return
      */
-    public KualiDecimal getTotalCost() {
-        KualiDecimal returnValue = new KualiDecimal(0);
+    public ScaleTwoDecimal getTotalCost() {
+        ScaleTwoDecimal returnValue = new ScaleTwoDecimal(0);
         returnValue = returnValue.add(totalDirectCostTotal);
         returnValue = returnValue.add(totalIndirectCostTotal);
         return returnValue;
@@ -377,10 +369,10 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
      * @param valuableItems
      * @return The total value
      */
-    KualiDecimal getTotalAmount(List<? extends ValuableItem> valuableItems) {
-        KualiDecimal returnVal = new KualiDecimal(0.00);
+    ScaleTwoDecimal getTotalAmount(List<? extends ValuableItem> valuableItems) {
+        ScaleTwoDecimal returnVal = new ScaleTwoDecimal(0.00);
         for (ValuableItem item : valuableItems) {
-            KualiDecimal amount = item.getAmount() != null ? item.getAmount() : new KualiDecimal(0.00);
+            ScaleTwoDecimal amount = item.getAmount() != null ? item.getAmount() : new ScaleTwoDecimal(0.00);
             returnVal = returnVal.add(amount);
         }
         return returnVal;
@@ -391,7 +383,7 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
      * 
      * @return
      */
-    public KualiDecimal getTotalCostShareAmount() {
+    public ScaleTwoDecimal getTotalCostShareAmount() {
         return getTotalAmount(institutionalProposalCostShares);
     }
 
@@ -400,7 +392,7 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
      * 
      * @return
      */
-    public KualiDecimal getTotalUnrecoveredFandAAmount() {
+    public ScaleTwoDecimal getTotalUnrecoveredFandAAmount() {
         return getTotalAmount(institutionalProposalUnrecoveredFandAs);
     }
 
@@ -497,9 +489,7 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         institutionalProposalUnitContact.setInstitutionalProposal(this);
     }
 
-    /**
-     * @return
-     */
+
     public KcPerson getOspAdministrator() {
         for (InstitutionalProposalUnitContact contact : getInstitutionalProposalUnitContacts()) {
             if (contact.isOspAdministrator()) {
@@ -517,16 +507,12 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         this.institutionalProposalUnitContacts = institutionalProposalUnitContacts;
     }
 
-    /**
-     * @return
-     */
+
     public List<InstitutionalProposalUnitContact> getInstitutionalProposalUnitContacts() {
         return institutionalProposalUnitContacts;
     }
 
-    /**
-     * @return
-     */
+
     public int getInstitutionalProposalContactsCount() {
         return institutionalProposalUnitContacts.size();
     }
@@ -619,11 +605,11 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         this.gradStudHeadcount = gradStudHeadcount;
     }
 
-    public KualiDecimal getGradStudPersonMonths() {
+    public ScaleTwoDecimal getGradStudPersonMonths() {
         return gradStudPersonMonths;
     }
 
-    public void setGradStudPersonMonths(KualiDecimal gradStudPersonMonths) {
+    public void setGradStudPersonMonths(ScaleTwoDecimal gradStudPersonMonths) {
         this.gradStudPersonMonths = gradStudPersonMonths;
     }
 
@@ -683,52 +669,52 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         this.requestedEndDateTotal = requestedEndDateTotal;
     }
 
-    public KualiDecimal getTotalDirectCostInitial() {
+    public ScaleTwoDecimal getTotalDirectCostInitial() {
         return totalDirectCostInitial;
     }
 
-    public void setTotalDirectCostInitial(KualiDecimal totalDirectCostInitial) {
+    public void setTotalDirectCostInitial(ScaleTwoDecimal totalDirectCostInitial) {
         if (totalDirectCostInitial == null) {
-            this.totalDirectCostInitial = KualiDecimal.ZERO;
+            this.totalDirectCostInitial = ScaleTwoDecimal.ZERO;
         }
         else {
             this.totalDirectCostInitial = totalDirectCostInitial;
         }
     }
 
-    public KualiDecimal getTotalDirectCostTotal() {
+    public ScaleTwoDecimal getTotalDirectCostTotal() {
         return totalDirectCostTotal;
     }
 
-    public void setTotalDirectCostTotal(KualiDecimal totalDirectCostTotal) {
+    public void setTotalDirectCostTotal(ScaleTwoDecimal totalDirectCostTotal) {
         if (totalDirectCostTotal == null) {
-            this.totalDirectCostTotal = KualiDecimal.ZERO;
+            this.totalDirectCostTotal = ScaleTwoDecimal.ZERO;
         }
         else {
             this.totalDirectCostTotal = totalDirectCostTotal;
         }
     }
 
-    public KualiDecimal getTotalIndirectCostInitial() {
+    public ScaleTwoDecimal getTotalIndirectCostInitial() {
         return totalIndirectCostInitial;
     }
 
-    public void setTotalIndirectCostInitial(KualiDecimal totalIndirectCostInitial) {
+    public void setTotalIndirectCostInitial(ScaleTwoDecimal totalIndirectCostInitial) {
         if (totalIndirectCostInitial == null) {
-            this.totalIndirectCostInitial = KualiDecimal.ZERO;
+            this.totalIndirectCostInitial = ScaleTwoDecimal.ZERO;
         }
         else {
             this.totalIndirectCostInitial = totalIndirectCostInitial;
         }
     }
 
-    public KualiDecimal getTotalIndirectCostTotal() {
+    public ScaleTwoDecimal getTotalIndirectCostTotal() {
         return totalIndirectCostTotal;
     }
 
-    public void setTotalIndirectCostTotal(KualiDecimal totalIndirectCostTotal) {
+    public void setTotalIndirectCostTotal(ScaleTwoDecimal totalIndirectCostTotal) {
         if (totalIndirectCostTotal == null) {
-            this.totalIndirectCostTotal = KualiDecimal.ZERO;
+            this.totalIndirectCostTotal = ScaleTwoDecimal.ZERO;
         }
         else {
             this.totalIndirectCostTotal = totalIndirectCostTotal;
@@ -1124,17 +1110,12 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         this.unitNumber = unitNumber;
     }
 
-    /**
-     * @return
-     */
+
     public String getLeadUnitNumber() {
         return getUnitNumber();
     }
 
-    /**
-     * This method...
-     * @param unitNumber
-     */
+
     public void setLeadUnitNumber(String unitNumber) {
         this.unitNumber = unitNumber;
     }
@@ -1410,30 +1391,22 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         return getKeywords().get(index);
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#getOwnerSequenceNumber()
-     */
+    @Override
     public Integer getOwnerSequenceNumber() {
         return null;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#incrementSequenceNumber()
-     */
+    @Override
     public void incrementSequenceNumber() {
         this.sequenceNumber++;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#getSequenceOwner()
-     */
+    @Override
     public InstitutionalProposal getSequenceOwner() {
         return this;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#setSequenceOwner(org.kuali.coeus.common.framework.sequence.owner.SequenceOwner)
-     */
+    @Override
     public void setSequenceOwner(InstitutionalProposal newOwner) {
         // no-op
     }
@@ -1450,16 +1423,12 @@ public class InstitutionalProposal extends KcPersistableBusinessObjectBase imple
         updateFundingStatus();
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.proposalId = null;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#getName()
-     */
+    @Override
     public String getVersionNameField() {
         return "proposalNumber";
     }

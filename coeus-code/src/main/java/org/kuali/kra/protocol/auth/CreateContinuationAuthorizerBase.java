@@ -15,22 +15,28 @@
  */
 package org.kuali.kra.protocol.auth;
 
+import org.kuali.kra.protocol.ProtocolBase;
+import org.kuali.kra.protocol.actions.submit.ProtocolSubmissionBase;
+
 
 public abstract class CreateContinuationAuthorizerBase extends ContinuationAuthorizer {
 
-    /**
-     * @see org.kuali.kra.protocol.auth.ProtocolAuthorizerBase#isAuthorized(java.lang.String, org.kuali.kra.protocol.auth.ProtocolTaskBase)
-     */
     @Override
     public boolean isAuthorized(String userId, ProtocolTaskBase task) {
         return !isAmendmentOrRenewalOrContinuation(task.getProtocol()) &&
                canExecuteAction(task.getProtocol(), getActionTypeContinuationCreatedHook()) &&
                (hasPermission(userId, task.getProtocol(), getPermissionCreateContinuationHook())
-                    || hasPermission(userId, task.getProtocol(), getPermissionCreateAnyContinuationHook()));
+                    || hasPermission(userId, task.getProtocol(), getPermissionCreateAnyContinuationHook()))&&
+                    !(isRequestForSuspension(findSubmisionHook(task.getProtocol()), getProtocolSubmissionTypeHook())
+                            & !isAdmin(userId, getAdminNamespaceHook(), getAdminRoleHook()));
     }
 
     protected abstract String getActionTypeContinuationCreatedHook();
     protected abstract String getPermissionCreateContinuationHook();
     protected abstract String getPermissionCreateAnyContinuationHook();
+    protected abstract String getAdminNamespaceHook();
+    protected abstract String getAdminRoleHook();
+    protected abstract String getProtocolSubmissionTypeHook();
+    protected abstract ProtocolSubmissionBase findSubmisionHook(ProtocolBase protocol);
 
 }

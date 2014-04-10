@@ -31,18 +31,11 @@ public class BudgetCategoryExistenceRule extends KcMaintenanceDocumentRuleBase {
         super();
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */ 
+    @Override
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         return checkExistence(document);
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         return checkExistence(document);
@@ -73,8 +66,8 @@ public class BudgetCategoryExistenceRule extends KcMaintenanceDocumentRuleBase {
             
         }
         Map pkMap = new HashMap();
-        pkMap.put("budgetCategoryCode", budgetCategoryCode);
-        valid=checkExistenceFromTable(BudgetCategory.class,pkMap,"budgetCategoryCode", "Budget Category");
+        pkMap.put("code", budgetCategoryCode);
+        valid=checkExistenceFromTable(BudgetCategory.class,pkMap,"code", "Budget Category");
 
 
         return valid;

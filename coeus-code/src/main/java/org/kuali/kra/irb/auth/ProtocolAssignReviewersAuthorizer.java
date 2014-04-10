@@ -22,8 +22,6 @@ import org.kuali.kra.infrastructure.PermissionConstants;
 import org.kuali.kra.irb.Protocol;
 import org.kuali.kra.irb.actions.submit.ProtocolReviewType;
 import org.kuali.kra.irb.actions.submit.ProtocolSubmission;
-import org.kuali.kra.irb.actions.submit.ProtocolSubmissionStatus;
-import org.kuali.kra.protocol.actions.submit.ProtocolSubmissionBase;
 
 /**
  * Determine if a user can assign a protocol to a committee/schedule.
@@ -32,14 +30,15 @@ public class ProtocolAssignReviewersAuthorizer extends ProtocolAuthorizer {
 
     private KcWorkflowService kraWorkflowService;
 
-    /**
-     * @see org.kuali.kra.irb.auth.ProtocolAuthorizer#isAuthorized(java.lang.String, org.kuali.kra.irb.auth.ProtocolTask)
-     */
+    @Override
     public boolean isAuthorized(String username, ProtocolTask task) {
         Protocol protocol = task.getProtocol();
+        ProtocolSubmission submission = findSubmission(protocol);
+        
         return isOnNode(protocol) && isPendingOrSubmittedToCommittee(protocol) && 
-                (isInSchedule(protocol) || isExpeditedSubmission(protocol)) &&
-                hasPermission(username, protocol, PermissionConstants.PERFORM_IRB_ACTIONS_ON_PROTO);
+               ( canPerformActionOnExpedited(protocol) || (isScheduleRequiredForReview(submission) && isAssignedToCommitteeAndSchedule(submission))
+                     || (!isScheduleRequiredForReview(submission) && isAssignedToCommittee(submission)) ) &&
+               hasPermission(username, protocol, PermissionConstants.PERFORM_IRB_ACTIONS_ON_PROTO);
     }
 
     public boolean isOnNode(Protocol protocol) {
@@ -56,48 +55,34 @@ public class ProtocolAssignReviewersAuthorizer extends ProtocolAuthorizer {
     }
     
     /**
+     * Is the submission assigned to a committee?
+     * @param submission
+     * @return
+     */
+    private boolean isAssignedToCommittee(ProtocolSubmission submission) {
+        return !StringUtils.isBlank(submission.getCommitteeId());
+    }
+    
+    /**
      * Is the submission assigned to a committee and schedule?
-     * @param protocol
+     * @param submission
      * @return
      */
-    private boolean isInSchedule(Protocol protocol) {
-        ProtocolSubmission submission = findSubmission(protocol);
-        return submission != null &&
-               !StringUtils.isBlank(submission.getCommitteeId()) &&
-               !StringUtils.isBlank(submission.getScheduleId());
+    private boolean isAssignedToCommitteeAndSchedule(ProtocolSubmission submission) {
+        return !StringUtils.isBlank(submission.getCommitteeId()) && !StringUtils.isBlank(submission.getScheduleId());
     }
     
     /**
-     * Find the submission.  It is the submission that is either currently pending or
-     * already submitted to a committee. 
-     * @param protocol
+     * Is the submission for a full committee review
+     * @param submission
      * @return
      */
-    private ProtocolSubmission findSubmission(Protocol protocol) {
-        for (ProtocolSubmissionBase submission : protocol.getProtocolSubmissions()) {
-            if (StringUtils.equals(submission.getSubmissionStatusCode(), ProtocolSubmissionStatus.PENDING) ||
-                StringUtils.equals(submission.getSubmissionStatusCode(), ProtocolSubmissionStatus.SUBMITTED_TO_COMMITTEE)) {
-                return (ProtocolSubmission) submission;
-            }
-        }
-        return null;
+    private boolean isFullCommitteeReview(ProtocolSubmission submission) {
+        return submission != null && ProtocolReviewType.FULL_TYPE_CODE.equals(submission.getProtocolReviewTypeCode());
     }
     
-    /**
-     * Is the submission expedited?
-     * @param protocol
-     * @return
-     */
-    private boolean isExpeditedSubmission(Protocol protocol) {
-        ProtocolSubmission submission = findSubmission(protocol);
-        return submission != null && ProtocolReviewType.EXPEDITED_REVIEW_TYPE_CODE.equals(submission.getProtocolReviewTypeCode());
+    private boolean isScheduleRequiredForReview (ProtocolSubmission submission) {        
+        return isFullCommitteeReview(submission) && StringUtils.isBlank(submission.getScheduleId());
     }
-
-    public KcWorkflowService getKraWorkflowService() {
-        return kraWorkflowService;
-    }
-
-    public void setKraWorkflowService(KcWorkflowService kraWorkflowService) {
-        this.kraWorkflowService = kraWorkflowService;
-    }
-}
+    
+ }

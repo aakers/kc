@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xpath.XPathAPI;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetService;
 import org.kuali.kra.budget.document.BudgetDocument;
@@ -53,9 +53,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * This class...
- */
+
 public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
     private static final String DUPLICATE_FILE_NAMES =  "Duplicate PDF Attachment File Names"; 
     private static final String XFA_NS = "http://www.xfa.org/schema/xfa-data/1.0/";
@@ -139,7 +137,7 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
     }
     
     public void generateSubAwardLineItems(BudgetSubAwards subAward, Budget budget) {
-        BudgetDecimal amountChargeFA = new BudgetDecimal(25000);
+        ScaleTwoDecimal amountChargeFA = new ScaleTwoDecimal(25000);
         String directLtCostElement = getParameterService().getParameterValueAsString(BudgetDocument.class, Constants.SUBCONTRACTOR_DIRECT_LT_25K_PARAM);
         String directGtCostElement = getParameterService().getParameterValueAsString(BudgetDocument.class, Constants.SUBCONTRACTOR_DIRECT_GT_25K_PARAM);
         String inDirectLtCostElement = getParameterService().getParameterValueAsString(BudgetDocument.class, Constants.SUBCONTRACTOR_F_AND_A_LT_25K_PARAM);
@@ -149,14 +147,14 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
             List<BudgetLineItem> currentLineItems = findSubAwardLineItems(budgetPeriod, subAward.getSubAwardNumber());
             //zero out existing line items before recalculating
             for (BudgetLineItem item : currentLineItems) {
-                item.setDirectCost(BudgetDecimal.ZERO);
-                item.setCostSharingAmount(BudgetDecimal.ZERO);
+                item.setDirectCost(ScaleTwoDecimal.ZERO);
+                item.setCostSharingAmount(ScaleTwoDecimal.ZERO);
                 item.setSubAwardNumber(subAward.getSubAwardNumber());
                 item.setLineItemDescription(subAward.getOrganizationName());
             }
-            if (BudgetDecimal.returnZeroIfNull(detail.getDirectCost()).isNonZero() || hasBeenChanged(detail, true)) {
-                BudgetDecimal ltValue = lesserValue(detail.getDirectCost(), amountChargeFA);
-                BudgetDecimal gtValue = detail.getDirectCost().subtract(ltValue);
+            if (ScaleTwoDecimal.returnZeroIfNull(detail.getDirectCost()).isNonZero() || hasBeenChanged(detail, true)) {
+                ScaleTwoDecimal ltValue = lesserValue(detail.getDirectCost(), amountChargeFA);
+                ScaleTwoDecimal gtValue = detail.getDirectCost().subtract(ltValue);
                 if (ltValue.isNonZero()) {
                     BudgetLineItem lt = findOrCreateLineItem(currentLineItems, detail, subAward, budgetPeriod, directLtCostElement);
                     lt.setLineItemCost(ltValue);
@@ -167,9 +165,9 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
                 }
                 amountChargeFA = amountChargeFA.subtract(ltValue);
             }
-            if (BudgetDecimal.returnZeroIfNull(detail.getIndirectCost()).isNonZero() || hasBeenChanged(detail, false)) {
-                BudgetDecimal ltValue = lesserValue(detail.getIndirectCost(), amountChargeFA);
-                BudgetDecimal gtValue = detail.getIndirectCost().subtract(ltValue);
+            if (ScaleTwoDecimal.returnZeroIfNull(detail.getIndirectCost()).isNonZero() || hasBeenChanged(detail, false)) {
+                ScaleTwoDecimal ltValue = lesserValue(detail.getIndirectCost(), amountChargeFA);
+                ScaleTwoDecimal gtValue = detail.getIndirectCost().subtract(ltValue);
                 if (ltValue.isNonZero()) {
                     BudgetLineItem lt = findOrCreateLineItem(currentLineItems, detail, subAward, budgetPeriod, inDirectLtCostElement);
                     lt.setLineItemCost(ltValue);
@@ -188,7 +186,7 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
             Iterator<BudgetLineItem> iter = currentLineItems.iterator();
             while (iter.hasNext()) {
                 BudgetLineItem lineItem = iter.next();
-                if (BudgetDecimal.returnZeroIfNull(lineItem.getLineItemCost()).isZero()) {
+                if (ScaleTwoDecimal.returnZeroIfNull(lineItem.getLineItemCost()).isZero()) {
                     budgetPeriod.getBudgetLineItems().remove(lineItem);
                     iter.remove();
                 } else {
@@ -197,7 +195,7 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
                     }
                 }
             }
-            if (!currentLineItems.isEmpty() && BudgetDecimal.returnZeroIfNull(detail.getCostShare()).isNonZero()) {
+            if (!currentLineItems.isEmpty() && ScaleTwoDecimal.returnZeroIfNull(detail.getCostShare()).isNonZero()) {
                 currentLineItems.get(0).setCostSharingAmount(detail.getCostShare());
             }
         }
@@ -218,9 +216,9 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
             primaryKeys.put("SUBAWARD_PERIOD_DETAIL_ID", detail.getBudgetSubAwardDetailId());
             BudgetSubAwardPeriodDetail dbDetail = getBusinessObjectService().findByPrimaryKey(BudgetSubAwardPeriodDetail.class, primaryKeys);
             if (checkDirect) {
-                changed = !BudgetDecimal.returnZeroIfNull(detail.getDirectCost()).equals(BudgetDecimal.returnZeroIfNull(dbDetail.getDirectCost()));
+                changed = !ScaleTwoDecimal.returnZeroIfNull(detail.getDirectCost()).equals(ScaleTwoDecimal.returnZeroIfNull(dbDetail.getDirectCost()));
             } else {
-                changed = !BudgetDecimal.returnZeroIfNull(detail.getIndirectCost()).equals(BudgetDecimal.returnZeroIfNull(dbDetail.getIndirectCost()));
+                changed = !ScaleTwoDecimal.returnZeroIfNull(detail.getIndirectCost()).equals(ScaleTwoDecimal.returnZeroIfNull(dbDetail.getIndirectCost()));
             }
         }
         return changed;
@@ -235,7 +233,7 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
         return null;
     }
     
-    protected BudgetDecimal lesserValue(BudgetDecimal num1, BudgetDecimal num2) {
+    protected ScaleTwoDecimal lesserValue(ScaleTwoDecimal num1, ScaleTwoDecimal num2) {
         if (num1.isLessThan(num2)) {
             return num1;
         } else {
@@ -278,28 +276,6 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
     protected String getLoggedInUserNetworkId() {
         return GlobalVariables.getUserSession().getPrincipalName();
     }
-//    private List<BudgetSubAwardAttachment> getSubAwardAttachments(BudgetSubAwards budgetSubAwardBean) {
-//        List<BudgetSubAwardAttachment> budgetSubAwardBeanAttachments = (List<BudgetSubAwardAttachment>) budgetSubAwardBean.getBudgetSubAwardAttachments();
-//        List<BudgetSubAwardAttachment> budgetSubAwardAttachments =  new ArrayList<BudgetSubAwardAttachment>();
-//        if(budgetSubAwardBeanAttachments!=null)
-//        for(BudgetSubAwardAttachment budgetSubAwardAttachmentBean: budgetSubAwardBeanAttachments) {
-//            BudgetSubAwardAttachment budgetSubAwardAttachment = new BudgetSubAwardAttachment();
-//            try {
-//                BeanUtils.copyProperties(budgetSubAwardAttachment, budgetSubAwardAttachmentBean);
-//                budgetSubAwardAttachment.setBudgetId(budgetSubAwardBean.getBudgetId());
-//                budgetSubAwardAttachment.setSubAwardNumber(budgetSubAwardBean.getSubAwardNumber());
-//            }
-//            catch (IllegalAccessException e) {
-//                LOG.warn(e);
-//            }
-//            catch (InvocationTargetException e) {
-//                LOG.warn(e);
-//            }
-//            budgetSubAwardAttachment.setBudgetId(budgetSubAwardAttachmentBean.getBudgetId());
-//            budgetSubAwardAttachments.add(budgetSubAwardAttachment);            
-//        }
-//        return budgetSubAwardAttachments;
-//    }
     
     /**
      * extracts XML from PDF
@@ -426,10 +402,7 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
 
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.budget.service.BudgetSubAwardService#updateSubAwardBudgetDetails(org.kuali.kra.budget.core.Budget, org.kuali.kra.proposaldevelopment.budget.bo.BudgetSubAwards, java.util.List)
-     */
+    @Override
     public boolean updateSubAwardBudgetDetails(Budget budget, BudgetSubAwards budgetSubAward, List<String[]> errors) throws Exception {
         boolean result = true;
         //extarct xml from the pdf because the stored xml has been modified
@@ -474,15 +447,15 @@ public class BudgetSubAwardServiceImpl implements BudgetSubAwardService {
                     indirectCostNode = XPathAPI.selectSingleNode(budgetYear, "IndirectCosts/TotalIndirectCosts");
                 }
                 if (directCostNode != null) {
-                    periodDetail.setDirectCost(new BudgetDecimal(Float.parseFloat(directCostNode.getTextContent())));
+                    periodDetail.setDirectCost(new ScaleTwoDecimal(Float.parseFloat(directCostNode.getTextContent())));
                 }
                 if (indirectCostNode != null) {
-                    periodDetail.setIndirectCost(new BudgetDecimal(Float.parseFloat(indirectCostNode.getTextContent())));
+                    periodDetail.setIndirectCost(new ScaleTwoDecimal(Float.parseFloat(indirectCostNode.getTextContent())));
                 }
                 if (costShareNode != null) {
-                    periodDetail.setCostShare(new BudgetDecimal(Float.parseFloat(costShareNode.getTextContent())));
+                    periodDetail.setCostShare(new ScaleTwoDecimal(Float.parseFloat(costShareNode.getTextContent())));
                 } else {
-                    periodDetail.setCostShare(BudgetDecimal.ZERO);
+                    periodDetail.setCostShare(ScaleTwoDecimal.ZERO);
                 }
                 periodDetail.computeTotal();
             } else {

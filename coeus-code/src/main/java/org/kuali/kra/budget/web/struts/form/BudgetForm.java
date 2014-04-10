@@ -18,9 +18,10 @@ package org.kuali.kra.budget.web.struts.form;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.framework.person.KcPerson;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.authorization.KraAuthorizationConstants;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.distributionincome.BudgetCostShare;
 import org.kuali.kra.budget.distributionincome.BudgetProjectIncome;
@@ -42,9 +43,8 @@ import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.budget.bo.BudgetSubAwards;
 import org.kuali.kra.proposaldevelopment.budget.modular.BudgetModularIdc;
 import org.kuali.kra.proposaldevelopment.budget.modular.BudgetModularSummary;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
-import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarchyException;
-import org.kuali.kra.proposaldevelopment.hierarchy.bo.HierarchyProposalSummary;
+import org.kuali.coeus.propdev.impl.hierarchy.ProposalHierarchyException;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyProposalSummary;
 import org.kuali.kra.proposaldevelopment.hierarchy.service.ProposalHierarchyService;
 import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.config.property.ConfigurationService;
@@ -91,7 +91,7 @@ public class BudgetForm extends BudgetVersionFormBase implements CostShareFuncti
     
     private BudgetJustificationWrapper budgetJustificationWrapper;
     
-    private BudgetDecimal costSharingAmount;
+    private ScaleTwoDecimal costSharingAmount;
     
     private List<ExtraButton> extraTopButtons;
 
@@ -219,7 +219,6 @@ public class BudgetForm extends BudgetVersionFormBase implements CostShareFuncti
 //        initialize();    
     }
     
-    /** {@inheritDoc} */
     @Override
     protected String getDefaultDocumentTypeName() {
         return "BudgetDocument";
@@ -554,11 +553,11 @@ public class BudgetForm extends BudgetVersionFormBase implements CostShareFuncti
         this.budgetModularSummary = budgetModularSummary;
     }        
     
-    public BudgetDecimal getCostSharingAmount() {
+    public ScaleTwoDecimal getCostSharingAmount() {
         return costSharingAmount;
     }
 
-    public void setCostSharingAmount(BudgetDecimal costSharingAmount) {
+    public void setCostSharingAmount(ScaleTwoDecimal costSharingAmount) {
         this.costSharingAmount = costSharingAmount;
     }
     
@@ -677,10 +676,7 @@ public class BudgetForm extends BudgetVersionFormBase implements CostShareFuncti
         return lookupKualiConfigurationService().getPropertyValueAsString(Constants.KRA_EXTERNALIZABLE_IMAGES_URI_KEY) + buttonFileName;
     }
 
-    /**
-     * This method does what its name says
-     * @return
-     */
+
     private ConfigurationService lookupKualiConfigurationService() {
         return CoreApiServiceLocator.getKualiConfigurationService();
     }
@@ -851,9 +847,7 @@ public class BudgetForm extends BudgetVersionFormBase implements CostShareFuncti
     public String getActionPrefix(){
         return "budget";
     }
-    /**
-     * {@inheritDocs}
-     */
+
     @Override
     protected void setSaveDocumentControl(Map editMode) {
         

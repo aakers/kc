@@ -16,15 +16,17 @@
 package org.kuali.kra.irb.actions.print;
 
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocValue;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
 import org.kuali.coeus.common.framework.unit.UnitService;
 import org.kuali.coeus.common.permissions.impl.web.bean.AssignedRole;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.AwardService;
-import org.kuali.kra.bo.CustomAttributeDocValue;
-import org.kuali.kra.bo.CustomAttributeDocument;
 import org.kuali.kra.bo.FundingSourceType;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.PermissionConstants;
@@ -51,10 +53,8 @@ import org.kuali.kra.irb.protocol.reference.ProtocolReference;
 import org.kuali.kra.irb.protocol.research.ProtocolResearchArea;
 import org.kuali.kra.irb.specialreview.ProtocolSpecialReview;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.protocol.actions.print.ProtocolSummaryPrintOptions;
 import org.kuali.kra.protocol.actions.print.ProtocolSummaryXmlStreamBase;
-import org.kuali.kra.service.SponsorService;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.KRADPropertyConstants;
@@ -65,7 +65,6 @@ import org.w3.x2001.protocolSummarySchema.ProtocolSummaryDocument.ProtocolSummar
 import java.sql.Date;
 import java.util.*;
 
-// import org.kuali.kra.irb.actions.ProtocolSummaryPrintOptions;
 
 /**
  * This class is to generate Protocol Summary Xml file
@@ -82,9 +81,7 @@ public class ProtocolSummaryXmlStream extends ProtocolSummaryXmlStreamBase {
     private AwardService awardService;
 
 
-    /**
-     * @see org.kuali.kra.printing.xmlstream.XmlStream#generateXmlStream(org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase, java.util.Map)
-     */
+    @Override
     public Map<String, XmlObject> generateXmlStream(KcPersistableBusinessObjectBase printableBusinessObject,
             Map<String, Object> reportParameters) {
         Protocol protocol = (Protocol) printableBusinessObject;
@@ -99,9 +96,6 @@ public class ProtocolSummaryXmlStream extends ProtocolSummaryXmlStreamBase {
     private String getOptionString(boolean printOption){
         return printOption?"1":"0";
     }
-    /**
-     * @see org.kuali.kra.printing.xmlstream.XmlStream#generateXmlStream(org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase, java.util.Map)
-     */
     public ProtocolSummary getProtocolSummary(KcPersistableBusinessObjectBase printableBusinessObject,
             Map<String, Object> htData) {
         Protocol protocol = (Protocol) printableBusinessObject;

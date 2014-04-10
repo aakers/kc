@@ -20,7 +20,7 @@ import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.approvedsubawards.AwardApprovedSubaward;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.kns.util.AuditCluster;
 import org.kuali.rice.kns.util.AuditError;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
@@ -30,9 +30,6 @@ import org.kuali.rice.krad.rules.rule.DocumentAuditRule;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class...
- */
 public class AwardSubawardAuditRule implements DocumentAuditRule {
     
     private static final String SUBAWARD_AUDIT_ERRORS = "subawardAuditErrors";
@@ -42,9 +39,7 @@ public class AwardSubawardAuditRule implements DocumentAuditRule {
     private List<AuditError> auditErrors;
     private List<AuditError> auditWarnings;
     
-    /**
-     * @see org.kuali.rice.krad.rules.rule.DocumentAuditRule#processRunAuditBusinessRules(org.kuali.rice.krad.document.Document)
-     */
+    @Override
     public boolean processRunAuditBusinessRules(Document document) {
         boolean valid = true;
         AwardDocument awardDocument = (AwardDocument) document;
@@ -61,10 +56,10 @@ public class AwardSubawardAuditRule implements DocumentAuditRule {
         }
         for (int i = 0; i < awardApprovedSubawards.size(); i++) {
             AwardApprovedSubaward subAward = awardApprovedSubawards.get(i);
-            KualiDecimal amount = subAward.getAmount();
+            ScaleTwoDecimal amount = subAward.getAmount();
             if (amount == null) {
                 valid = false;  // a "required field" error is already reported by the framework, so don't call reportError
-            } else if(!amount.isGreaterThan(new KualiDecimal(0.00))) {
+            } else if(!amount.isGreaterThan(new ScaleTwoDecimal(0.00))) {
                 valid = false;
                 auditWarnings.add(new AuditError("document.awardList[0].awardApprovedSubawards[" + i + "].amount",
                         KeyConstants.ERROR_AMOUNT_IS_ZERO,

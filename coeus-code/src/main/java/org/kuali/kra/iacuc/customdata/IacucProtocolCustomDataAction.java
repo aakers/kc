@@ -18,28 +18,23 @@ package org.kuali.kra.iacuc.customdata;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.impl.custom.CustomDataRule;
 import org.kuali.kra.iacuc.IacucProtocolAction;
 import org.kuali.kra.iacuc.IacucProtocolForm;
 import org.kuali.kra.protocol.ProtocolFormBase;
 import org.kuali.kra.rule.event.SaveCustomDataEvent;
-import org.kuali.kra.rules.CustomDataRule;
 import org.kuali.rice.krad.exception.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * This class...
- */
+
 public class IacucProtocolCustomDataAction extends IacucProtocolAction {
 
     public String getCustomAttributeNameHook() {
         return "IacucCustomDataAttribute";
     }
     
-    /**
-     * @see org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -49,9 +44,7 @@ public class IacucProtocolCustomDataAction extends IacucProtocolAction {
         return forward;    
     }
     
-    /**
-     * @see org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+    @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form, 
             HttpServletRequest request, HttpServletResponse response) throws Exception { 
         ProtocolFormBase protocolForm = (ProtocolFormBase) form;

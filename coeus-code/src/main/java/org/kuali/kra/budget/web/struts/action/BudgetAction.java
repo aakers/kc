@@ -21,14 +21,17 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
+import org.kuali.coeus.propdev.impl.budget.ProposalBudgetStatusService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.controller.StrutsConfirmation;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.workflow.KcDocumentRejectionService;
 import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.ContactRole;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.budget.calculator.BudgetCalculationService;
 import org.kuali.kra.budget.core.*;
 import org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeService;
@@ -47,16 +50,12 @@ import org.kuali.kra.budget.versions.BudgetVersionOverview;
 import org.kuali.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.budget.modular.BudgetModularService;
 import org.kuali.kra.proposaldevelopment.budget.service.BudgetPrintService;
 import org.kuali.kra.proposaldevelopment.budget.service.BudgetSubAwardService;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarcyActionHelper;
-import org.kuali.kra.proposaldevelopment.service.ProposalStatusService;
-import org.kuali.kra.service.VersionHistoryService;
-import org.kuali.kra.budget.web.struts.action.BudgetActionBase;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kew.api.KewApiConstants;
@@ -95,9 +94,6 @@ public class BudgetAction extends BudgetActionBase {
     protected static final String NO_SYNCH_AWARD_RATES = "noSynchAwardRates";
 
     private ProposalHierarcyActionHelper hierarchyHelper;
-    /**
-     * @see org.kuali.core.web.struts.action.KualiDocumentActionBase#docHandler(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -206,9 +202,6 @@ public class BudgetAction extends BudgetActionBase {
         return actionForward; 
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;
@@ -276,9 +269,6 @@ public class BudgetAction extends BudgetActionBase {
         return KcServiceLocator.getService(BudgetSummaryService.class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form,
         HttpServletRequest request, HttpServletResponse response)
@@ -539,10 +529,7 @@ public class BudgetAction extends BudgetActionBase {
         return hierarchyHelper;
     }
 
-    /**
-     * This method...
-     * @param budget
-     */
+
     private void populateBudgetPrintForms(Budget budget) {
         if(budget.getBudgetPrintForms().isEmpty()){
             BudgetPrintService budgetPrintService = KcServiceLocator.getService(BudgetPrintService.class);
@@ -655,7 +642,7 @@ public class BudgetAction extends BudgetActionBase {
         BudgetParent budgetParent = budgetDocument.getParentDocument().getBudgetParent();
         if (budgetParent instanceof DevelopmentProposal) {
             DevelopmentProposal proposal = (DevelopmentProposal)budgetParent;
-            KcServiceLocator.getService(ProposalStatusService.class).loadBudgetStatus(proposal);
+            KcServiceLocator.getService(ProposalBudgetStatusService.class).loadBudgetStatus(proposal);
         }
         if (budget.getFinalVersionFlag() != null && Boolean.TRUE.equals(budget.getFinalVersionFlag())) {
             budget.setBudgetStatus(budgetParent.getBudgetStatus());
@@ -717,9 +704,6 @@ public class BudgetAction extends BudgetActionBase {
     }
 
     
-    /**
-     * @see BudgetActionBase#getPessimisticLockService()
-     */
     @Override
     protected PessimisticLockService getPessimisticLockService() {
         return KcServiceLocator.getService(BudgetLockService.class);
@@ -774,11 +758,7 @@ public class BudgetAction extends BudgetActionBase {
     protected void recalculateBudgetPeriod(BudgetForm budgetForm, Budget budget, BudgetPeriod budgetPeriod) {
         getBudgetCommonService(budgetForm.getBudgetDocument().getParentDocument()).recalculateBudgetPeriod(budget, budgetPeriod);
     }  
-    /**
-     * This method...
-     * @param budget
-     * @param budgetPeriod
-     */
+
     protected void calculateBudgetPeriod(Budget budget, BudgetPeriod budgetPeriod) {
         getCalculationService().calculateBudgetPeriod(budget, budgetPeriod);
     }

@@ -16,7 +16,7 @@
 package org.kuali.kra.proposaldevelopment.specialreview;
 
 import org.kuali.coeus.common.specialreview.impl.bo.SpecialReview;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
 import org.kuali.rice.krad.data.jpa.PortableSequenceGenerator;
 import org.kuali.rice.krad.data.jpa.converters.BooleanYNConverter;
 
@@ -145,10 +145,6 @@ public class ProposalSpecialReview extends SpecialReview<ProposalSpecialReviewEx
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
     public void resetPersistenceState() {
         proposalSpecialReviewId = null;
         for (ProposalSpecialReviewExemption exemption : getSpecialReviewExemptions()) {

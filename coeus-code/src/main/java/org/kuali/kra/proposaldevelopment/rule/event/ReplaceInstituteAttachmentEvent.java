@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.proposaldevelopment.rule.event;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.ReplaceInstituteAttachmentRule;
 import org.kuali.kra.proposaldevelopment.rule.ReplaceNarrativeRule;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -27,16 +27,12 @@ public class ReplaceInstituteAttachmentEvent extends AddInstituteAttachmentEvent
         super(errorPathPrefix, document, narrative);
     }
     
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return ReplaceInstituteAttachmentRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((ReplaceInstituteAttachmentRule) rule).processReplaceInstituteAttachmentBusinessRules(this);
     }

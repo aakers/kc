@@ -15,11 +15,11 @@
  */
 package org.kuali.kra.protocol.customdata;
 
+import org.kuali.coeus.common.framework.custom.CustomDataHelperBase;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.coeus.sys.framework.auth.task.TaskAuthorizationService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.CustomAttributeDocument;
-import org.kuali.kra.bo.DocumentCustomData;
-import org.kuali.kra.common.customattributes.CustomDataHelperBase;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.ProtocolDocumentBase;
 import org.kuali.kra.protocol.ProtocolFormBase;
@@ -37,9 +37,7 @@ import java.util.Map;
 public abstract class ProtocolCustomDataHelperBase<T extends DocumentCustomData> extends CustomDataHelperBase<T> { 
     
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -3821021799847248950L;
 
     /**

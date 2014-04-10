@@ -20,7 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.s2s.S2SException;
-import org.kuali.kra.s2s.bo.S2sOppForms;
+import org.kuali.coeus.propdev.impl.s2s.S2sOppForms;
 import org.kuali.kra.s2s.formmapping.FormMappingInfo;
 import org.kuali.kra.s2s.formmapping.FormMappingLoader;
 import org.kuali.kra.s2s.generator.S2SGeneratorNotFoundException;
@@ -124,7 +124,7 @@ public class OpportunitySchemaParser {
                     String schemaUrl = ((Element) importNode).getAttribute(SCHEMA_LOCATION);
                     S2sOppForms oppForm = new S2sOppForms();
                     oppForm.setFormName(displayFormName);
-                    oppForm.setOppNameSpace(nameSpace);
+                    oppForm.getS2sOppFormsId().setOppNameSpace(nameSpace);
                     oppForm.setSchemaUrl(schemaUrl);
                     mandatory = (minOccurs == null || minOccurs.trim().equals("") || Integer.parseInt(minOccurs) > 0);
                     oppForm.setMandatory(mandatory);

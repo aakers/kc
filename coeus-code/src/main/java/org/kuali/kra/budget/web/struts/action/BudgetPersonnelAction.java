@@ -25,7 +25,7 @@ import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.rolodex.nonorg.NonOrganizationalRolodex;
 import org.kuali.coeus.sys.framework.controller.StrutsConfirmation;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetCategory;
 import org.kuali.kra.budget.document.BudgetDocument;
@@ -375,11 +375,11 @@ public class BudgetPersonnelAction extends BudgetExpensesAction {
             errorFound=true;
         }
         
-        if(budgetPersonnelDetails.getPercentEffort().isGreaterThan(new BudgetDecimal(100))){
+        if(budgetPersonnelDetails.getPercentEffort().isGreaterThan(new ScaleTwoDecimal(100))){
             GlobalVariables.getMessageMap().putError("budgetPeriod[" + selectedBudgetPeriodIndex   +"].budgetLineItem[" + selectedBudgetLineItemIndex + "].budgetPersonnelDetailsList[" + selectedPersonnelIndex + "].percentEffort", KeyConstants.ERROR_PERCENTAGE, Constants.PERCENT_EFFORT_FIELD);
             errorFound=true;
         }
-        if(budgetPersonnelDetails.getPercentCharged().isGreaterThan(new BudgetDecimal(100))){
+        if(budgetPersonnelDetails.getPercentCharged().isGreaterThan(new ScaleTwoDecimal(100))){
             GlobalVariables.getMessageMap().putError("budgetPeriod[" + selectedBudgetPeriodIndex +"].budgetLineItem[" + selectedBudgetLineItemIndex + "].budgetPersonnelDetailsList[" + selectedPersonnelIndex + "].percentCharged", KeyConstants.ERROR_PERCENTAGE, Constants.PERCENT_CHARGED_FIELD);
             errorFound=true;
         }
@@ -622,9 +622,6 @@ public class BudgetPersonnelAction extends BudgetExpensesAction {
         return mapping.findForward(MAPPING_BASIC);
     }
     
-    /**
-     * @see org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         BudgetForm budgetForm = (BudgetForm) form;

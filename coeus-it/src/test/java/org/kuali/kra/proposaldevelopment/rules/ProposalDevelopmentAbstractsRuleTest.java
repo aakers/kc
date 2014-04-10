@@ -18,10 +18,10 @@ package org.kuali.kra.proposaldevelopment.rules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalAbstract;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.abstrct.ProposalAbstract;
 import org.kuali.rice.krad.util.ErrorMessage;
 import org.kuali.rice.krad.util.GlobalVariables;
 
@@ -130,12 +130,7 @@ public class ProposalDevelopmentAbstractsRuleTest extends ProposalDevelopmentRul
         assertNotNull(message);
         assertEquals(message.getErrorKey(), KeyConstants.ERROR_ABSTRACT_TYPE_DUPLICATE);
     }
-    
-    /**
-     * This method...
-     * @param document
-     * @param abstractTypeCode
-     */
+
     private void addAbstract(ProposalDevelopmentDocument document, String abstractTypeCode) {
         List<ProposalAbstract> abstracts = document.getDevelopmentProposal().getProposalAbstracts();
         ProposalAbstract proposalAbstract = new ProposalAbstract();

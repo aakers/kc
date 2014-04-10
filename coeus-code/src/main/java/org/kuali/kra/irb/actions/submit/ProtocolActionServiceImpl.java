@@ -116,9 +116,7 @@ public class ProtocolActionServiceImpl extends ProtocolActionServiceImplBase imp
                 .getRightId()) : false;
     }
     
-    /**
-     * @see org.kuali.kra.protocol.actions.submit.ProtocolActionServiceImplBase#resetProtocolStatus(org.kuali.kra.protocol.actions.ProtocolActionBase, org.kuali.kra.protocol.ProtocolBase)
-     */
+    @Override
     public void resetProtocolStatus(ProtocolActionBase protocolActionBo, ProtocolBase protocol) {
         ProtocolUndoActionMapping protocolAction = new ProtocolUndoActionMapping(protocolActionBo.getProtocolActionTypeCode(), 
                 protocolActionBo.getSubmissionTypeCode(), protocol.getProtocolStatusCode());
@@ -184,6 +182,6 @@ public class ProtocolActionServiceImpl extends ProtocolActionServiceImplBase imp
 
     @Override
     protected String[] getActionCodesArrayHook() {
-        return this.actionCodes;
+        return actionCodes;
     }
 }

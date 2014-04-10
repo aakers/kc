@@ -15,11 +15,11 @@
  */
 package org.kuali.kra.protocol.actions.print;
 
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.printing.print.AbstractPrint;
-import org.kuali.kra.printing.service.impl.PrintingServiceImpl;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AbstractPrint;
+import org.kuali.coeus.common.framework.print.Printable;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.common.impl.print.PrintingServiceImpl;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.ProtocolFormBase;
 
@@ -51,10 +51,7 @@ public abstract class ProtocolPrintingServiceImplBase extends PrintingServiceImp
     }};
     
     private String reportName;
-    /**
-     * 
-     * @see org.kuali.kra.protocol.actions.print.ProtocolPrintingService#getProtocolPrintable(org.kuali.kra.protocol.actions.print.ProtocolPrintType)
-     */
+
     public Printable getProtocolPrintable(ProtocolPrintType reportType) {
         Printable printable = null;
         ProtocolPrintHelper printHelper = getProtocolPrintHelper(reportType);
@@ -81,10 +78,7 @@ public abstract class ProtocolPrintingServiceImplBase extends PrintingServiceImp
         return printable;
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.protocol.actions.print.ProtocolPrintingService#getProtocolPrintArtifacts(org.kuali.kra.protocol.ProtocolBase)
-     */
+    @Override
      public Printable getProtocolPrintArtifacts(ProtocolBase protocol) { 
          ProtocolPrintType printType = ProtocolPrintType.PROTOCOL_FULL_PROTOCOL_REPORT;
          AbstractPrint printable = (AbstractPrint)getProtocolPrintable(printType);

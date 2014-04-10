@@ -18,20 +18,18 @@ package org.kuali.kra.institutionalproposal.contacts;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBase;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
 
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalPersonCreditSplitRuleEvent extends KcDocumentEventBase {
 
 private static final Log LOG = LogFactory.getLog(InstitutionalProposalPersonCreditSplitRuleEvent.class);
     
-    private Map<String, KualiDecimal> totalsByCreditSplitType;
+    private Map<String, ScaleTwoDecimal> totalsByCreditSplitType;
     
     /**
      * Constructs a InstitutionalProposalPersonCreditSplitRuleEvent
@@ -39,7 +37,7 @@ private static final Log LOG = LogFactory.getLog(InstitutionalProposalPersonCred
      * @param errorPathPrefix
      * @param document
      */
-    public InstitutionalProposalPersonCreditSplitRuleEvent(Document document, Map<String, KualiDecimal> totalsByCreditSplitType) {
+    public InstitutionalProposalPersonCreditSplitRuleEvent(Document document, Map<String, ScaleTwoDecimal> totalsByCreditSplitType) {
         super("Credit splits invalid", "document.institutionalProposalList[0].creditSplits.*", document);
         this.totalsByCreditSplitType = totalsByCreditSplitType;
     }
@@ -49,16 +47,12 @@ private static final Log LOG = LogFactory.getLog(InstitutionalProposalPersonCred
         LOG.info("Logging event");
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class<InstitutionalProposalPersonCreditSplitRule> getRuleInterfaceClass() {
         return InstitutionalProposalPersonCreditSplitRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return false;
     }
@@ -67,7 +61,7 @@ private static final Log LOG = LogFactory.getLog(InstitutionalProposalPersonCred
      * Gets the totalsByCreditSplitType attribute. 
      * @return Returns the totalsByCreditSplitType.
      */
-    public Map<String, KualiDecimal> getTotalsByCreditSplitType() {
+    public Map<String, ScaleTwoDecimal> getTotalsByCreditSplitType() {
         return totalsByCreditSplitType;
     }
 

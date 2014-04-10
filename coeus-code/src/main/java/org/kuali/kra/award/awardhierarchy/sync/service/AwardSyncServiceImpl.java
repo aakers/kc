@@ -18,6 +18,9 @@ package org.kuali.kra.award.awardhierarchy.sync.service;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.workflow.KcWorkflowService;
@@ -32,10 +35,7 @@ import org.kuali.kra.award.awardhierarchy.sync.helpers.AwardSyncHelper;
 import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.AwardService;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.award.infrastructure.AwardPermissionConstants;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.rice.kew.api.KewApiConstants;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.kim.api.identity.Person;
@@ -88,23 +88,17 @@ public class AwardSyncServiceImpl implements AwardSyncService {
     private KcWorkflowService kraWorkflowService;
     private KcAuthorizationService kraAuthorizationService;
         
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.sync.service.AwardSyncService#validateHierarchyChanges(org.kuali.kra.award.home.Award)
-     */
+    @Override
     public void validateHierarchyChanges(Award award) {
         runSync(award, SyncType.VALIDATE);
     }
     
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.sync.service.AwardSyncService#applyAwardSyncChangesToHierarchy(org.kuali.kra.award.home.Award)
-     */
+    @Override
     public void applyAwardSyncChangesToHierarchy(Award award) {
         runSync(award, SyncType.SYNC);
     }  
     
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.sync.service.AwardSyncService#getAwardLockingHierarchyForSync(org.kuali.kra.award.document.AwardDocument, java.lang.String)
-     */
+    @Override
     public AwardDocument getAwardLockingHierarchyForSync(AwardDocument awardDocument, String principalId) {
         AwardHierarchy hierarchy = getAwardHierarchyService().loadAwardHierarchy(awardDocument.getAward().getAwardNumber());
         if (hierarchy != null) {

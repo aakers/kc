@@ -25,7 +25,7 @@ import org.kuali.kra.award.home.fundingproposal.AwardFundingProposal;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.institutionalproposal.service.InstitutionalProposalService;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kns.util.AuditCluster;
 import org.kuali.rice.kns.util.AuditError;
@@ -68,9 +68,7 @@ public class AwardProjectPersonsAuditRule implements DocumentAuditRule {
         auditWarnings = new ArrayList<AuditError>();
     }
     
-    /**
-     * @see org.kuali.core.rule.DocumentAuditRule#processRunAuditBusinessRules(org.kuali.core.document.Document)
-     */
+    @Override
     public boolean processRunAuditBusinessRules(Document document) {
         boolean valid = true;
         AwardDocument awardDocument = (AwardDocument)document;
@@ -187,7 +185,7 @@ public class AwardProjectPersonsAuditRule implements DocumentAuditRule {
                             || (person.getRolodexId() != null && ObjectUtils.equals(person.getRolodexId(), propPerson.getRolodexId()))) {
                         if (StringUtils.equals(propPerson.getProposalPersonRoleId(), Constants.CO_INVESTIGATOR_ROLE)
                                 || StringUtils.equals(propPerson.getProposalPersonRoleId(), Constants.PRINCIPAL_INVESTIGATOR_ROLE)
-                                || StringUtils.equals(propPerson.getOptInCertificationStatus(), "Y")) {
+                                || propPerson.getOptInCertificationStatus()) {
                             personFoundCheck = true;
                             break;
                         } //otherwise they are not certified

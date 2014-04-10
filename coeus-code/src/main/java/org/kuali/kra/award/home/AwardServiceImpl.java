@@ -15,22 +15,21 @@
  */
 package org.kuali.kra.award.home;
 
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.coeus.common.framework.version.VersionException;
+import org.kuali.coeus.common.framework.version.VersionStatus;
 import org.kuali.coeus.common.framework.version.VersioningService;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.kra.award.customdata.AwardCustomData;
 import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.notesandattachments.attachments.AwardAttachment;
-import org.kuali.kra.bo.CustomAttributeDocument;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.DocumentService;
 
 import java.util.*;
 
-/** {@inheritDoc} */
 public class AwardServiceImpl implements AwardService {
     
     private static final String AWARD_NUMBER = "awardNumber";
@@ -55,13 +54,13 @@ public class AwardServiceImpl implements AwardService {
         return results;
     }    
     
-    /** {@inheritDoc} */
+    @Override
     public Award getAward(Long awardId) {
         return awardId != null ? (Award) businessObjectService.findByPrimaryKey(Award.class, 
                                         Collections.singletonMap(AWARD_ID, awardId)) : null;
     }
     
-    /** {@inheritDoc} */
+    @Override
     public Award getAward(String awardId) {
         return awardId != null ? (Award) businessObjectService.findByPrimaryKey(Award.class,
                 Collections.singletonMap(AWARD_ID, awardId)) : null;
@@ -101,9 +100,7 @@ public class AwardServiceImpl implements AwardService {
         return newAwardDocument;
     }   
     
-    /**
-     * @see org.kuali.kra.award.home.AwardService#synchNewCustomAttributes(org.kuali.kra.award.home.Award, org.kuali.kra.award.home.Award)
-     */
+    @Override
     public void synchNewCustomAttributes(Award newAward, Award oldAward) {
         Set<Integer> availableCustomAttributes = new HashSet<Integer>();
         for(AwardCustomData awardCustomData : newAward.getAwardCustomDataList()) {
@@ -211,10 +208,7 @@ public class AwardServiceImpl implements AwardService {
         }
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.award.home.AwardService#getActiveOrNewestAward(java.lang.String)
-     */
+    @Override
     public Award getActiveOrNewestAward(String awardNumber) {
         List<VersionHistory> versions = getVersionHistoryService().loadVersionHistory(Award.class, awardNumber);
         VersionHistory newest = null;

@@ -15,13 +15,17 @@
  */
 package org.kuali.kra.printing.util;
 
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 
 public class PrintingTestUtils {
+
+    private static final Log LOG = LogFactory.getLog(PrintingTestUtils.class);
 
 	public static String FILE_DIR = System.getProperty("java.io.tmpdir");
 
@@ -42,7 +46,7 @@ public class PrintingTestUtils {
 			fos.flush();
 			fos.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
 	}
 }

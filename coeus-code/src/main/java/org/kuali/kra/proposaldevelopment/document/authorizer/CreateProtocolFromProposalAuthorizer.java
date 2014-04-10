@@ -21,7 +21,7 @@ import org.kuali.coeus.sys.framework.auth.task.TaskAuthorizationService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.TaskName;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.document.authorization.ProposalTask;
 import org.kuali.rice.krad.util.GlobalVariables;
 /**
@@ -29,10 +29,7 @@ import org.kuali.rice.krad.util.GlobalVariables;
  */
 public class CreateProtocolFromProposalAuthorizer extends ProposalAuthorizer {
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.protocol.auth.ProtocolAuthorizer#isAuthorized(java.lang.String, org.kuali.kra.protocol.auth.ProtocolTask)
-     */
+    @Override
     public boolean isAuthorized(String userId, ProposalTask task) {
 
         DevelopmentProposal proposal = (DevelopmentProposal)task.getDocument().getDevelopmentProposal();

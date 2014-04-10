@@ -15,17 +15,18 @@
  */
 package org.kuali.kra.s2s.service;
 
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
-import org.kuali.kra.budget.core.BudgetCategoryMap;
 import org.kuali.kra.budget.document.BudgetDocument;
 import org.kuali.kra.budget.parameters.BudgetPeriod;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.s2s.S2SException;
+import org.kuali.coeus.budget.api.category.BudgetCategoryMapContract;
 import org.kuali.kra.s2s.generator.bo.BudgetPeriodInfo;
 import org.kuali.kra.s2s.generator.bo.BudgetSummaryInfo;
 import org.kuali.kra.s2s.generator.bo.IndirectCostInfo;
+import org.kuali.kra.s2s.generator.bo.KeyPersonInfo;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public interface S2SBudgetCalculatorService {
 
     /**
      * 
-     * This method returns a list of {@link BudgetCategoryMap} based on the input. The list returned will not contain the categories
+     * This method returns a list of {@link BudgetCategoryMapContract} based on the input. The list returned will not contain the categories
      * that the codes passed as a list of {@link String} and also will not contain those that match the types passed as list of
      * {@link String}. In case 2 empty lists are passed as parameters, the method will return entire list without applying any
      * filters.
@@ -47,7 +48,7 @@ public interface S2SBudgetCalculatorService {
      * @param filterCategoryTypes Category types that must be filtered
      * @return a List of BudgetCategoryMap.
      */
-    public List<BudgetCategoryMap> getBudgetCategoryMapList(List<String> filterTargetCategoryCodes, List<String> filterCategoryTypes);
+    public List<? extends BudgetCategoryMapContract> getBudgetCategoryMapList(List<String> filterTargetCategoryCodes, List<String> filterCategoryTypes);
 
     /**
      * 
@@ -73,29 +74,6 @@ public interface S2SBudgetCalculatorService {
 
     /**
      * 
-     * This method returns the final version of {@link BudgetDocument} for a given {@link ProposalDevelopmentDocument}
-     * 
-     * @param pdDoc Proposal development document.
-     * @return BudgetDocument final version of budget corresponding to the ProposalDevelopmentDocument object.
-     * @throws S2SException
-     */
-    public BudgetDocument getFinalBudgetVersion(ProposalDevelopmentDocument pdDoc) throws S2SException;
-
-    /**
-     * 
-     * This method gets the salary requested for a given proposal person.
-     * 
-     * @param pdDoc {@link ProposalDevelopmentDocument} from which salary needs to be fetched
-     * @param proposalPerson proposal person whose salary needs to be fetched
-     * 
-     * @return {@link BudgetDecimal} salary of proposal person
-     * @throws S2SException
-     */
-    public BudgetDecimal getProposalPersonSalary(ProposalDevelopmentDocument pdDoc, ProposalPerson proposalPerson)
-            throws S2SException;
-
-    /**
-     * 
      * This method determines whether a {@link ProposalPerson} is a Non MIT person
      * 
      * @param proposalPerson ProposalPerson.
@@ -111,5 +89,7 @@ public interface S2SBudgetCalculatorService {
      * @return IndirectCostInfo for the corresponding BudgetPeriod object.
      */
     public IndirectCostInfo getIndirectCosts(Budget budget,BudgetPeriod budgetPeriod);
+
+    public ScaleTwoDecimal getBaseSalaryByPeriod(Long budgetId, int budgetPeriod, KeyPersonInfo keyPerson );
 
 }

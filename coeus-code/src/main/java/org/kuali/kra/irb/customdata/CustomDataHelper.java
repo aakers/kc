@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.irb.customdata;
 
-import org.kuali.kra.bo.CustomAttributeDocValue;
-import org.kuali.kra.bo.CustomAttributeDocument;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocValue;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.kra.infrastructure.TaskName;
 import org.kuali.kra.irb.Protocol;
 import org.kuali.kra.irb.ProtocolDocument;
@@ -33,9 +33,7 @@ import java.util.Map;
  */
 public class CustomDataHelper extends ProtocolCustomDataHelperBase<CustomAttributeDocValue> { 
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 3956588282238741445L;
 
     /**
@@ -46,9 +44,6 @@ public class CustomDataHelper extends ProtocolCustomDataHelperBase<CustomAttribu
         super(form);
     }
   
-    /**
-     * @see org.kuali.kra.common.customattributes.CustomDataHelperBase#canModifyCustomData()
-     */
     @Override
     public boolean canModifyCustomData() {
         ProtocolTask task = new ProtocolTask(TaskName.MODIFY_PROTOCOL_OTHERS, (Protocol) getProtocol());

@@ -18,6 +18,7 @@ package org.kuali.kra.subaward.subawardrule;
 
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.audit.KcDocumentBaseAuditRule;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension;
@@ -28,11 +29,17 @@ import org.kuali.kra.award.home.AwardService;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.subaward.bo.*;
 import org.kuali.kra.subaward.document.SubAwardDocument;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.DocumentAuditRule;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.MessageMap;
+import org.kuali.kra.subaward.subawardrule.events.AddSubAwardAttachmentEvent;
+import org.kuali.kra.subaward.subawardrule.AddSubAwardAttachmentRule;
+import static org.kuali.kra.infrastructure.KeyConstants.SUBAWARD_ATTACHMENT_FILE_REQUIRED;
+import static org.kuali.kra.infrastructure.KeyConstants.SUBAWARD_ATTACHMENT_TYPE_CODE_REQUIRED;
+import static org.kuali.kra.infrastructure.KeyConstants.SUBAWARD_ATTACHMENT_DESCRIPTION_REQUIRED;
+import static org.kuali.kra.infrastructure.KeyConstants.ERROR_REQUIRED_SUBAWARD_TEMPLATE_INFO_CARRY_FORWARD_REQUESTS_SENT_TO;
 
 import java.util.Collections;
 
@@ -46,7 +53,9 @@ SubAwardAmountInfoRule,
 SubAwardContactRule,
 SubAwardCloseoutRule,
 SubAwardFundingSourceRule,
-        DocumentAuditRule {
+DocumentAuditRule,
+AddSubAwardAttachmentRule,
+SubAwardTemplateInfoRule {
 
     private static final String STATUS_CODE = ".statusCode";
     private static final String SUBAWARD_TYPE_CODE = ".subAwardTypeCode";
@@ -66,9 +75,11 @@ SubAwardFundingSourceRule,
     private static final String CLOSEOUT_TYPE_CODE="newSubAwardCloseout.closeoutTypeCode";
     private static final String DATE_REQUESTED = "newSubAwardCloseout.dateRequested";
     private static final String DATE_FLLOWUP = "newSubAwardCloseout.dateFollowup";
+    private static final String REPORT_TYPE = "subAwardAttachmentFormBean.newReport.subAwardReportTypeCode";
     
     private static final String AWARD_NUMBER="newSubAwardFundingSource.award.awardNumber";
-
+    private static final String AMOUNT_PERIOD_OF_PERFORMANCE_START_DATE = "newSubAwardAmountInfo.periodofPerformanceStartDate";
+    private static final org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(SubAwardDocumentRule.class);
     /**.
      * This method is for AddSubAwardBusinessRules
      * @param subAward
@@ -158,7 +169,7 @@ SubAwardFundingSourceRule,
         rulePassed &= getDictionaryValidationService().isBusinessObjectValid(amountInfo); 
         GlobalVariables.getMessageMap().removeFromErrorPath("newSubAwardAmountInfo");
         
-        KualiDecimal obligatedAmount = subAward.getTotalObligatedAmount();
+        ScaleTwoDecimal obligatedAmount = subAward.getTotalObligatedAmount();
         if (amountInfo.getObligatedChange() != null) {
             obligatedAmount = obligatedAmount.add(amountInfo.getObligatedChange());
             if (obligatedAmount.isNegative()) {
@@ -166,7 +177,7 @@ SubAwardFundingSourceRule,
                 reportError(AMOUNT_INFO_OBLIGATED_AMOUNT, KeyConstants.ERROR_AMOUNT_INFO_OBLIGATED_AMOUNT_NEGATIVE); 
             }
         }
-        KualiDecimal anticipatedAmount = subAward.getTotalAnticipatedAmount();
+        ScaleTwoDecimal anticipatedAmount = subAward.getTotalAnticipatedAmount();
         if (amountInfo.getAnticipatedChange() != null) {
             anticipatedAmount = anticipatedAmount.add(amountInfo.getAnticipatedChange());
             if (anticipatedAmount.isNegative()) {
@@ -185,6 +196,13 @@ SubAwardFundingSourceRule,
             reportError(AMOUNT_INFO_OBLIGATED_AMOUNT, KeyConstants.ERROR_SUBAWARD_OBLIGATED_AMOUNT_SHOULD_BE_GREATER_AMOUNT_RELEASED); 
         }
         
+        if (amountInfo.getPeriodofPerformanceStartDate() != null && amountInfo.getPeriodofPerformanceEndDate()!= null) {
+            if(amountInfo.getPeriodofPerformanceStartDate().after(amountInfo.getPeriodofPerformanceEndDate())){
+                rulePassed = false;
+                reportError(AMOUNT_PERIOD_OF_PERFORMANCE_START_DATE,
+                        KeyConstants.ERROR_PERIOD_OF_PERFORMANCE_START_DATE_SHOULD_BE_GREATER_THAN_ERROR_PERIOD_OF_PERFORMANCE_END_DATE);         
+            }
+        }
         return rulePassed;
     }
 
@@ -299,12 +317,67 @@ SubAwardFundingSourceRule,
         return true;
     }
     
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcBusinessRule#processRules(org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension)
-     */
     public boolean processRules(KcDocumentEventBaseExtension event) {
         boolean retVal = false;
         retVal = event.getRule().processRules(event);
         return retVal;
+    }
+    /**
+     * @see org.kuali.kra.subaward.subawardrule.AddSubAwardAttachmentRule#processsAddSubawardAttachmentRule(org.kuali.kra.subaward.subawardrule.events.AddSubAwardAttachmentEvent)
+     */
+    public boolean processsAddSubawardAttachmentRule(AddSubAwardAttachmentEvent event) {
+        boolean valid = true;
+        
+        if( StringUtils.isBlank(event.getSubAwardAttachments().getSubAwardAttachmentTypeCode())) {
+            valid = false;
+            LOG.debug(SUBAWARD_ATTACHMENT_TYPE_CODE_REQUIRED);
+            reportError("subAwardAttachmentFormBean.newAttachment.subAwardAttachmentTypeCode", SUBAWARD_ATTACHMENT_TYPE_CODE_REQUIRED);
+        }
+        
+        if (StringUtils.isBlank(event.getSubAwardAttachments().getNewFile().getFileName()) ) {
+            valid = false;
+            LOG.debug(SUBAWARD_ATTACHMENT_FILE_REQUIRED);
+            reportError("subAwardAttachmentFormBean.newAttachment.newFile", SUBAWARD_ATTACHMENT_FILE_REQUIRED);
+    
+            }
+        if (StringUtils.isBlank(event.getSubAwardAttachments().getDescription()) ) {
+            valid = false;
+            LOG.debug(SUBAWARD_ATTACHMENT_DESCRIPTION_REQUIRED);
+            reportError("subAwardAttachmentFormBean.newAttachment.description", SUBAWARD_ATTACHMENT_DESCRIPTION_REQUIRED);
+    
+            }
+       return valid;
+    }
+    public boolean processsAddSubawardReportRule(SubAwardReports subAwardReports) {
+        boolean valid = true;
+        
+        if(subAwardReports==null 
+                || subAwardReports.getSubAwardReportTypeCode()==null){
+            valid = false;            
+            reportError(REPORT_TYPE
+                    , KeyConstants.ERROR_REQUIRED_SUBAWARD_REPORT_TYPE_CODE);
+        }
+        return valid;
+        
+    }
+    public boolean processAddSubAwardTemplateInfoBusinessRules(SubAward subAward) {
+        boolean rulePassed = true;
+        rulePassed &= processSaveSubAwardTemplateInfoBusinessRules(subAward);
+        
+        return rulePassed;
+    }
+    protected boolean processSaveSubAwardTemplateInfoBusinessRules(SubAward subAward){
+        boolean rulePassed = true;   
+        for (SubAwardTemplateInfo subAwardTemplateInfo : subAward.getSubAwardTemplateInfo()) {
+          if (subAward!=null 
+                && ((subAwardTemplateInfo.getAutomaticCarryForward()!=null) && (subAwardTemplateInfo.getAutomaticCarryForward().equals("Y")))) {
+             if (subAwardTemplateInfo.getCarryForwardRequestsSentTo()==null) {
+                rulePassed = false;            
+                LOG.debug(ERROR_REQUIRED_SUBAWARD_TEMPLATE_INFO_CARRY_FORWARD_REQUESTS_SENT_TO);
+                reportError("document.subAwardList[0].subAwardTemplateInfo[0].carryForwardRequestsSentTo", ERROR_REQUIRED_SUBAWARD_TEMPLATE_INFO_CARRY_FORWARD_REQUESTS_SENT_TO);  
+             }
+          }  
+        }
+        return rulePassed;
     }
 }

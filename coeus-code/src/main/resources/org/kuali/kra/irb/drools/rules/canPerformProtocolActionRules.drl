@@ -119,11 +119,19 @@ then
 	setAction(protocolAction, true);
 end
 
-rule "Manage Review Comments"
+rule "Manage Review Comments 1"
 when
 	protocolAction : ProtocolActionMapping(actionTypeCode == "310", protocolStatusCode in ("101", "102", "104", "105", "106", "304", "103"))
 then	
 	setAction(protocolAction, true);
+end
+
+rule "Manage Review Comments 2"
+salience 100
+when
+    protocolAction : ProtocolActionMapping(actionTypeCode == "310", submissionStatusCode in ("100"))
+then    
+    setAction(protocolAction, true);
 end
 
 rule "Suspend Protocol 1"
@@ -193,7 +201,7 @@ end
 rule "Create new Amendment"
 salience 100
 when
-	protocolAction : ProtocolActionMapping(actionTypeCode == "103", protocolStatusCode in ("200", "201", "202", "203", "308", "311", "302"))
+	protocolAction : ProtocolActionMapping(actionTypeCode == "103", protocolStatusCode in ("200", "201", "202", "203", "308", "311", "302"), submissionStatusCode not in ("100", "101"))
 then	
 	setAction(protocolAction, true);
 end
@@ -209,7 +217,7 @@ end
 rule "Create new Renewal"
 salience 100
 when
-	protocolAction : ProtocolActionMapping(actionTypeCode == "102", protocolStatusCode in ("200", "201", "202", "203", "302", "308", "311", "305"))
+	protocolAction : ProtocolActionMapping(actionTypeCode == "102", protocolStatusCode in ("200", "201", "202", "203", "302", "308", "311", "305"), submissionStatusCode not in ("100", "101"))
 then	
 	setAction(protocolAction, true);
 end
@@ -315,7 +323,7 @@ salience 100
 when
     // based on ProtocolAssignCmtSchedAuthorizer.isPendingOrSubmittedToCommittee
 	//protocolAction : ProtocolActionMapping(actionTypeCode == "109", protocolSubmissionScheduleId == null, submissionStatusCode not in ("100","102"))
-	protocolAction : ProtocolActionMapping(actionTypeCode == "109", submissionStatusCode in ("100","102"))
+	protocolAction : ProtocolActionMapping(actionTypeCode == "109", submissionStatusCode in ("100","101","102"))
 then	
 	setAction(protocolAction, true);
 end
@@ -380,7 +388,7 @@ rule "Notify IRB"
 salience 100
 when
 	protocolAction : ProtocolActionMapping(actionTypeCode == "116",
-	  protocolStatusCode not in ("100", "101", "102", "103", "105", "106", "313", "402"))
+	  protocolStatusCode not in ("100", "101", "102", "103", "105", "106", "313", "402"), submissionStatusCode not in ("100", "101"))
 then	
 	setAction(protocolAction, true);
 end
@@ -406,6 +414,22 @@ salience 100
 when
 	protocolAction : ProtocolActionMapping(actionTypeCode == '309',  protocolStatusCode == '101')
 then	
+    setAction(protocolAction, true);
+end
+
+rule "Rule 2 -  Modify Protocol Submission"
+salience 100
+when
+    protocolAction : ProtocolActionMapping(actionTypeCode == "309", submissionStatusCode in ("100"))
+then    
+    setAction(protocolAction, true);
+end
+
+rule "Rule 3 -  Modify Protocol Submission"
+salience 100
+when
+    protocolAction : ProtocolActionMapping(actionTypeCode == "309", protocolStatusCode == "200", submissionStatusCode in ("102"))
+then    
     setAction(protocolAction, true);
 end
 

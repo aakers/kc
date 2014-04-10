@@ -17,14 +17,14 @@ package org.kuali.kra.institutionalproposal.fundedawards;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.fundingproposal.AwardFundingProposal;
-import org.kuali.kra.bo.versioning.VersionHistory;
 import org.kuali.kra.institutionalproposal.ProposalStatus;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.institutionalproposal.web.struts.form.InstitutionalProposalForm;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.rice.krad.util.GlobalVariables;
 
 import java.io.Serializable;
@@ -36,18 +36,14 @@ import java.util.Set;
  */
 public class FundedAwardsBean implements Serializable {
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 7202420195219545687L;
     
     private static final String ERROR_UNLOCK_PENDING_AWARDS = "error.institutionalProposal.unlockAward.pendingVersion";
     
     private InstitutionalProposalForm institutionalProposalForm;
     
-    /**
-     * Constructs a FundedAwardsBean.java.
-     */
+
     public FundedAwardsBean() {
         super();
     }

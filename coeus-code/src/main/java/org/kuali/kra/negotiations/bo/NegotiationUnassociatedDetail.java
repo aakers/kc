@@ -21,12 +21,12 @@ import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.rolodex.RolodexService;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
+import org.kuali.coeus.common.framework.type.ProposalType;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.bo.*;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,7 @@ import java.util.List;
  */
 public class NegotiationUnassociatedDetail extends KcPersistableBusinessObjectBase implements Negotiable {
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 989159429578390915L;
     private Long negotiationUnassociatedDetailId;
     private Long negotiationId;
@@ -68,10 +66,7 @@ public class NegotiationUnassociatedDetail extends KcPersistableBusinessObjectBa
 
     private transient KcPersonService kcPersonService;
     
-    /**
-     * 
-     * Constructs a NegotiationUnassociatedDetail.java.
-     */
+
     public NegotiationUnassociatedDetail() {
         super();
     }

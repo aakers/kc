@@ -16,26 +16,24 @@
 package org.kuali.kra.budget.rates;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.bo.AbstractInstituteRate;
-import org.kuali.kra.budget.BudgetDecimal;
 import org.kuali.kra.budget.calculator.RateClassType;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetAssociateInterface;
 
 public abstract class AbstractBudgetRate extends AbstractInstituteRate implements BudgetAssociateInterface {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -7152006670699620080L;
 
     private Long budgetId;
 
     private Budget budget;
 
-    private BudgetDecimal applicableRate;
+    private ScaleTwoDecimal applicableRate;
 
-    private BudgetDecimal oldApplicableRate;
+    private ScaleTwoDecimal oldApplicableRate;
 
     private boolean rateChanged;
 
@@ -86,11 +84,11 @@ public abstract class AbstractBudgetRate extends AbstractInstituteRate implement
         return nonEditableRate;
     }
 
-    public BudgetDecimal getApplicableRate() {
-        return BudgetDecimal.returnZeroIfNull(applicableRate);
+    public ScaleTwoDecimal getApplicableRate() {
+        return ScaleTwoDecimal.returnZeroIfNull(applicableRate);
     }
 
-    public BudgetDecimal getExactApplicableRate() {
+    public ScaleTwoDecimal getExactApplicableRate() {
         return applicableRate;
     }
 
@@ -98,11 +96,11 @@ public abstract class AbstractBudgetRate extends AbstractInstituteRate implement
         return applicableRate == null;
     }
 
-    public void setExactApplicableRate(BudgetDecimal applicableRate) {
+    public void setExactApplicableRate(ScaleTwoDecimal applicableRate) {
         setApplicableRate(applicableRate);
     }
 
-    public void setApplicableRate(BudgetDecimal applicableRate) {
+    public void setApplicableRate(ScaleTwoDecimal applicableRate) {
         setOldApplicableRate(this.applicableRate);
         if (!ObjectUtils.equals(this.applicableRate, applicableRate)) {
             setRateChanged(true);
@@ -110,11 +108,11 @@ public abstract class AbstractBudgetRate extends AbstractInstituteRate implement
         this.applicableRate = applicableRate;
     }
 
-    public BudgetDecimal getOldApplicableRate() {
-        return BudgetDecimal.returnZeroIfNull(oldApplicableRate);
+    public ScaleTwoDecimal getOldApplicableRate() {
+        return ScaleTwoDecimal.returnZeroIfNull(oldApplicableRate);
     }
 
-    public void setOldApplicableRate(BudgetDecimal oldApplicableRate) {
+    public void setOldApplicableRate(ScaleTwoDecimal oldApplicableRate) {
         this.oldApplicableRate = oldApplicableRate;
     }
 
@@ -190,9 +188,6 @@ public abstract class AbstractBudgetRate extends AbstractInstituteRate implement
         this.budgetId = budgetId;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -208,9 +203,6 @@ public abstract class AbstractBudgetRate extends AbstractInstituteRate implement
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -23,16 +23,16 @@ import org.junit.Test;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.timeandmoney.AwardHierarchyNode;
 import org.kuali.kra.timeandmoney.transactions.PendingTransaction;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActivePendingTransactionServiceImplTest {
     
-    public static final KualiDecimal TEN_THOUSAND = new KualiDecimal(10000);
-    public static final KualiDecimal TWENTY_THOUSAND = new KualiDecimal(20000);
-    public static final KualiDecimal ZERO = new KualiDecimal(0);
+    public static final ScaleTwoDecimal TEN_THOUSAND = new ScaleTwoDecimal(10000);
+    public static final ScaleTwoDecimal TWENTY_THOUSAND = new ScaleTwoDecimal(20000);
+    public static final ScaleTwoDecimal ZERO = new ScaleTwoDecimal(0);
     
     public static final String awardNumber1 = "000021-00001";
     public static final String awardNumber2 = "000021-00002";
@@ -137,14 +137,6 @@ public class ActivePendingTransactionServiceImplTest {
         Assert.assertEquals(awardNumber1, activePendingTransactionsServiceImpl.findCommonParent(awardHierarchyNodes, awardNumber1, awardNumber3, awardNumber4));
     }
 
-    
-
-    /**
-     * This method...
-     * @param rootAwardNumber
-     * @param parentAwardNumber
-     * @param awardNumber
-     */
     private void addAwardHierarchyNode(String rootAwardNumber, String parentAwardNumber, String awardNumber) {
         awardHierarchyNode = new AwardHierarchyNode();
         awardHierarchyNode.setAwardNumber(awardNumber);

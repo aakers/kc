@@ -34,7 +34,7 @@ import org.kuali.kra.award.paymentreports.awardreports.AwardReportTerm;
 import org.kuali.kra.award.paymentreports.specialapproval.approvedequipment.AwardApprovedEquipment;
 import org.kuali.kra.award.specialreview.AwardSpecialReview;
 import org.kuali.kra.test.infrastructure.KcIntegrationTestBase;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.krad.UserSession;
 import org.kuali.rice.krad.service.BusinessObjectService;
@@ -117,10 +117,6 @@ public class AwardVersioningTest extends KcIntegrationTestBase {
         verifySequenceAssociatesAfterVersioning(awardVersion2.getSpecialReviews(), awardVersion3.getSpecialReviews());
     }
 
-    /**
-     * This method...
-     * @param awardVersion2
-     */
     private void addSomeApprovedEquipmentAndVerifyBaseline(Award awardVersion2) {
         awardVersion2.add(new AwardApprovedEquipment(VENDOR_A, MODEL_A, ITEM_A, AMOUNT));
         awardVersion2.add(new AwardApprovedEquipment(VENDOR_A, MODEL_A, ITEM_B, AMOUNT));
@@ -178,7 +174,7 @@ public class AwardVersioningTest extends KcIntegrationTestBase {
     
     private AwardApprovedSubaward createApprovedSubaward(String organizationName) {
         AwardApprovedSubaward subaward = new AwardApprovedSubaward();
-        subaward.setAmount(new KualiDecimal(100.00));
+        subaward.setAmount(new ScaleTwoDecimal(100.00));
         subaward.setOrganizationName(organizationName);
         return subaward;
     }
@@ -201,9 +197,7 @@ public class AwardVersioningTest extends KcIntegrationTestBase {
         return term;
     }
     
-    /**
-     * @return
-     */
+
     private AwardComment createComment(String commentText) {
         AwardComment comment = new AwardComment();
         comment.setComments(commentText);
@@ -214,19 +208,19 @@ public class AwardVersioningTest extends KcIntegrationTestBase {
     
     private AwardCostShare createCostShare(double costSharePct, String destination) {
         AwardCostShare costShare = new AwardCostShare();
-        costShare.setCostSharePercentage(new KualiDecimal(costSharePct));
+        costShare.setCostSharePercentage(new ScaleTwoDecimal(costSharePct));
         costShare.setCostShareMet(costShare.getCostSharePercentage());
         costShare.setCostShareTypeCode(1);
         costShare.setProjectPeriod(FISCAL_YEAR);
         costShare.setSource(COST_SHARE_SOURCE);
         costShare.setDestination(destination);
-        costShare.setCommitmentAmount(new KualiDecimal(COST_SHARE_COMMIT_AMT));
+        costShare.setCommitmentAmount(new ScaleTwoDecimal(COST_SHARE_COMMIT_AMT));
         return costShare;
     }
 
     private AwardFandaRate createAwardFandaRate(String onOffCampusFlag) {
         AwardFandaRate rate = new AwardFandaRate();
-        rate.setApplicableFandaRate(new KualiDecimal(5.0));
+        rate.setApplicableFandaRate(new ScaleTwoDecimal(5.0));
         rate.setFandaRateTypeCode("1");
         rate.setFiscalYear("2008");
         rate.setStartDate(new Date(new GregorianCalendar(2007, Calendar.JULY, 1).getTimeInMillis()));
@@ -335,13 +329,7 @@ public class AwardVersioningTest extends KcIntegrationTestBase {
             assertEquals(associateBeforeVersioning.getSequenceNumber().intValue() + 1, associateAfterVersioning.getSequenceNumber().intValue());
         }
     }
-    
-    /**
-     * This method...
-     * @return
-     * @throws VersionException
-     * @throws WorkflowException
-     */
+
     private Award versionAward(AwardDocument oldVersionDocument) throws VersionException, WorkflowException {
         Award oldVersion = oldVersionDocument.getAward();
         Award newVersion = (Award) versioningService.createNewVersion(oldVersion);

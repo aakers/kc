@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.sponsor.term.SponsorTerm;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.validation.ErrorReporter;
 import org.kuali.kra.award.AwardDocumentRule;
@@ -37,7 +38,6 @@ import org.kuali.kra.award.paymentreports.awardreports.reporting.ReportTracking;
 import org.kuali.kra.award.paymentreports.awardreports.reporting.ReportTrackingBean;
 import org.kuali.kra.award.paymentreports.closeout.AwardCloseoutService;
 import org.kuali.kra.award.paymentreports.paymentschedule.AwardPaymentSchedule;
-import org.kuali.kra.bo.SponsorTerm;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.rice.kns.service.KNSServiceLocator;
@@ -270,15 +270,20 @@ public class AwardPaymentReportsAndTermsAction extends AwardAction {
      */
     public ActionForward addAwardReportTerm(ActionMapping mapping, ActionForm form, 
             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-        AwardReportTerm newReport = 
-            ((AwardForm) form).getAwardReportsBean().addAwardReportTermItem(getReportClass(request), getReportClassCodeIndex(request));
-        if (newReport != null) {
-            ActionForward confirmSynch = this.confirmSyncAction(mapping, form, request, response, AwardSyncType.ADD_SYNC, newReport, AWARD_REPORT_TERM_PROPERTY, null, 
-                    mapping.findForward(Constants.MAPPING_AWARD_BASIC));
-            ((AwardForm) form).getReportTrackingBeans().add(new ReportTrackingBean());
-            return confirmSynch;
-        } else {
+        if(new AwardDocumentRule().processAwardReportTermSaveRules((AwardForm) form)) {
+            AwardReportTerm newReport = 
+                    ((AwardForm) form).getAwardReportsBean().addAwardReportTermItem(getReportClass(request), getReportClassCodeIndex(request));
+            if (newReport != null) {
+                ActionForward confirmSynch = this.confirmSyncAction(mapping, form, request, response, AwardSyncType.ADD_SYNC, newReport, AWARD_REPORT_TERM_PROPERTY, null, 
+                        mapping.findForward(Constants.MAPPING_AWARD_BASIC));
+                ((AwardForm) form).getReportTrackingBeans().add(new ReportTrackingBean());
+                return confirmSynch;
+            }
+            else {
+                return mapping.findForward(Constants.MAPPING_AWARD_BASIC);
+            }
+        }
+        else {
             return mapping.findForward(Constants.MAPPING_AWARD_BASIC);
         }
     }
@@ -603,7 +608,7 @@ public class AwardPaymentReportsAndTermsAction extends AwardAction {
         }
         
         getAwardCloseoutService().updateCloseoutDueDatesBeforeSave(awardDocument.getAward());
-        if (new AwardDocumentRule().processAwardReportTermBusinessRules(awardDocument)) {
+        if (new AwardDocumentRule().processAwardReportTermBusinessRules(awardDocument) && new AwardDocumentRule().processAwardReportTermSaveRules(awardForm)) {
             
             /**
              * process AwardPaymentSchedule, if they have been updated, update the last update user, and last update date fields.
@@ -767,6 +772,7 @@ public class AwardPaymentReportsAndTermsAction extends AwardAction {
     }
     
     public ActionForward updateMultileReportTracking(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if(new AwardDocumentRule().processAwardReportTermSaveRules((AwardForm) form)) {
         AwardForm awardForm = (AwardForm) form;
         int awardReportTermItemsIndex = getAwardReportTermItemsIndex(request);
         List<ReportTracking> reportTrackings = awardForm.getAwardDocument().getAward().getAwardReportTermItems().get(getAwardReportTermItemsIndex(request)).getReportTrackings();
@@ -775,6 +781,7 @@ public class AwardPaymentReportsAndTermsAction extends AwardAction {
         getReportTrackingService().setReportTrackingListSelected(reportTrackings, false);
         }
         awardForm.buildReportTrackingBeans();
+        }
         return mapping.findForward(Constants.MAPPING_AWARD_BASIC);
     }
     

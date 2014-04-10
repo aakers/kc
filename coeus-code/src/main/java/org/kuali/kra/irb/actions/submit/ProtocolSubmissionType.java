@@ -19,9 +19,7 @@ import org.kuali.kra.protocol.actions.submit.ProtocolSubmissionTypeBase;
 
 public class ProtocolSubmissionType extends ProtocolSubmissionTypeBase {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -1232083217368314655L;
 
     public static final String INITIAL_SUBMISSION = "100";
@@ -44,33 +42,15 @@ public class ProtocolSubmissionType extends ProtocolSubmissionTypeBase {
 
     public static final String REQUEST_FOR_DATA_ANALYSIS_ONLY = "113";
 
-    public static final String NOTIFY_IRB = "112";
+    public static final String NOTIFY_IRB = "112";      // also known as FYI
 
-    // also known as FYI  
     public static final String REQUEST_FOR_TERMINATION = "108";
 
     public static final String RESUBMISSION = "116";
 
-    private String submissionTypeCode;
-
-    private String description;
-
-    public ProtocolSubmissionType() {
-    }
 
     public String getSubmissionTypeCode() {
-        return submissionTypeCode;
+        return super.getSubmissionTypeCode();
     }
 
-    public void setSubmissionTypeCode(String submissionTypeCode) {
-        this.submissionTypeCode = submissionTypeCode;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

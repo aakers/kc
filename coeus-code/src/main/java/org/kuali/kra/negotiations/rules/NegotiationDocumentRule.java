@@ -16,6 +16,7 @@
 package org.kuali.kra.negotiations.rules;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
@@ -24,7 +25,6 @@ import org.kuali.kra.negotiations.bo.*;
 import org.kuali.kra.negotiations.document.NegotiationDocument;
 import org.kuali.kra.negotiations.service.NegotiationService;
 import org.kuali.kra.rule.event.SaveCustomDataEvent;
-import org.kuali.kra.service.SponsorService;
 import org.kuali.rice.kns.service.DataDictionaryService;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -46,10 +46,7 @@ public class NegotiationDocumentRule extends KcTransactionalDocumentRuleBase {
     private DataDictionaryService dataDictionaryService;
     private SponsorService sponsorService;
     
-    /**
-     * 
-     * Constructs a NegotiationDocumentRule.java.
-     */
+
     public NegotiationDocumentRule() {
         super();
     }
@@ -79,10 +76,7 @@ public class NegotiationDocumentRule extends KcTransactionalDocumentRuleBase {
         
         return result;
     }
-    
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcBusinessRule#processRules(org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension)
-     */
+
     public boolean processRules(KcDocumentEventBaseExtension event) {
         boolean retVal = false;
         retVal = event.getRule().processRules(event);

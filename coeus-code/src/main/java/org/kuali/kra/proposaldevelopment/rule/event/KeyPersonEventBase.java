@@ -16,9 +16,9 @@
 package org.kuali.kra.proposaldevelopment.rule.event;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBase;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.rice.krad.util.ObjectUtils;
 
 
@@ -34,9 +34,6 @@ public abstract class KeyPersonEventBase extends KcDocumentEventBase implements 
     
     private ProposalPerson person;
     
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcDocumentEventBase#KraDocumentEventBase(String, String, Document)
-     */
     protected KeyPersonEventBase(String description, ProposalDevelopmentDocument document, ProposalPerson person) {
         this(description, "", document, person);
     }
@@ -58,9 +55,7 @@ public abstract class KeyPersonEventBase extends KcDocumentEventBase implements 
         return person;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#validate()
-     */
+    @Override
     public void validate() {
         super.validate();
         if (getProposalPerson() == null) {

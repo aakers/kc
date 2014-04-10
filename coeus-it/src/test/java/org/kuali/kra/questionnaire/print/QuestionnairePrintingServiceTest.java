@@ -20,14 +20,14 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.kuali.coeus.common.framework.print.AbstractPrint;
+import org.kuali.coeus.common.framework.print.Printable;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.irb.Protocol;
 import org.kuali.kra.irb.ProtocolDocument;
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.printing.print.AbstractPrint;
 import org.kuali.kra.printing.util.PrintingServiceTestBase;
 import org.kuali.kra.printing.util.PrintingTestUtils;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.actions.print.QuestionnairePrintOption;
 import org.kuali.kra.questionnaire.Questionnaire;
 import org.kuali.rice.kew.api.exception.WorkflowException;
@@ -63,16 +63,12 @@ public class QuestionnairePrintingServiceTest extends PrintingServiceTestBase {
             PrintingTestUtils.writePdftoDisk(pdfBytes,"Questionnaire");
             assertNotNull(pdfBytes);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             //assert false;
             throw new RuntimeException(e);
         }
     }
-    /**
-     * This method...
-     * @return
-     * @throws WorkflowException
-     */
+
     private String createQuestionnaireMaintDocument() throws WorkflowException {
         MaintenanceDocumentBase maintDocument = (MaintenanceDocumentBase) documentService.getNewDocument(KcServiceLocator.getService(MaintenanceDocumentDictionaryService.class).getDocumentTypeName(Questionnaire.class));
         maintDocument.getDocumentHeader().setDocumentDescription("test 1"); 
@@ -135,7 +131,7 @@ public class QuestionnairePrintingServiceTest extends PrintingServiceTestBase {
                     "QuestionnaireAnswer");
             assertNotNull(pdfBytes);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             //assert false;
             throw new RuntimeException(e);
         }
@@ -186,7 +182,7 @@ public class QuestionnairePrintingServiceTest extends PrintingServiceTestBase {
             assertEquals(printables.size(),1);
             assertEquals(((AbstractPrint)printables.get(0)).getReportParameters().get("questionnaireId"), 1);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             //assert false;
             throw new RuntimeException(e);
         }

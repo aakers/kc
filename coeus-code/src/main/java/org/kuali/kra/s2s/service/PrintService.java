@@ -15,13 +15,10 @@
  */
 package org.kuali.kra.s2s.service;
 
-import org.kuali.kra.bo.SponsorFormTemplate;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.s2s.S2SException;
-
-import java.util.List;
 
 /**
  * This class contains the PDF form generation related services for a proposal.
@@ -30,26 +27,11 @@ public interface PrintService {
 	/**
 	 * This method is used for the printing of forms in PDF format
 	 * 
-	 * @param pdDoc(ProposalDevelopmentDocument)
+	 * @param pdDoc (ProposalDevelopmentDocument)
 	 * @throws S2SException
 	 * 
 	 */
 	public AttachmentDataSource printForm(ProposalDevelopmentDocument pdDoc)
 			throws S2SException, PrintingException;
 
-	/**
-	 * 
-	 * Prints the proposal sponsor forms by passing the given proposal
-	 * information to {@link ProposalPrintReader}
-	 * 
-	 * @param proposalNumber
-	 *            proposal number.
-	 * @param sponsorFormTemplates
-	 *            list of SponsorFormTemplate.
-	 * @return byte array of forms corresponding to the proposal number and
-	 *         SponsorFormTemplate objects.
-	 * @throws S2SException
-	 */
-	public byte[] printProposalSponsorForms(String proposalNumber,
-			List<SponsorFormTemplate> sponsorFormTemplates) throws S2SException;
 }

@@ -18,11 +18,11 @@ package org.kuali.kra.personmasschange.document;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.irb.ProtocolDocument;
 import org.kuali.kra.personmasschange.bo.PersonMassChange;
 import org.kuali.kra.personmasschange.service.PersonMassChangeService;
@@ -57,10 +57,6 @@ public class PersonMassChangeDocument extends KcTransactionalDocumentBase implem
         personMassChangeList.add(newPersonMassChange);
     }
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase#getDocumentTypeCode()
-     */
     @Override
     public String getDocumentTypeCode() {
         return DOCUMENT_TYPE_CODE;

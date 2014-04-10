@@ -26,16 +26,16 @@ import org.kuali.coeus.common.committee.impl.print.ScheduleTemplatePrintBase;
 import org.kuali.coeus.common.committee.impl.print.service.CommitteePrintingServiceBase;
 import org.kuali.coeus.common.committee.impl.rule.event.CommitteeActionPrintCommitteeDocumentEvent;
 import org.kuali.coeus.common.committee.impl.service.CommonCommitteeNotificationService;
+import org.kuali.coeus.common.framework.print.AbstractPrint;
+import org.kuali.coeus.common.framework.print.Printable;
+import org.kuali.coeus.common.framework.print.util.PrintingUtils;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.common.printing.CorrespondencePrintingService;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.meeting.CommScheduleMinuteDoc;
 import org.kuali.kra.meeting.ScheduleAgenda;
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.printing.print.AbstractPrint;
-import org.kuali.kra.printing.util.PrintingUtils;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.correspondence.ProtocolCorrespondence;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.krad.service.BusinessObjectService;
@@ -339,9 +339,7 @@ public abstract class MeetingActionsActionBase extends MeetingActionBase {
      * TODO : maybe should create a public class for this ?
      */
     public class PrintableAttachment extends AttachmentDataSource {
-        /**
-         * Comment for <code>serialVersionUID</code>
-         */
+
         private static final long serialVersionUID = -8537865725808758230L;
         
         private byte[] streamData;

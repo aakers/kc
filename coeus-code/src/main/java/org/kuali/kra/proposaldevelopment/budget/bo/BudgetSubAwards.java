@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.upload.FormFile;
 import org.kuali.coeus.common.framework.org.Organization;
 import org.kuali.kra.budget.core.BudgetAssociate;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -32,9 +32,7 @@ import java.util.List;
  */
 public class BudgetSubAwards extends BudgetAssociate implements HierarchyMaintainable, Comparable<BudgetSubAwards> {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -857485535655759499L;
 
     private String proposalNumber;

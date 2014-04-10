@@ -19,6 +19,9 @@ package org.kuali.kra.bo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.kuali.coeus.common.framework.custom.attr.CustomAttribute;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
+
 /**
  * Defines utilities for unit testing
  */
@@ -67,17 +70,13 @@ public class CustomAttributeDocumentTestUtilities {
         customAttributeDocument = buildCustomAttributeDocument("PRDV", false, customAttribute);
         customAttributeDocuments.put("8", customAttributeDocument);
 
-        customAttribute = buildCustomAttribute(11, "ARRA_FUNDING", "ARRA Funding", "1", new Integer(3), GROUP_NAME_4,"org.kuali.kra.bo.ArgValueLookup","yes_no_flag");
+        customAttribute = buildCustomAttribute(11, "ARRA_FUNDING", "ARRA Funding", "1", new Integer(3), GROUP_NAME_4,"org.kuali.coeus.common.framework.custom.arg.ArgValueLookup","yes_no_flag");
         customAttributeDocument = buildCustomAttributeDocument("PRDV", false, customAttribute);
         customAttributeDocuments.put("9", customAttributeDocument);
         
         return customAttributeDocuments;
     }
 
-    /**
-     * This method...
-     * @return
-     */
     private static CustomAttributeDocument buildCustomAttributeDocument(String documentTypeCode, boolean required, CustomAttribute customAttribute) {
         CustomAttributeDocument customAttributeDocument = new CustomAttributeDocument();
         customAttributeDocument.setCustomAttributeId(customAttribute.getId());
@@ -92,10 +91,6 @@ public class CustomAttributeDocumentTestUtilities {
         return buildCustomAttribute(id, name, label, dataTypeCode, dataLength, groupName, null, null);
     }
 
-    /**
-     * This method...
-     * @return
-     */
     private static CustomAttribute buildCustomAttribute(Integer id, String name, String label, String dataTypeCode, Integer dataLength, String groupName, String lookupClass, String lookupReturn) {
         CustomAttribute customAttribute = new CustomAttribute();
 

@@ -27,16 +27,18 @@ import gov.grants.apply.forms.rrKeyPersonExpanded12V12.RRKeyPersonExpanded12Docu
 import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.person.KcPerson;
-import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
+import org.kuali.coeus.common.framework.rolodex.RolodexService;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonComparator;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonDegree;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.kra.s2s.util.AuditError;
 import org.kuali.kra.s2s.util.S2SConstants;
-import org.kuali.kra.service.SponsorService;
-import org.kuali.rice.kns.util.AuditError;
-import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -210,7 +212,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 			profile.setCredential(PI.getEraCommonsUserName());
 		} else {
             if (KcServiceLocator.getService(SponsorService.class).isSponsorNihMultiplePi(pdDoc.getDevelopmentProposal())) {
-                getAuditErrors().add(new AuditError(Constants.NO_FIELD, S2SConstants.ERROR_ERA_COMMON_USER_NAME + PI.getFullName(), 
+                getAuditErrors().add(new AuditError(Constants.NO_FIELD, S2SConstants.ERROR_ERA_COMMON_USER_NAME + PI.getFullName(),
                         Constants.GRANTS_GOV_PAGE + "." + Constants.GRANTS_GOV_PANEL_ANCHOR));             
             }
         }
@@ -224,9 +226,8 @@ public class RRKeyPersonExpandedV1_2Generator extends
 	 */
 	private void setDepartmentNameToProfile(Profile profile, ProposalPerson PI) {
 		if(PI.getHomeUnit() != null) {
-            KcPersonService kcPersonService = KcServiceLocator.getService(KcPersonService.class);
-            KcPerson kcPersons = kcPersonService.getKcPersonByPersonId(PI.getPersonId());
-            String departmentName =  kcPersons.getOrganizationIdentifier();
+            KcPerson kcPerson = PI.getPerson();
+            String departmentName =  kcPerson.getOrganizationIdentifier();
             profile.setDepartmentName(departmentName);
         }
         else
@@ -259,8 +260,8 @@ public class RRKeyPersonExpandedV1_2Generator extends
              rolodex = null;
         } else if (PI.getRolodexId() != null) {
             pIPersonOrRolodexId = PI.getRolodexId().toString();
-            BusinessObjectService businessObjectService = KcServiceLocator.getService(BusinessObjectService.class);
-            rolodex = businessObjectService.findBySinglePrimaryKey(Rolodex.class,pIPersonOrRolodexId);
+            RolodexService rolodexService = KcServiceLocator.getService(RolodexService.class);
+            rolodex = rolodexService.getRolodex(Integer.valueOf(pIPersonOrRolodexId));
         }
 	}
 
@@ -495,41 +496,4 @@ public class RRKeyPersonExpandedV1_2Generator extends
 				.setRRKeyPersonExpanded12(rrKeyPersonExpanded);
 		return rrKeyPersonExpandedDocument;
 	}
-
-//	@Override
-//	protected XmlObject getKeypersonProfileObject() {
-//		if (extraPersons != null) {
-//			PersonProfileList extraPersonProfileList = PersonProfileList.Factory.newInstance();
-//
-//			extraPersonProfileList.setProposalNumber(pdDoc
-//					.getDevelopmentProposal().getProposalNumber());
-//			extraPersonProfileList.setExtraKeyPersonArray(getExtraKeyPersons());
-//
-//			PersonProfileListDocument  extraPersonDoc = PersonProfileListDocument.Factory.newInstance();
-//			extraPersonDoc.setPersonProfileList(extraPersonProfileList);
-//			String xmlData = extraPersonDoc.xmlText();
-//			Map<String, byte[]> streamMap = new HashMap<String, byte[]>();
-//			streamMap.put("", xmlData.getBytes());
-//
-//			Source xsltSource = new StreamSource(getClass()
-//					.getResourceAsStream(ADDITIONALKEYPERSONPROFILES_XSL));
-//			Map<String, Source> xSLTemplateWithBookmarks = new HashMap<String, Source>();
-//			xSLTemplateWithBookmarks.put("", xsltSource);
-//			
-//			
-//			GenericPrintable printable = new GenericPrintable();
-//			printable.setXSLTemplateWithBookmarks(xSLTemplateWithBookmarks);
-//			printable.setStreamMap(streamMap);
-//			PrintingService printingService= KraServiceLocator.getService(PrintingService.class);
-//			try {
-//				AttachmentDataSource printData = printingService.print(printable);
-//				String fileName = pdDoc.getDevelopmentProposal().getProposalNumber() +"_"+PROFILE_COMMENT;
-//				saveNarrative(printData.getContent(), ""+PROFILE_TYPE,fileName,PROFILE_COMMENT);
-//			} catch (PrintingException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return null;
-//	
-//	}
 }

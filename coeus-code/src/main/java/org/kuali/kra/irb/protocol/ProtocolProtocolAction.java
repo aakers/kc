@@ -16,10 +16,13 @@
 package org.kuali.kra.irb.protocol;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.bo.FundingSourceType;
 import org.kuali.kra.bo.ResearchAreaBase;
@@ -40,7 +43,6 @@ import org.kuali.kra.irb.protocol.participant.ProtocolParticipantService;
 import org.kuali.kra.irb.protocol.reference.*;
 import org.kuali.kra.irb.protocol.research.ProtocolResearchAreaService;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.protocol.ProtocolDocumentBase;
 import org.kuali.kra.protocol.actions.submit.ProtocolSubmissionBase;
 import org.kuali.kra.protocol.protocol.funding.ProtocolFundingSourceBase;
@@ -65,7 +67,9 @@ import static org.kuali.kra.infrastructure.Constants.MAPPING_BASIC;
  * tab (web page).
  */
 public class ProtocolProtocolAction extends ProtocolAction {
-    
+
+    private static final Log LOG = LogFactory.getLog(ProtocolProtocolAction.class);
+
     private static final String CONFIRM_DELETE_PROTOCOL_FUNDING_SOURCE_KEY = "confirmDeleteProtocolFundingSource";
 
     /**
@@ -655,7 +659,7 @@ public class ProtocolProtocolAction extends ProtocolAction {
             try {
                 getProtocolActionRequestService().generateFundingSource(protocolForm);
             }catch(Exception ex) {
-                ex.printStackTrace();
+                LOG.error(ex.getMessage(), ex);
             }
         }
     }

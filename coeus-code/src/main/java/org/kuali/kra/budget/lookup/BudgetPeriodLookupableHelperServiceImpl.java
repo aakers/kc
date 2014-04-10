@@ -26,18 +26,11 @@ import java.util.ListIterator;
 import java.util.Map;
 
 
-/**
- * This class...
- */
+
 public class BudgetPeriodLookupableHelperServiceImpl extends KualiLookupableHelperServiceImpl {
     
     protected AwardBudgetService awardBudgetService;
-    
-    /**
-     * 
-     * @see org.kuali.core.lookup.KualiLookupableHelperServiceImpl#getSearchResults(java.util.Map) It calls the
-     *      S2sService#searchOpportunity service to look up the opportunity
-     */
+
     public List<? extends BusinessObject> getSearchResults(Map<String, String> fieldValues) {
         String awardNumber = fieldValues.get("budgetParentId");
         List<BudgetPeriod> budgetPeriods = getAwardBudgetService().findBudgetPeriodsFromLinkedProposal(awardNumber);

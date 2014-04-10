@@ -15,18 +15,22 @@
  */
 package org.kuali.kra.s2s.generator.impl;
 
+import org.kuali.coeus.common.framework.sponsor.Sponsorable;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.SponsorHierarchy;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.kra.proposaldevelopment.budget.service.ProposalBudgetService;
+import org.kuali.kra.questionnaire.answer.Answer;
+import org.kuali.kra.questionnaire.answer.AnswerHeader;
+import org.kuali.kra.s2s.depend.SponsorHierarchyService;
 import org.kuali.kra.s2s.generator.S2SBaseFormGenerator;
 import org.kuali.kra.s2s.generator.bo.DepartmentalPerson;
 import org.kuali.kra.s2s.service.S2SBudgetCalculatorService;
 import org.kuali.kra.s2s.service.S2SUtilService;
-import org.kuali.kra.service.Sponsorable;
-import org.kuali.rice.krad.service.BusinessObjectService;
+import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This abstract class has methods that are common to all the versions of RRSF424 form.
@@ -36,6 +40,11 @@ import java.util.Map;
 public abstract class RRSF424BaseGenerator extends S2SBaseFormGenerator {
     protected S2SUtilService s2sUtilService;
     protected S2SBudgetCalculatorService s2sBudgetCalculatorService;
+    protected ParameterService parameterService;
+    protected SponsorHierarchyService sponsorHierarchyService;
+    protected ProposalBudgetService proposalBudgetService;
+    protected ProposalDevelopmentService proposalDevelopmentService;
+
     private static final String PROPOSAL_CONTACT_TYPE = "PROPOSAL_CONTACT_TYPE";
     protected static final String PRINCIPAL_INVESTIGATOR = "PI";
     protected static final int PRE_APPLICATION = 6;
@@ -59,13 +68,42 @@ public abstract class RRSF424BaseGenerator extends S2SBaseFormGenerator {
     protected static final String SPONSOR_GROUPS = "Sponsor Groups";
     protected static final String SPONSOR_NIH = "NIH";
 
-    /**
-     * 
-     * Constructs a RRSF424BaseGenerator.java.
-     */
+
     public RRSF424BaseGenerator() {
         s2sUtilService = KcServiceLocator.getService(S2SUtilService.class);
         s2sBudgetCalculatorService = KcServiceLocator.getService(S2SBudgetCalculatorService.class);
+        parameterService = KcServiceLocator.getService(ParameterService.class);
+        sponsorHierarchyService = KcServiceLocator.getService(SponsorHierarchyService.class);
+        proposalBudgetService = KcServiceLocator.getService(ProposalBudgetService.class);
+        proposalDevelopmentService = KcServiceLocator.getService(ProposalDevelopmentService.class);
+    }
+
+    /**
+     *
+     * This method is used to get the answer for a particular Questionnaire question
+     * question based on the question id.
+     *
+     * @param questionId
+     *            the question id to be passed.
+     * @return returns the answer for a particular
+     *         question based on the question id passed.
+     */
+    protected String getAnswer(String questionId) {
+        List<AnswerHeader> answerHeaders = new ArrayList<AnswerHeader>();
+        answerHeaders = getQuestionnaireAnswers(pdDoc.getDevelopmentProposal(), true);
+        String answer = null;
+        if (answerHeaders != null && !answerHeaders.isEmpty()) {
+            for (AnswerHeader answerHeader : answerHeaders) {
+                List<Answer> answerDetails = answerHeader.getAnswers();
+                for (Answer answers : answerDetails) {
+                    if (answers.getAnswer() != null && questionId.equals(answers.getQuestion().getQuestionId())) {
+                        answer = answers.getAnswer();
+                        return answer;
+                    }
+                }
+            }
+        }
+        return answer;
     }
 
     /**
@@ -75,7 +113,7 @@ public abstract class RRSF424BaseGenerator extends S2SBaseFormGenerator {
      * @return String contact type for the proposal
      */
     protected String getContactType() {
-        String contactType = s2sUtilService.getParameterValue(PROPOSAL_CONTACT_TYPE);
+        String contactType = parameterService.getParameterValueAsString(ProposalDevelopmentDocument.class, PROPOSAL_CONTACT_TYPE);
         if (contactType == null || contactType.length() == 0) {
             contactType = CONTACT_TYPE_O;
         }
@@ -87,8 +125,6 @@ public abstract class RRSF424BaseGenerator extends S2SBaseFormGenerator {
      * 
      * @param pdDoc(ProposalDevelopmentDocument)
      *            proposal development document.
-     * @param contactType(String)
-     *            for which the DepartmentalPerson has to be found.
      * @return depPerson(DepartmentalPerson) corresponding to the contact type.
      */
     protected DepartmentalPerson getContactPerson(
@@ -104,14 +140,7 @@ public abstract class RRSF424BaseGenerator extends S2SBaseFormGenerator {
      * @return
      */
     public boolean isSponsorInHierarchy(Sponsorable sponsorable, String sponsorHierarchy,String level1) {
-        Map<String, String> valueMap = new HashMap<String, String>();
-        valueMap.put("sponsorCode", sponsorable.getSponsorCode());
-        valueMap.put("hierarchyName", sponsorHierarchy);
-        valueMap.put("level1", level1);
-        int matchingHierarchies = KcServiceLocator.getService(BusinessObjectService.class)
-                .countMatching(SponsorHierarchy.class, valueMap);
-        
-        return matchingHierarchies > 0;
+        return sponsorHierarchyService.isSponsorInHierarchy(sponsorable.getSponsorCode(), sponsorHierarchy, 1, level1);
     }
     
 }

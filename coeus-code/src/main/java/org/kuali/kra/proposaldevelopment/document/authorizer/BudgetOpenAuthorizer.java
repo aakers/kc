@@ -15,9 +15,9 @@
  */
 package org.kuali.kra.proposaldevelopment.document.authorizer;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.workflow.KcWorkflowService;
 import org.kuali.kra.infrastructure.PermissionConstants;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.document.authorization.ProposalTask;
 
 /**
@@ -30,11 +30,7 @@ public class BudgetOpenAuthorizer extends ProposalAuthorizer {
 
     private KcWorkflowService kraWorkflowService;
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.proposaldevelopment.document.authorizer.ProposalAuthorizer#isAuthorized(java.lang.String, 
-     *      org.kuali.kra.proposaldevelopment.document.authorization.ProposalTask)
-     */
+    @Override
     public boolean isAuthorized(String userId, ProposalTask task) {
         ProposalDevelopmentDocument doc = task.getDocument();
         

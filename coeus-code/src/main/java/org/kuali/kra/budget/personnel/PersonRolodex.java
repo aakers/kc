@@ -15,12 +15,10 @@
  */
 package org.kuali.kra.budget.personnel;
 
+import org.kuali.coeus.common.framework.sponsor.Sponsorable;
 import org.kuali.kra.award.home.ContactRole;
-import org.kuali.kra.service.Sponsorable;
 
-/**
- * This class...
- */
+
 public interface PersonRolodex {
     public String getPersonId();
     public Integer getRolodexId();

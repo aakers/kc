@@ -16,14 +16,12 @@
 package org.kuali.kra.protocol.actions.print;
 
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.common.framework.print.stream.xml.PrintBaseXmlStream;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.printing.xmlstream.PrintBaseXmlStream;
 
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public abstract class RenewalReminderStreamBase extends PrintBaseXmlStream {
     
     public abstract Map<String, XmlObject> generateXmlStream(KcPersistableBusinessObjectBase printableBusinessObject, Map<String, Object> reportParameters);

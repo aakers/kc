@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.controller.AuditActionHelper;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.AwardForm;
@@ -42,8 +43,7 @@ import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.institutionalproposal.service.InstitutionalProposalService;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
-import org.kuali.kra.service.VersionHistoryService;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.timeandmoney.AwardHierarchyNode;
 import org.kuali.rice.core.api.util.RiceConstants;
 import org.kuali.rice.kew.api.KewApiConstants;
@@ -156,7 +156,7 @@ public class AwardActionsAction extends AwardAction implements AuditModeAction {
         }
     }
 
-    /** {@inheritDoc} */
+    @Override
     public ActionForward activate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         AwardForm awardForm = (AwardForm) form;
@@ -164,7 +164,7 @@ public class AwardActionsAction extends AwardAction implements AuditModeAction {
         return new AuditActionHelper().setAuditMode(mapping, (AwardForm) form, true);
     }
 
-    /** {@inheritDoc} */
+    @Override
     public ActionForward deactivate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         ((AwardForm) form).clearUnitRulesMessages();

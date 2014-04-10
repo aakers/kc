@@ -15,15 +15,13 @@
  */
 package org.kuali.kra.proposaldevelopment.service;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 
 import java.util.List;
 
-/**
- * This class...
- */
+
 public interface NarrativeService {
     public void addNarrative(ProposalDevelopmentDocument proposaldevelopmentDocument,Narrative narrative);
     public void deleteProposalAttachment(ProposalDevelopmentDocument proposaldevelopmentDocument,int lineToDelete);

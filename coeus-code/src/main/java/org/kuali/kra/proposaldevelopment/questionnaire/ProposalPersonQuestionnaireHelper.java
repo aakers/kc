@@ -19,12 +19,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.coeus.common.framework.module.CoeusModule;
 import org.kuali.coeus.common.framework.module.CoeusSubModule;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.TaskName;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonRole;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonRole;
 import org.kuali.kra.proposaldevelopment.document.authorization.ProposalTask;
 import org.kuali.kra.questionnaire.QuestionnaireHelperBase;
 import org.kuali.kra.questionnaire.QuestionnaireService;
@@ -35,14 +35,10 @@ import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.krad.service.DocumentService;
 import org.kuali.rice.krad.util.ObjectUtils;
 
-/**
- * This class...
- */
+
 public class ProposalPersonQuestionnaireHelper extends QuestionnaireHelperBase {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -5090730280279711495L;
     
     private static final Log LOG = LogFactory.getLog(ProposalPersonQuestionnaireHelper.class);
@@ -74,10 +70,6 @@ public class ProposalPersonQuestionnaireHelper extends QuestionnaireHelperBase {
         this.proposalPerson = proposalPerson;
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.questionnaire.QuestionnaireHelperBase#getModuleQnBean()
-     */
     @Override
     public ModuleQuestionnaireBean getModuleQnBean() {
         //ProposalDevelopmentDocument propDevDoc = getProposalDevelopmentDocument(); 

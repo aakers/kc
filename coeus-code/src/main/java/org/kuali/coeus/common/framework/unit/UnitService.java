@@ -16,8 +16,8 @@
 package org.kuali.coeus.common.framework.unit;
 
 import org.kuali.coeus.common.framework.unit.admin.UnitAdministrator;
+import org.kuali.coeus.common.framework.unit.crrspndnt.UnitCorrespondent;
 import org.kuali.kra.iacuc.bo.IacucUnitCorrespondent;
-import org.kuali.kra.bo.UnitCorrespondent;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,9 +26,6 @@ import java.util.List;
  * The Unit Service provides a set of queries related to Units.
  *
  * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
- */
-/**
- * This class...
  */
 public interface UnitService {
     

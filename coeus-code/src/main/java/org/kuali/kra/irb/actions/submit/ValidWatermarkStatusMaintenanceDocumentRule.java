@@ -16,11 +16,11 @@
 package org.kuali.kra.irb.actions.submit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.print.watermark.Watermark;
+import org.kuali.coeus.common.framework.print.watermark.WatermarkConstants;
 import org.kuali.coeus.sys.framework.rule.KcMaintenanceDocumentRuleBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.Watermark;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.util.watermark.WatermarkConstants;
 import org.kuali.rice.kns.document.MaintenanceDocument;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -36,37 +36,24 @@ import java.util.Map;
  */
 public class ValidWatermarkStatusMaintenanceDocumentRule extends KcMaintenanceDocumentRuleBase {
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
+    @Override
 
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
 
-    /**
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
     @Override
     public boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
     @Override
     public boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#isDocumentValidForSave(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
+    @Override
     public boolean isDocumentValidForSave(MaintenanceDocument document) {
         boolean result = super.isDocumentValidForSave(document);
         final Watermark watermark = (Watermark) document.getNewMaintainableObject().getDataObject();

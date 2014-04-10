@@ -21,7 +21,7 @@ import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.proposaldevelopment.bo.CreditSplit;
 import org.kuali.kra.proposaldevelopment.bo.InvestigatorCreditType;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.HashMap;
@@ -29,9 +29,7 @@ import java.util.Map;
 
 public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusinessObjectBase implements CreditSplit, SequenceAssociate<InstitutionalProposal> {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 994819927148154584L;
 
     private static final String INV_CREDIT_TYPE_CODE_FIELD_NAME = "invCreditTypeCode";
@@ -40,7 +38,7 @@ public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusines
 
     private InstitutionalProposalPerson institutionalProposalPerson;
 
-    private KualiDecimal credit;
+    private ScaleTwoDecimal credit;
 
     private InvestigatorCreditType investigatorCreditType;
 
@@ -49,18 +47,11 @@ public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusines
 
     private Long institutionalProposalContactId;
 
-    /**
-     * Default Constructor
-     */
+
     public InstitutionalProposalPersonCreditSplit() {
     }
 
-    /**
-     * Convenience Constructor
-     * @param investigatorCreditType
-     * @param credit
-     */
-    InstitutionalProposalPersonCreditSplit(InvestigatorCreditType investigatorCreditType, KualiDecimal credit) {
+    InstitutionalProposalPersonCreditSplit(InvestigatorCreditType investigatorCreditType, ScaleTwoDecimal credit) {
         setInvestigatorCreditType(investigatorCreditType);
         setCredit(credit);
     }
@@ -94,8 +85,8 @@ public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusines
      *
      * @return the value of credit
      */
-    public KualiDecimal getCredit() {
-        return this.credit != null ? this.credit : new KualiDecimal(0);
+    public ScaleTwoDecimal getCredit() {
+        return this.credit != null ? this.credit : new ScaleTwoDecimal(0);
     }
 
     /**
@@ -147,7 +138,7 @@ public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusines
      *
      * @param argCredit Value to assign to this.credit
      */
-    public void setCredit(KualiDecimal argCredit) {
+    public void setCredit(ScaleTwoDecimal argCredit) {
         this.credit = argCredit;
     }
 
@@ -169,9 +160,7 @@ public class InstitutionalProposalPersonCreditSplit extends KcPersistableBusines
         this.invCreditTypeCode = investigatorCreditType != null ? investigatorCreditType.getInvCreditTypeCode() : null;
     }
 
-    /**
-     * @return
-     */
+
     protected BusinessObjectService getBusinessObjectService() {
         return KcServiceLocator.getService(BusinessObjectService.class);
     }

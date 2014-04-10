@@ -15,27 +15,23 @@
  */
 package org.kuali.kra.award.budget;
 
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.summary.BudgetSummaryService;
 import org.kuali.kra.budget.versions.BudgetVersionOverview;
 
 import static org.kuali.coeus.sys.framework.service.KcServiceLocator.getService;
 
-/**
- * This class...
- */
+
 public class AwardBudgetVersionOverviewExt extends BudgetVersionOverview {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -8402075117207933626L;
 
     private String awardBudgetStatusCode;
 
     private String awardBudgetTypeCode;
 
-    private BudgetDecimal obligatedAmount;
+    private ScaleTwoDecimal obligatedAmount;
 
     private AwardBudgetStatus awardBudgetStatus;
 
@@ -85,7 +81,7 @@ public class AwardBudgetVersionOverviewExt extends BudgetVersionOverview {
      * Gets the obligatedAmount attribute. 
      * @return Returns the obligatedAmount.
      */
-    public BudgetDecimal getObligatedAmount() {
+    public ScaleTwoDecimal getObligatedAmount() {
         return obligatedAmount;
     }
 
@@ -93,7 +89,7 @@ public class AwardBudgetVersionOverviewExt extends BudgetVersionOverview {
      * Sets the obligatedAmount attribute value.
      * @param obligatedAmount The obligatedAmount to set.
      */
-    public void setObligatedAmount(BudgetDecimal obligatedChangeAmount) {
+    public void setObligatedAmount(ScaleTwoDecimal obligatedChangeAmount) {
         this.obligatedAmount = obligatedChangeAmount;
     }
 

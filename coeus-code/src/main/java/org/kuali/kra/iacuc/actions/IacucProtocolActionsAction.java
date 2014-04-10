@@ -24,6 +24,12 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.committee.impl.meeting.CommitteeScheduleMinuteBase;
 import org.kuali.coeus.common.committee.impl.meeting.MinuteEntryType;
 import org.kuali.coeus.common.framework.attachment.AttachmentFile;
+import org.kuali.coeus.common.framework.print.Printable;
+import org.kuali.coeus.common.framework.print.PrintableAttachment;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.common.framework.print.util.PrintingUtils;
+import org.kuali.coeus.common.framework.print.watermark.WatermarkConstants;
+import org.kuali.coeus.common.framework.print.watermark.WatermarkService;
 import org.kuali.coeus.common.notification.impl.bo.NotificationType;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
 import org.kuali.coeus.sys.framework.auth.task.ApplicationTask;
@@ -68,12 +74,7 @@ import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.infrastructure.TaskName;
 import org.kuali.kra.irb.actions.history.ProtocolHistoryFilterDatesEvent;
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.printing.print.PrintableAttachment;
-import org.kuali.kra.printing.service.WatermarkService;
-import org.kuali.kra.printing.util.PrintingUtils;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.ProtocolDocumentBase;
 import org.kuali.kra.protocol.ProtocolFormBase;
@@ -90,7 +91,6 @@ import org.kuali.kra.protocol.noteattachment.ProtocolAttachmentBase;
 import org.kuali.kra.protocol.noteattachment.ProtocolAttachmentProtocolBase;
 import org.kuali.kra.protocol.summary.AttachmentSummary;
 import org.kuali.kra.protocol.summary.ProtocolSummary;
-import org.kuali.kra.util.watermark.WatermarkConstants;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.kns.document.authorization.DocumentAuthorizerBase;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
@@ -135,7 +135,7 @@ public class IacucProtocolActionsAction extends IacucProtocolAction {
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
-    /** {@inheritDoc} */
+    @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IacucProtocolForm protocolForm = (IacucProtocolForm) form;
@@ -203,13 +203,11 @@ public class IacucProtocolActionsAction extends IacucProtocolAction {
         return mapping.findForward(Constants.MAPPING_BASIC);
     }    
 
-    /** {@inheritDoc} */
     public ActionForward activate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         return new AuditActionHelper().setAuditMode(mapping, (ProtocolFormBase) form, true);
     }
 
-    /** {@inheritDoc} */
     public ActionForward deactivate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         return new AuditActionHelper().setAuditMode(mapping, (ProtocolFormBase) form, false);
@@ -1035,17 +1033,7 @@ public class IacucProtocolActionsAction extends IacucProtocolAction {
     }
     
     
-    
-    /**
-     * 
-     * This method... 
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
+
     public ActionForward assignToAgenda(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = mapping.findForward(Constants.MAPPING_BASIC);
         IacucProtocolForm protocolForm = (IacucProtocolForm) form;

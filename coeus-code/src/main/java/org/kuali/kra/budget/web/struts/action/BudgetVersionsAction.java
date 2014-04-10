@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.controller.AuditActionHelper;
 import org.kuali.coeus.sys.framework.controller.StrutsConfirmation;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
@@ -44,7 +45,6 @@ import org.kuali.kra.budget.versions.BudgetVersionOverview;
 import org.kuali.kra.budget.web.struts.form.BudgetForm;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarcyActionHelper;
 import org.kuali.kra.question.CopyPeriodsQuestion;
 import org.kuali.rice.kew.api.exception.WorkflowException;
@@ -118,9 +118,6 @@ public class BudgetVersionsAction extends BudgetAction {
         return super.execute(mapping, form, request, response);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ActionForward docHandler(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -180,11 +177,7 @@ public class BudgetVersionsAction extends BudgetAction {
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
     
-    /**
-     * This method...
-     * @param budgetForm
-     * @return
-     */
+
     private BudgetParentDocument getBudgetParentDocument(BudgetForm budgetForm) {
         BudgetDocument budgetDocument = budgetForm.getBudgetDocument();
         BudgetParentDocument parentDocument = budgetDocument.getParentDocument();
@@ -284,13 +277,7 @@ public class BudgetVersionsAction extends BudgetAction {
         return synchBudgetRate(budgetDocument, true);
     }
 
-    /**
-     * This method...
-     * @param request
-     * @param budgetForm
-     * @return
-     * @throws WorkflowException
-     */
+
     private BudgetDocument getSelectedBudgetDocument(HttpServletRequest request, BudgetForm budgetForm) throws WorkflowException {
         BudgetDocument budgetDoc = budgetForm.getBudgetDocument();
         BudgetParentDocument budgetParentDocument = budgetDoc.getParentDocument();

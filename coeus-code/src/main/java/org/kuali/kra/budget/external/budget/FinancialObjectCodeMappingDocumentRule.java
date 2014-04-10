@@ -16,12 +16,12 @@
 package org.kuali.kra.budget.external.budget;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.type.ActivityType;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.sys.framework.rule.KcMaintenanceDocumentRuleBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.budget.rates.RateType;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.proposaldevelopment.bo.ActivityType;
 import org.kuali.rice.kns.document.MaintenanceDocument;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -36,37 +36,24 @@ public class FinancialObjectCodeMappingDocumentRule extends KcMaintenanceDocumen
     
     private BusinessObjectService businessObjectService;
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
+    @Override
 
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
 
-    /**
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
     @Override
     public boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
     @Override
     public boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         return isDocumentValidForSave(document);
     }
 
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase#isDocumentValidForSave(org.kuali.rice.kns.document.MaintenanceDocument)
-     */
+    @Override
     public boolean isDocumentValidForSave(MaintenanceDocument document) {
         boolean result = super.isDocumentValidForSave(document);
         final FinancialObjectCodeMapping mapping = (FinancialObjectCodeMapping) document.getNewMaintainableObject().getDataObject();

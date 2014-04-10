@@ -18,18 +18,17 @@ package org.kuali.coeus.sys.framework.model;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.workflow.SimpleBooleanSplitNodeAware;
 import org.kuali.kra.authorization.KraAuthorizationConstants;
-import org.kuali.kra.bo.CustomAttributeDocument;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.bo.DocumentNextvalue;
 import org.kuali.kra.bo.RolePersons;
 import org.kuali.kra.budget.core.BudgetService;
 import org.kuali.kra.budget.versions.BudgetDocumentVersion;
 import org.kuali.kra.budget.versions.BudgetVersionOverview;
-import org.kuali.kra.service.CustomAttributeService;
-import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.krad.bo.DocumentHeader;
@@ -38,7 +37,7 @@ import org.kuali.rice.krad.data.jpa.DisableVersioning;
 import org.kuali.rice.krad.document.TransactionalDocumentBase;
 import org.kuali.rice.krad.exception.ValidationException;
 import org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent;
-import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
+import org.kuali.rice.krad.service.DocumentHeaderService;
 import org.kuali.rice.krad.util.ErrorMessage;
 import org.kuali.rice.krad.util.GlobalVariables;
 
@@ -49,7 +48,7 @@ import java.util.*;
 @DisableVersioning
 @MappedSuperclass
 @AttributeOverride(name="documentNumber", column = @Column(name = "DOCUMENT_NUMBER",length=14) )
-public abstract class KcTransactionalDocumentBase extends TransactionalDocumentBase implements SimpleBooleanSplitNodeAware {
+public abstract class KcTransactionalDocumentBase extends TransactionalDocumentBase implements SimpleBooleanSplitNodeAware, KcDataObject {
 
     private static final long serialVersionUID = -1879382692835231633L;
 
@@ -71,6 +70,18 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
     @Transient
     private boolean viewOnly = false;
 
+    @Transient
+    private boolean updateUserSet;
+
+    @Transient
+    private transient KcDataObjectService kcDataObjectService;
+
+    @Transient
+    private transient DocumentHeaderService documentHeaderService;
+
+    @Transient
+    private transient CustomAttributeService customAttributeService;
+
     public KcTransactionalDocumentBase() {
         super();
         documentNextvalues = new ArrayList<DocumentNextvalue>();
@@ -82,34 +93,22 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
     @Override
     public void prepareForSave() {
         super.prepareForSave();
-        String updateUser = GlobalVariables.getUserSession().getPrincipalName();
-        // Since the UPDATE_USER column is only VACHAR(60), we need to truncate this string if it's longer than 60 characters
-        if (updateUser.length() > 60) {
-            updateUser = updateUser.substring(0, 60);
-        }
-        setUpdateTimestamp((KcServiceLocator.getService(DateTimeService.class)).getCurrentTimestamp());
-        setUpdateUser(updateUser);
-        //CustomAttributeService customAttributeService = this.getService(CustomAttributeService.class);
-        //customAttributeService.saveCustomAttributeValues(this);
-        if (this.getVersionNumber() == null) {
-            this.setVersionNumber(new Long(0));
-        }
 
-        documentHeader = KRADServiceLocatorWeb.getDocumentHeaderService().saveDocumentHeader(documentHeader);
+        documentHeader = getDocumentHeaderService().saveDocumentHeader(documentHeader);
     }
 
     @Override
     protected void prePersist() {
         //do not call super to remove the call to  DocumentHeaderService.saveDocumentHeader(documentHeader)
-        if (StringUtils.isEmpty(getObjectId())) {
-            setObjectId(UUID.randomUUID().toString());
-        }
+        getKcDataObjectService().initVersionNumberForPersist(this);
+        getKcDataObjectService().initUpdateFieldsForPersist(this);
+        getKcDataObjectService().initObjectIdForPersist(this);
     }
 
     @Override
     protected void postPersist() {
         super.postPersist();
-        DocumentHeader temp = KRADServiceLocatorWeb.getDocumentHeaderService().getDocumentHeaderById(documentNumber);
+        DocumentHeader temp = getDocumentHeaderService().getDocumentHeaderById(documentNumber);
         if (temp != null && temp.getWorkflowDocument() != null) {
             documentHeader = temp;
         }
@@ -118,10 +117,19 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
     @Override
     public void postProcessSave(KualiDocumentEvent event) {
         super.postProcessSave(event);
-        DocumentHeader temp =  KRADServiceLocatorWeb.getDocumentHeaderService().getDocumentHeaderById(documentNumber);
+        DocumentHeader temp =  getDocumentHeaderService().getDocumentHeaderById(documentNumber);
         if (temp != null && temp.getWorkflowDocument() != null) {
             documentHeader = temp;
         }
+    }
+
+    @Override
+    protected void preUpdate() {
+        getKcDataObjectService().initObjectIdForUpdate(this);
+        getKcDataObjectService().initVersionNumberForUpdate(this);
+        getKcDataObjectService().initUpdateFieldsForUpdate(this);
+
+        super.preUpdate();
     }
 
     /**
@@ -161,28 +169,41 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
      */
     public Map<String, CustomAttributeDocument> getCustomAttributeDocuments() {
         if (customAttributeDocuments == null) {
-            CustomAttributeService customAttributeService = KcServiceLocator.getService(CustomAttributeService.class);
-            customAttributeDocuments = customAttributeService.getDefaultCustomAttributeDocuments(getDocumentTypeCode(), getDocumentCustomData());
+            customAttributeDocuments = getCustomAttributeService().getDefaultCustomAttributeDocuments(getDocumentTypeCode(), getDocumentCustomData());
         }
         return customAttributeDocuments;
     }
 
     public abstract List<? extends DocumentCustomData> getDocumentCustomData();
 
+    @Override
     public Timestamp getUpdateTimestamp() {
         return updateTimestamp;
     }
 
+    @Override
     public void setUpdateTimestamp(Timestamp updateTimestamp) {
         this.updateTimestamp = updateTimestamp;
     }
 
+    @Override
     public String getUpdateUser() {
         return updateUser;
     }
 
+    @Override
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
+    }
+
+    @Override
+    public boolean isUpdateUserSet() {
+        return updateUserSet;
+    }
+
+    @Override
+    public void setUpdateUserSet(boolean updateUserSet) {
+        this.updateUserSet = updateUserSet;
     }
 
     public void setDocumentNextvalues(List<DocumentNextvalue> documentNextvalues) {
@@ -281,17 +302,6 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
         return new ArrayList<RolePersons>();
     }
 
-    /**
-     * Lookups and returns a service class.  This method can be overriden for easier unit testing.
-     * 
-     * @param <T> the type of service.
-     * @param serviceClass the service class.
-     * @return the service.
-     */
-/*    protected <T> T getService(Class<T> serviceClass) {
-        return KraServiceLocator.getService(serviceClass);
-    }
-*/
     public abstract String getDocumentTypeCode();
 
     public boolean isViewOnly() {
@@ -345,4 +355,37 @@ public abstract class KcTransactionalDocumentBase extends TransactionalDocumentB
      */
     // TODO : have NOT found a consistent indicator of whether a document route is processed or not, so this is a hack 
     public abstract boolean isProcessComplete();
+
+    KcDataObjectService getKcDataObjectService() {
+        if (this.kcDataObjectService == null) {
+            this.kcDataObjectService = KcServiceLocator.getService(KcDataObjectService.class);
+        }
+        return this.kcDataObjectService;
+    }
+
+    void setKcDataObjectService(KcDataObjectService kcDataObjectService) {
+        this.kcDataObjectService = kcDataObjectService;
+    }
+
+    DocumentHeaderService getDocumentHeaderService() {
+        if (this.documentHeaderService == null) {
+            this.documentHeaderService = KcServiceLocator.getService(DocumentHeaderService.class);
+        }
+        return this.documentHeaderService;
+    }
+
+    void setDocumentHeaderService(DocumentHeaderService documentHeaderService) {
+        this.documentHeaderService = documentHeaderService;
+    }
+
+    CustomAttributeService getCustomAttributeService() {
+        if (this.customAttributeService == null) {
+            this.customAttributeService = KcServiceLocator.getService(CustomAttributeService.class);
+        }
+        return this.customAttributeService;
+    }
+
+    void setCustomAttributeService(CustomAttributeService customAttributeService) {
+        this.customAttributeService = customAttributeService;
+    }
 }

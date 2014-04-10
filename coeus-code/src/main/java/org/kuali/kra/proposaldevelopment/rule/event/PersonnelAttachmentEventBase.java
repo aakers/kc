@@ -16,9 +16,9 @@
 package org.kuali.kra.proposaldevelopment.rule.event;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBase;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiography;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.util.ObjectUtils;
 
@@ -28,9 +28,6 @@ public abstract class PersonnelAttachmentEventBase extends KcDocumentEventBase i
 
     private ProposalPersonBiography proposalPersonBiography;
 
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcDocumentEventBase#KcDocumentEventBase(String, String, Document)
-     */
     protected PersonnelAttachmentEventBase(String description, String errorPathPrefix, ProposalDevelopmentDocument document,
             ProposalPersonBiography proposalPersonBiography) {
         super(description, errorPathPrefix, document);
@@ -60,9 +57,7 @@ public abstract class PersonnelAttachmentEventBase extends KcDocumentEventBase i
         return proposalPersonBiography;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#validate()
-     */
+    @Override
     public void validate() {
         super.validate();
         if (getProposalPersonBiography() == null) {

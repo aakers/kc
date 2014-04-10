@@ -23,8 +23,7 @@ import java.util.Map;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
-import org.kuali.kra.award.contacts.AwardPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.dao.ProposalPersonDao;
 import org.kuali.rice.core.framework.persistence.ojb.dao.PlatformAwareDaoBaseOjb;
 import org.kuali.rice.kns.service.DataDictionaryService;
@@ -41,10 +40,7 @@ public class ProposalPersonDaoOjb  extends PlatformAwareDaoBaseOjb implements Oj
     private LookupDao lookupDao;
     private DataDictionaryService dataDictionaryService;
 
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.dao.ProposalPersonDao#getProtocolPersonsByName(java.lang.String)
-     */
+    @Override
     @SuppressWarnings("unchecked")
     public List<ProposalPerson> getProposalPersonsByName(String partialName) {
         Map<String, String> fieldValues = new HashMap<String,String>();

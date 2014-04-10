@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.proposaldevelopment.rule.event;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiography;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.SavePersonnelAttachmentRule;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -44,16 +44,12 @@ public class SavePersonnelAttachmentEvent extends PersonnelAttachmentEventBase {
         this(errorPathPrefix, (ProposalDevelopmentDocument) document, proposalPersonBiography);
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return SavePersonnelAttachmentRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((SavePersonnelAttachmentRule) rule).processSavePersonnelAttachmentBusinessRules(this);
     }

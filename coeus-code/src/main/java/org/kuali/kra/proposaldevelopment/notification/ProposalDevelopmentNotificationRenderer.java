@@ -16,11 +16,11 @@
 package org.kuali.kra.proposaldevelopment.notification;
 
 import org.kuali.coeus.common.notification.impl.NotificationRendererBase;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentService;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.bo.ProposalChangedData;
-import org.kuali.kra.proposaldevelopment.service.ProposalDevelopmentService;
+import org.kuali.coeus.propdev.impl.editable.ProposalChangedData;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -50,10 +50,7 @@ public class ProposalDevelopmentNotificationRenderer extends NotificationRendere
         this.developmentProposal = developmentProposal;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.coeus.common.notification.impl.NotificationRenderer#getReplacementParameters()
-     */
+    @Override
     public Map<String, String> getDefaultReplacementParameters() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
         Map<String, String> result = super.getDefaultReplacementParameters();

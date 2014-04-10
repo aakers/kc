@@ -21,11 +21,11 @@ import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.calculator.DateSortable;
 import org.kuali.kra.budget.core.BudgetAssociate;
 import org.kuali.kra.budget.parameters.BudgetPeriod;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.sql.Date;
@@ -57,7 +57,7 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
 
     private String appointmentTypeCode;
 
-    private BudgetDecimal calculationBase;
+    private ScaleTwoDecimal calculationBase;
 
     private String personName;
 
@@ -79,7 +79,8 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
     private BudgetPersonSalaryDetails personSalaryDetails;
     
     private List<BudgetPersonSalaryDetails>budgetPersonSalaryDetails;
-   
+
+    private TbnPerson tbnPerson;
 
     public List<BudgetPersonSalaryDetails> getBudgetPersonSalaryDetails() {
         BusinessObjectService boService = KcServiceLocator.getService(BusinessObjectService.class);
@@ -192,11 +193,11 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
         this.appointmentType = appointmentType;
     }
 
-    public BudgetDecimal getCalculationBase() {
+    public ScaleTwoDecimal getCalculationBase() {
         return calculationBase;
     }
 
-    public void setCalculationBase(BudgetDecimal calculationBase) {
+    public void setCalculationBase(ScaleTwoDecimal calculationBase) {
         this.calculationBase = calculationBase;
     }
 
@@ -435,9 +436,6 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
         this.hiddenInHierarchy = hiddenInHierarchy;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -447,9 +445,6 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -502,9 +497,12 @@ public class BudgetPerson extends BudgetAssociate implements HierarchyMaintainab
     public BudgetPersonSalaryDetails getPersonSalaryDetails() {
         return personSalaryDetails;
     }
-   
-  
-    
-    
-    
+
+    public TbnPerson getTbnPerson() {
+        return tbnPerson;
+    }
+
+    public void setTbnPerson(TbnPerson tbnPerson) {
+        this.tbnPerson = tbnPerson;
+    }
 }

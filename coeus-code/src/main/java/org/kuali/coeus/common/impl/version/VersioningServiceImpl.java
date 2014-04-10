@@ -22,7 +22,6 @@ import org.kuali.coeus.common.framework.sequence.associate.SeparatelySequenceabl
 import org.kuali.coeus.common.framework.sequence.owner.SequenceOwner;
 import org.kuali.coeus.common.framework.version.VersionException;
 import org.kuali.coeus.common.framework.version.VersioningService;
-import org.kuali.kra.service.impl.SequenceUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -42,9 +41,7 @@ public class VersioningServiceImpl implements VersioningService {
     private static final String PERIOD = ".";
     private static final Log LOG = LogFactory.getLog(VersioningServiceImpl.class);
     
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public <T extends SequenceOwner<?>> T createNewVersion(T oldVersion) throws VersionException {
         final long time = getCurrentTime();
         T newVersion = new SequenceUtils().sequence(oldVersion);
@@ -53,9 +50,7 @@ public class VersioningServiceImpl implements VersioningService {
         return newVersion;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public <T extends SeparatelySequenceableAssociate> T versionAssociate(T oldAssociate) throws VersionException {
         final long time = getCurrentTime();
         SequenceUtils sequenceUtils = new SequenceUtils();
@@ -65,9 +60,7 @@ public class VersioningServiceImpl implements VersioningService {
         return newAssociate;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public <T extends SeparatelySequenceableAssociate> List<T> versionAssociates(List<T> oldAssociates) throws VersionException {
         final long time = getCurrentTime();
         SequenceUtils sequenceUtils = new SequenceUtils();

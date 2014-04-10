@@ -16,6 +16,7 @@
 package org.kuali.kra.timeandmoney.document;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
 import org.kuali.coeus.common.permissions.impl.PermissionableKeys;
 import org.kuali.coeus.sys.framework.auth.perm.Permissionable;
 import org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase;
@@ -24,7 +25,6 @@ import org.kuali.kra.award.awardhierarchy.AwardHierarchy;
 import org.kuali.kra.award.awardhierarchy.AwardHierarchyService;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.version.service.AwardVersionService;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.RoleConstants;
 import org.kuali.kra.timeandmoney.AwardHierarchyNode;
@@ -48,9 +48,7 @@ import java.util.*;
  */
 public class TimeAndMoneyDocument extends KcTransactionalDocumentBase implements Copyable, SessionDocument, Permissionable, Comparable {
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -2554022334215932544L;
 
     public static final String DOCUMENT_TYPE_CODE = "TAMD";
@@ -68,9 +66,7 @@ public class TimeAndMoneyDocument extends KcTransactionalDocumentBase implements
     private List<AwardVersionHistory> awardVersionHistoryList;
     private List<String> order;
     
-    /**
-     * Constructs a AwardDocument object
-     */
+
     public TimeAndMoneyDocument(){        
         super();        
         init();
@@ -89,12 +85,8 @@ public class TimeAndMoneyDocument extends KcTransactionalDocumentBase implements
         return getObjectId() == null; 
     }
     
-    /**
-     * 
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();       
         managedLists.add(pendingTransactions);

@@ -16,15 +16,15 @@
 package org.kuali.kra.proposaldevelopment.rules;
 
 import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
 import org.kuali.coeus.common.framework.unit.Unit;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonUnit;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonUnit;
 import org.kuali.kra.proposaldevelopment.service.KeyPersonnelService;
-import org.kuali.kra.service.SponsorService;
 import org.kuali.rice.kns.util.AuditCluster;
 import org.kuali.rice.kns.util.AuditError;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
@@ -50,10 +50,7 @@ import static org.kuali.kra.infrastructure.KeyConstants.*;
 public class KeyPersonnelAuditRule extends KcTransactionalDocumentRuleBase implements DocumentAuditRule {
     private static final org.apache.commons.logging.Log LOG = org.apache.commons.logging.LogFactory.getLog(KeyPersonnelAuditRule.class);
     
-    /**
-     * 
-     * @see org.kuali.rice.krad.rules.rule.DocumentAuditRule#processRunAuditBusinessRules(org.kuali.rice.krad.document.Document)
-     */
+    @Override
     public boolean processRunAuditBusinessRules(Document document) {
         ProposalDevelopmentDocument pd = (ProposalDevelopmentDocument) document;
         boolean retval = true;
@@ -197,9 +194,6 @@ public class KeyPersonnelAuditRule extends KcTransactionalDocumentRuleBase imple
         return getKeyPersonnelService().isInvestigator(person);
     }
         
-    /**
-     * @see KeyPersonnelService#isPrincipalInvestigator(ProposalPerson)
-     */
     private boolean hasPrincipalInvestigator(ProposalDevelopmentDocument document) {
         return getKeyPersonnelService().hasPrincipalInvestigator(document);
     }

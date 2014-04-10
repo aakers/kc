@@ -18,12 +18,13 @@ package org.kuali.kra.budget.personnel;
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
-import org.kuali.kra.bo.PersonAppointment;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.common.framework.person.attr.PersonAppointment;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetParent;
 import org.kuali.kra.budget.document.BudgetDocument;
 import org.kuali.kra.infrastructure.Constants;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.ObjectUtils;
@@ -144,7 +145,7 @@ public class BudgetPersonServiceImpl implements BudgetPersonService {
     /**
      * 
      * Determines if an appointment is applicable to the current budget, currently
-     * based soley on whether the budget period matches some part of the appointment
+     * based solely on whether the budget period matches some part of the appointment
      * period
      * @param budget
      * @param appointment
@@ -181,7 +182,7 @@ public class BudgetPersonServiceImpl implements BudgetPersonService {
         }
         
         if (ObjectUtils.isNull(budgetPerson.getCalculationBase())) {
-            budgetPerson.setCalculationBase(new BudgetDecimal(this.parameterService.getParameterValueAsString(
+            budgetPerson.setCalculationBase(new ScaleTwoDecimal(this.parameterService.getParameterValueAsString(
                     BudgetDocument.class, Constants.BUDGET_PERSON_DEFAULT_CALCULATION_BASE)));
         }
         
@@ -208,6 +209,28 @@ public class BudgetPersonServiceImpl implements BudgetPersonService {
         queryMap.put("budgetId", budgetPersonnelDetails.getBudgetId());
         queryMap.put("personSequenceNumber", budgetPersonnelDetails.getPersonSequenceNumber());
         return (BudgetPerson)businessObjectService.findByPrimaryKey(BudgetPerson.class, queryMap);
+    }
+
+    /**
+     * This method compares a proposal person with budget person. It checks whether the proposal person is from PERSON or ROLODEX
+     * and matches the respective person ID with the person in {@link BudgetPersonnelDetails}. It returns true only if IDs are not
+     * null and also matches each other.
+     *
+     * @param proposalPerson - key person from proposal
+     * @param budgetPersonnelDetails person from BudgetPersonnelDetails
+     * @return true if persons match, false otherwise
+     */
+    @Override
+    public boolean proposalPersonEqualsBudgetPerson(ProposalPerson proposalPerson, BudgetPersonnelDetails budgetPersonnelDetails) {
+        boolean equal = false;
+        if (proposalPerson != null && budgetPersonnelDetails != null) {
+            String budgetPersonId = budgetPersonnelDetails.getPersonId();
+            if ((proposalPerson.getPersonId() != null && proposalPerson.getPersonId().equals(budgetPersonId))
+                    || (proposalPerson.getRolodexId() != null && proposalPerson.getRolodexId().toString().equals(budgetPersonId))) {
+                equal = true;
+            }
+        }
+        return equal;
     }
 
     /**

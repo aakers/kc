@@ -16,7 +16,6 @@
 package org.kuali.kra.s2s.generator.impl;
 
 import gov.grants.apply.forms.nasaSeniorKeyPersonSupplementalDataSheetV10.CoItypeDataType;
-import gov.grants.apply.forms.nasaSeniorKeyPersonSupplementalDataSheetV10.FederalAgencyDataType;
 import gov.grants.apply.forms.nasaSeniorKeyPersonSupplementalDataSheetV10.NASASeniorKeyPersonSupplementalDataSheetDocument;
 import gov.grants.apply.forms.nasaSeniorKeyPersonSupplementalDataSheetV10.NASASeniorKeyPersonSupplementalDataSheetDocument.NASASeniorKeyPersonSupplementalDataSheet;
 import gov.grants.apply.forms.nasaSeniorKeyPersonSupplementalDataSheetV10.NASASeniorKeyPersonSupplementalDataSheetDocument.NASASeniorKeyPersonSupplementalDataSheet.SeniorKeyPersonAttachment;
@@ -27,17 +26,17 @@ import gov.grants.apply.system.attachmentsV10.AttachmentGroupMin0Max100DataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
+import org.kuali.coeus.common.framework.rolodex.RolodexService;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonComparator;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonComparator;
 import org.kuali.kra.s2s.generator.S2SBaseFormGenerator;
 import org.kuali.kra.s2s.service.S2SBudgetCalculatorService;
 import org.kuali.kra.s2s.service.S2SUtilService;
 import org.kuali.kra.s2s.util.S2SConstants;
-import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.*;
 
@@ -55,7 +54,7 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 
 	private S2SUtilService s2sUtilService;
 	private S2SBudgetCalculatorService s2sBudgetCalculatorService;
-	private BusinessObjectService businessObjectService;
+	private RolodexService rolodexService;
 
 	private static final String COLLABORATOR = "COLLABORATOR";
 	private static final String COUNTRY_CODE_USA = "USA";
@@ -83,8 +82,8 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 		s2sUtilService = KcServiceLocator.getService(S2SUtilService.class);
 		s2sBudgetCalculatorService = KcServiceLocator
 				.getService(S2SBudgetCalculatorService.class);
-		businessObjectService = KcServiceLocator
-				.getService(BusinessObjectService.class);
+        rolodexService = KcServiceLocator
+				.getService(RolodexService.class);
 	}
 
 	/**
@@ -199,31 +198,6 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 	}
 
 	/**
-	 * 
-	 * This method fetches the LEVEL1 value for Sponsor Hierarchy
-	 * 
-	 * @param sponsorCode
-	 *            of the sponsor.
-	 * @return enum FederalAgencyDataType based on the sponsor code passed.
-	 */
-	private FederalAgencyDataType.Enum getFederalAgencyDataType(
-			String sponsorCode) {
-//		FederalAgencyDataType.Enum federalAgencyDataType = null;
-//		Map<String, String> criteriaMap = new HashMap<String, String>();
-//		criteriaMap.put("hierachyName", HIERARCHY_GOVERNMENT_AGENCY);
-//		criteriaMap.put("sponsorCode", sponsorCode);
-//		List<SponsorHierarchy> sponsorHierarchyList = new
-//		ArrayList<SponsorHierarchy>(businessObjectService.findMatching(SponsorHierarchy.class, criteriaMap));
-//		if (sponsorHierarchyList.size() > 0) {
-//    		federalAgencyDataType=FederalAgencyDataType.Enum.forString(sponsorHierarchyList.get(0).getLevel1());
-//		}
-
-		// FIXME above line commented and value is hardcoded because values in
-		// column sponsor_Hierachy.LEVEL1 don't match with
-		return null;
-	}
-
-	/**
 	 * This method returns SeniorKeyPerson object which contains informations
 	 * SeniorKeyPersonName,NASACo-Itype,
 	 * USGovernmentParticipation,FederalAgency,FederalAgencyDollar,InternationalParticipation,
@@ -250,11 +224,7 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 
 		if (s2sBudgetCalculatorService.isPersonNonMITPerson(proposalPerson)) {
 			if (proposalPerson.getRolodexId() != null) {
-				Map<String, String> conditionMap = new HashMap<String, String>();
-				conditionMap.put("rolodexId", proposalPerson.getRolodexId()
-						.toString());
-				Rolodex rolodex = (Rolodex) businessObjectService
-						.findByPrimaryKey(Rolodex.class, conditionMap);
+				Rolodex rolodex = rolodexService.getRolodex(proposalPerson.getRolodexId());
 				if (rolodex != null) {
 						Sponsor rolodexSponsor = rolodex.getSponsor();
                         Sponsor proposalSponsor = pdDoc.getDevelopmentProposal().getSponsor();
@@ -298,12 +268,7 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
                 && proposalPerson.getProjectRole().equalsIgnoreCase(COLLABORATOR)) {
             seniorKeyPerson.setNASACoItype(CoItypeDataType.COLLABORATOR);
         }		
-		if (sponsorCode != null && sponsortType==0) {
-			FederalAgencyDataType.Enum federalAgency = getFederalAgencyDataType(sponsorCode);
-			if (federalAgency != null) {
-				seniorKeyPerson.setFederalAgency(federalAgency);
-			}
-		}
+
 		// set total dollar amount requested. There is no budget for rolodex
 		// person.
 		// seniorKeyPerson.setFederalAgencyDollar(null);
@@ -363,11 +328,7 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 		}
 		if (s2sBudgetCalculatorService.isPersonNonMITPerson(proposalPerson)) {
 			if (proposalPerson.getRolodexId() != null) {
-				Map<String, String> conditionMap = new HashMap<String, String>();
-				conditionMap.put("rolodexId", proposalPerson.getRolodexId()
-						.toString());
-				Rolodex rolodex = (Rolodex) businessObjectService
-						.findByPrimaryKey(Rolodex.class, conditionMap);
+				Rolodex rolodex = rolodexService.getRolodex(proposalPerson.getRolodexId());
 				if (rolodex != null) {
 					if (rolodex.getSponsorCode() != null
 							&& rolodex.getSponsorCode().equals(
@@ -414,12 +375,6 @@ public class NASASeniorKeyPersonSupplementalDataSheetV1_0Generator extends
 			}
 		} else {
 			seniorKeyPerson.setNASACoItype(CoItypeDataType.CO_I);
-		}
-		if (sponsorCode != null) {
-			FederalAgencyDataType.Enum federalAgency = getFederalAgencyDataType(sponsorCode);
-			if (federalAgency != null) {
-				seniorKeyPerson.setFederalAgency(federalAgency);
-			}
 		}
 		// set total dollar amount requested. There is no budget for rolodex
 		// person.

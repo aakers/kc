@@ -58,9 +58,6 @@ public class InstitutionalProposalNotepad extends InstitutionalProposalAssociate
     private List<Note> attachments;
 
     public InstitutionalProposalNotepad() {
-        Calendar cl = Calendar.getInstance();
-        setCreateTimestamp(new Date(cl.getTime().getTime()));
-        setCreateUser(GlobalVariables.getUserSession().getPrincipalName());
         attachments = new ArrayList<Note>();
     }
 
@@ -130,33 +127,36 @@ public class InstitutionalProposalNotepad extends InstitutionalProposalAssociate
 
     /**
      * Sets the createTimeStamp attribute value.
-     * @param createTimeStamp The createTimeStamp to set.
+     * @param createTimestamp The createTimeStamp to set.
      */
     public void setCreateTimestamp(Date createTimestamp) {
         this.createTimestamp = createTimestamp;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#getSequenceOwner()
-     */
+    @Override
     public SequenceOwner getSequenceOwner() {
         return getInstitutionalProposal();
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#setSequenceOwner(org.kuali.coeus.common.framework.sequence.owner.SequenceOwner)
-     */
+    @Override
     public void setSequenceOwner(SequenceOwner newlyVersionedOwner) {
         setInstitutionalProposal((InstitutionalProposal) newlyVersionedOwner);
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.proposalNotepadId = null;
     }
-    
+
+    @Override
+    protected void prePersist() {
+        super.prePersist();
+
+        Calendar cl = Calendar.getInstance();
+        setCreateTimestamp(new Date(cl.getTime().getTime()));
+        setCreateUser(StringUtils.substring(GlobalVariables.getUserSession().getPrincipalName(), 0, UPDATE_USER_LENGTH));
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void postPersist() {
@@ -215,10 +215,7 @@ public class InstitutionalProposalNotepad extends InstitutionalProposalAssociate
     }
     
     public void setCreateUser(String createUser) {
-        if (!KRADConstants.SYSTEM_USER.equals(createUser)) {
-            this.createUser = StringUtils.substring(createUser, 0, UPDATE_USER_LENGTH);
-        }
-
+        this.createUser = createUser;
     }
 
 }

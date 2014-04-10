@@ -20,8 +20,8 @@ import org.apache.ojb.broker.metadata.CollectionDescriptor;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.Query;
 import org.apache.ojb.broker.query.QueryByCriteria;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 
 import java.util.HashMap;
@@ -58,10 +58,7 @@ public class KcQueryCustomizerDefaultImpl extends org.apache.ojb.broker.accessla
         }
         return this.parameterService;
     }
-    /**
-     * 
-     * @see org.apache.ojb.broker.accesslayer.QueryCustomizerDefaultImpl#customizeQuery(java.lang.Object, org.apache.ojb.broker.PersistenceBroker, org.apache.ojb.broker.metadata.CollectionDescriptor, org.apache.ojb.broker.query.QueryByCriteria)
-     */
+    @Override
     public Query customizeQuery(Object anObject,
             PersistenceBroker aBroker,
             CollectionDescriptor aCod, QueryByCriteria aQuery){

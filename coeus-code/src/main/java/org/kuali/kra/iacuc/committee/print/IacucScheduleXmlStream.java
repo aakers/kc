@@ -19,6 +19,8 @@ import edu.mit.coeus.xml.iacuc.*;
 import edu.mit.coeus.xml.iacuc.ScheduleType.Attendents;
 import edu.mit.coeus.xml.iacuc.ScheduleType.OtherBusiness;
 import edu.mit.coeus.xml.iacuc.SubmissionDetailsType.SubmissionChecklistInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.committee.impl.bo.CommitteeBase;
 import org.kuali.coeus.common.committee.impl.bo.CommitteeMembershipBase;
@@ -28,6 +30,7 @@ import org.kuali.coeus.common.committee.impl.meeting.CommitteeScheduleAttendance
 import org.kuali.coeus.common.committee.impl.service.CommitteeMembershipServiceBase;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.print.stream.xml.PrintBaseXmlStream;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.sponsor.Sponsor;
 import org.kuali.coeus.common.framework.unit.Unit;
@@ -36,7 +39,6 @@ import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.iacuc.committee.bo.IacucCommitteeSchedule;
 import org.kuali.kra.iacuc.committee.print.service.IacucPrintXmlUtilService;
 import org.kuali.kra.iacuc.personnel.IacucProtocolPersonRolodex;
-import org.kuali.kra.printing.xmlstream.PrintBaseXmlStream;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.actions.ProtocolActionBase;
 import org.kuali.kra.protocol.actions.submit.ProtocolReviewer;
@@ -50,7 +52,9 @@ import java.text.ParseException;
 import java.util.*;
 
 public class IacucScheduleXmlStream extends PrintBaseXmlStream {
-    
+
+    private static final Log LOG = LogFactory.getLog(IacucScheduleXmlStream.class);
+
     private CommitteeMembershipServiceBase committeeMembershipService;
     private KcPersonService kcPersonService;
     private IacucPrintXmlUtilService printXmlUtilService;
@@ -440,7 +444,7 @@ public class IacucScheduleXmlStream extends PrintBaseXmlStream {
             }
         }
         catch (ParseException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
 
         scheduleMasterDataType.setMaxProtocols(new BigInteger(String.valueOf(scheduleDetailsBean.getMaxProtocols())));
@@ -544,11 +548,11 @@ public class IacucScheduleXmlStream extends PrintBaseXmlStream {
 
 
     /**
-     * Sets the irbPrintXmlUtilService attribute value.
+     * Sets the printXmlUtilService attribute value.
      * 
-     * @param irbPrintXmlUtilService The irbPrintXmlUtilService to set.
+     * @param printXmlUtilService The printXmlUtilService to set.
      */
-    public void setPrintXmlUtilService(IacucPrintXmlUtilService PrintXmlUtilService) {
+    public void setPrintXmlUtilService(IacucPrintXmlUtilService printXmlUtilService) {
         this.printXmlUtilService = printXmlUtilService;
     }
 

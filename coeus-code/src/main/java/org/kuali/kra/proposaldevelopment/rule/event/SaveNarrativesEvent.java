@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.proposaldevelopment.rule.event;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.SaveNarrativesRule;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -65,16 +65,12 @@ public class SaveNarrativesEvent extends NarrativeEventBase{
         return this.originalNarratives;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return SaveNarrativesRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((SaveNarrativesRule) rule).processSaveNarrativesBusinessRules(this);
     }

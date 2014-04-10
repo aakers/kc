@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.committee.impl.bo.CommitteeScheduleBase;
 import org.kuali.coeus.common.committee.impl.meeting.*;
 import org.kuali.coeus.common.committee.impl.print.service.CommitteePrintingServiceBase;
+import org.kuali.coeus.common.framework.print.PrintingException;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.common.printing.CorrespondencePrintingService;
 import org.kuali.kra.iacuc.actions.reviewcomments.IacucReviewCommentsService;
@@ -30,8 +31,7 @@ import org.kuali.kra.iacuc.committee.print.service.IacucScheduleCorrespondencePr
 import org.kuali.kra.iacuc.correspondence.IacucProtocolActionCorrespondenceGenerationService;
 import org.kuali.kra.iacuc.correspondence.IacucProtocolActionsCorrespondence;
 import org.kuali.kra.iacuc.correspondence.IacucProtocolCorrespondenceType;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolBase;
 import org.kuali.kra.protocol.actions.reviewcomments.ReviewCommentsService;
 import org.kuali.kra.protocol.correspondence.ProtocolCorrespondence;

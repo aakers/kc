@@ -15,9 +15,11 @@
  */
 package org.kuali.kra.s2s.generator.impl;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.ynq.ProposalYnq;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.questionnaire.ProposalDevelopmentModuleQuestionnaireBean;
 import org.kuali.kra.questionnaire.answer.Answer;
 import org.kuali.kra.questionnaire.answer.AnswerHeader;
@@ -67,8 +69,8 @@ public class NASAOtherProjectInformationV1_0GeneratorTest extends S2STestBase<NA
         person.setLastName("MARITZA");
         person.setMiddleName("D");
         person.setPersonId("000000077 ");
-        person.setOptInCertificationStatus("Y");
-        person.setOptInUnitStatus("Y");
+        person.setOptInCertificationStatus(true);
+        person.setOptInUnitStatus(true);
         person.setProposalPersonNumber(1000);
         person.setDevelopmentProposal(document.getDevelopmentProposal());
         person.setProposalNumber(document.getDevelopmentProposal().getProposalNumber());

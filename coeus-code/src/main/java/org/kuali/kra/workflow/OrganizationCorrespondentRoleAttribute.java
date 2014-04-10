@@ -16,9 +16,9 @@
 package org.kuali.kra.workflow;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.org.OrganizationService;
+import org.kuali.coeus.common.framework.org.crrspndnt.OrganizationCorrespondent;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.OrganizationCorrespondent;
-import org.kuali.kra.service.OrganizationService;
 import org.kuali.rice.kew.api.identity.Id;
 import org.kuali.rice.kew.api.identity.PrincipalId;
 import org.kuali.rice.kew.api.rule.RoleName;
@@ -34,9 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 public class OrganizationCorrespondentRoleAttribute extends GenericRoleAttribute {
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final String ROLE_NAME = "OrganizationCorrespondent";
     private static final String ORGANIZATION_ID = "organizationId";
 

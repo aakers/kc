@@ -16,32 +16,35 @@
 package org.kuali.kra.budget.rates;
 
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
+import org.kuali.coeus.budget.api.rate.TrainingStipendRateContract;
 
 import java.sql.Date;
 
-public class TrainingStipendRate extends KcPersistableBusinessObjectBase {
+public class TrainingStipendRate extends KcPersistableBusinessObjectBase implements TrainingStipendRateContract {
 
-    private Long rateId;
+    private Long id;
 
     private String careerLevel;
 
     private int experienceLevel;
 
-    private BudgetDecimal stipendRate;
+    private ScaleTwoDecimal stipendRate;
 
     private Date effectiveDate;
 
     private String description;
 
-    public Long getRateId() {
-        return rateId;
+    @Override
+    public Long getId() {
+        return id;
     }
 
-    public void setRateId(Long id) {
-        this.rateId = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
+    @Override
     public String getCareerLevel() {
         return careerLevel;
     }
@@ -50,6 +53,7 @@ public class TrainingStipendRate extends KcPersistableBusinessObjectBase {
         this.careerLevel = level;
     }
 
+    @Override
     public int getExperienceLevel() {
         return experienceLevel;
     }
@@ -58,14 +62,16 @@ public class TrainingStipendRate extends KcPersistableBusinessObjectBase {
         this.experienceLevel = level;
     }
 
-    public BudgetDecimal getStipendRate() {
+    @Override
+    public ScaleTwoDecimal getStipendRate() {
         return stipendRate;
     }
 
-    public void setStipendRate(BudgetDecimal rate) {
+    public void setStipendRate(ScaleTwoDecimal rate) {
         this.stipendRate = rate;
     }
 
+    @Override
     public Date getEffectiveDate() {
         return effectiveDate;
     }
@@ -74,6 +80,7 @@ public class TrainingStipendRate extends KcPersistableBusinessObjectBase {
         this.effectiveDate = effectiveDate;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

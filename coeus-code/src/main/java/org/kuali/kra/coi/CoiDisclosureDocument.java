@@ -16,9 +16,9 @@
 package org.kuali.kra.coi;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
 import org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.krms.KcKrmsConstants;
 import org.kuali.kra.krms.KrmsRulesContext;
@@ -45,9 +45,7 @@ public class CoiDisclosureDocument extends KcTransactionalDocumentBase implement
     public static final String DOCUMENT_TYPE_CODE = "COI";
     private List<CoiDisclosure> coiDisclosureList;
     
-    /**
-     * Constructs a CoiDisclosureDocument object.
-     */
+
     public CoiDisclosureDocument() { 
         super();
         coiDisclosureList = new ArrayList<CoiDisclosure>();
@@ -67,7 +65,7 @@ public class CoiDisclosureDocument extends KcTransactionalDocumentBase implement
 
     @Override
     public String getDocumentTypeCode() {
-        // TODO Auto-generated method stub
+
         return DOCUMENT_TYPE_CODE;
     } 
     
@@ -93,9 +91,6 @@ public class CoiDisclosureDocument extends KcTransactionalDocumentBase implement
     }
 
  
-    /**
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
     @SuppressWarnings("unchecked")
     @Override
     public List buildListOfDeletionAwareLists() {

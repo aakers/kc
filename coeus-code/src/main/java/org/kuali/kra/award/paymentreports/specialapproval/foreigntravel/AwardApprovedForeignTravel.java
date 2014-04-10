@@ -22,7 +22,7 @@ import org.kuali.coeus.common.framework.rolodex.nonorg.NonOrganizationalRolodex;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.AwardAssociate;
 import org.kuali.kra.award.home.ValuableItem;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.io.Serializable;
@@ -70,7 +70,7 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
 
     private Date endDate;
 
-    private KualiDecimal amount;
+    private ScaleTwoDecimal amount;
 
     private static int instanceCount;
 
@@ -80,16 +80,12 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
     // used in tag 
     private transient KcPersonService kcPersonService;
 
-    /**
-     * Constructs a AwardApprovedForeignTravel
-     */
+
     public AwardApprovedForeignTravel() {
         instanceNumber = instanceCount++;
     }
 
-    /**
-     * Constructs a AwardApprovedForeignTravel
-     */
+
     public AwardApprovedForeignTravel(Object traveler, String destination, Date startDate, Date endDate, double amount) {
         super();
         if (traveler instanceof KcPerson) {
@@ -100,7 +96,7 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.amount = new KualiDecimal(amount);
+        this.amount = new ScaleTwoDecimal(amount);
     }
 
     /**
@@ -184,16 +180,12 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
         return endDate;
     }
 
-    /**
-     * @return
-     */
+
     public Integer getRolodexId() {
         return rolodexId;
     }
 
-    /**
-     * @return
-     */
+
     public NonOrganizationalRolodex getRolodexTraveler() {
         return rolodexTraveler;
     }
@@ -210,27 +202,21 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
      * Gets the amount attribute. 
      * @return Returns the amount.
      */
-    public KualiDecimal getAmount() {
+    public ScaleTwoDecimal getAmount() {
         return amount;
     }
 
-    /**
-     * @return
-     */
+
     public boolean isEmployee() {
         return personId != null;
     }
 
-    /**
-     * @return
-     */
+
     public boolean isNonemployee() {
         return rolodexId != null;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.approvedForeignTravelId = null;
     }
@@ -317,7 +303,7 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
      * Sets the amount attribute value.
      * @param amount The amount to set.
      */
-    public void setAmount(final KualiDecimal amount) {
+    public void setAmount(final ScaleTwoDecimal amount) {
         this.amount = amount;
     }
 
@@ -326,7 +312,7 @@ public class AwardApprovedForeignTravel extends AwardAssociate implements Compar
      * @param amount
      */
     public void setAmount(final double amount) {
-        this.amount = new KualiDecimal(amount);
+        this.amount = new ScaleTwoDecimal(amount);
     }
 
     /**

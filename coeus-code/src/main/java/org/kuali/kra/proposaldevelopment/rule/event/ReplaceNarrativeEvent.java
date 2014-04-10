@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.proposaldevelopment.rule.event;
 
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.bo.Narrative;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.ReplaceNarrativeRule;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -51,16 +51,12 @@ public class ReplaceNarrativeEvent extends AddNarrativeEvent {
         this(errorPathPrefix, (ProposalDevelopmentDocument) document, narrative);
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return ReplaceNarrativeRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((ReplaceNarrativeRule) rule).processReplaceNarrativeBusinessRules(this);
     }

@@ -16,7 +16,6 @@
 package org.kuali.kra.s2s.generator.bo;
 
 
-import java.util.LinkedHashMap;
 
 
 public class KeyPersonInfo extends CompensationInfo{
@@ -28,8 +27,6 @@ public class KeyPersonInfo extends CompensationInfo{
     private String lastName = null;
     private String firstName = null;
     private String middleName = null;
-//    private String prefix = null;
-//    private String suffix = null;
     private String role = null;
     private String keyPersonRole = null;
     private boolean nonMITPersonFlag;
@@ -46,7 +43,7 @@ public class KeyPersonInfo extends CompensationInfo{
     /**
      * Setter for property sortId.
      * 
-     * @param personId New value of property sortId.
+     * @param sortId New value of property sortId.
      */
     public void setSortId(int sortId) {
         this.sortId = sortId;
@@ -119,7 +116,7 @@ public class KeyPersonInfo extends CompensationInfo{
     /**
      * Setter for property name.
      * 
-     * @param name New value of property name.
+     * @param middleName New value of property middleName.
      */
     public void setMiddleName(java.lang.String middleName) {
         this.middleName = middleName;
@@ -156,7 +153,7 @@ public class KeyPersonInfo extends CompensationInfo{
     /**
      * Setter for property role.
      * 
-     * @param role New value of property role.
+     * @param keyPersonRole New value of property keyPersonRole.
      */
     public void setKeyPersonRole(java.lang.String keyPersonRole) {
         this.keyPersonRole = keyPersonRole;
@@ -179,20 +176,6 @@ public class KeyPersonInfo extends CompensationInfo{
         this.nonMITPersonFlag = nonMITPersonFlag;
     }
 
-
-    @SuppressWarnings("unchecked")
-    protected LinkedHashMap toStringMapper() {
-        LinkedHashMap hashMap = new LinkedHashMap();
-        hashMap.put("sortId", getSortId());
-        hashMap.put("personId", getPersonId());
-        hashMap.put("lastName", getLastName());
-        hashMap.put("firstName", getFirstName());
-        hashMap.put("middleName", getMiddleName());
-        hashMap.put("role", getRole());
-        hashMap.put("nonMITPersonFlag", isNonMITPersonFlag());
-        return hashMap;
-    }
-
     /**
      * Gets the rolodexId attribute. 
      * @return Returns the rolodexId.
@@ -209,9 +192,6 @@ public class KeyPersonInfo extends CompensationInfo{
         this.rolodexId = rolodexId;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -222,9 +202,6 @@ public class KeyPersonInfo extends CompensationInfo{
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

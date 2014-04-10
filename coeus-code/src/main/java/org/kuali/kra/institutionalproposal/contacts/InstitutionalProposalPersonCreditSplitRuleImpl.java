@@ -18,28 +18,24 @@ package org.kuali.kra.institutionalproposal.contacts;
 import org.kuali.kra.institutionalproposal.rules.InstitutionalProposalCreditSplitAuditError;
 import org.kuali.kra.proposaldevelopment.bo.InvestigatorCreditType;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalPersonCreditSplitRuleImpl extends KcTransactionalDocumentRuleBase implements
         InstitutionalProposalPersonCreditSplitRule {
 
-    private static final KualiDecimal MAX_TOTAL_VALUE = new KualiDecimal(100.00);
+    private static final ScaleTwoDecimal MAX_TOTAL_VALUE = new ScaleTwoDecimal(100.00);
 
-    /**
-     * @see org.kuali.kra.institutionalproposal.contacts.InstitutionalProposalPersonCreditSplitRule#checkInstitutionalProposalPersonCreditSplitTotals(org.kuali.kra.nstitutionaliroposal.contacts.InstitutionalProposalPersonCreditSplitRuleEvent)
-     */
+    @Override
     public boolean checkInstitutionalProposalPersonCreditSplitTotals(InstitutionalProposalPersonCreditSplitRuleEvent event) {
         boolean retval = true; 
         for(InvestigatorCreditType creditType: loadInvestigatorCreditTypes()) {
             if(creditType.addsToHundred()) {
-                KualiDecimal value = event.getTotalsByCreditSplitType().get(creditType.getInvCreditTypeCode());
+                ScaleTwoDecimal value = event.getTotalsByCreditSplitType().get(creditType.getInvCreditTypeCode());
                 if(value == null) {
                     break;   // value may not have been initialized yet, so we don't want to block save
                 }

@@ -15,31 +15,27 @@
  */
 package org.kuali.kra.service.impl;
 
+import org.kuali.coeus.common.framework.ynq.YnqGroupName;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonYnq;
+import org.kuali.coeus.propdev.impl.ynq.ProposalYnq;
 import org.kuali.kra.bo.Ynq;
 import org.kuali.kra.bo.YnqExplanationType;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.YnqConstants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonYnq;
-import org.kuali.kra.proposaldevelopment.bo.ProposalYnq;
-import org.kuali.kra.proposaldevelopment.bo.YnqGroupName;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.service.YnqService;
 import org.kuali.rice.kew.api.WorkflowDocument;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 public class YnqServiceImpl implements YnqService {
 
     private BusinessObjectService businessObjectService;
 
     
-    /**
-     * @see org.kuali.kra.proposaldevelopment.service.YnqService#getYnqExplanationTypes()
-     */
+    @Override
     @SuppressWarnings("unchecked")
     public List<YnqExplanationType> getYnqExplanationTypes() {
         Collection<YnqExplanationType> allTypes = new ArrayList();
@@ -51,10 +47,7 @@ public class YnqServiceImpl implements YnqService {
         return ynqExplanationTypes;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.proposaldevelopment.service.YnqService#getYnq(java.lang.String)
-     */
+    @Override
     @SuppressWarnings("unchecked")
     public List<Ynq> getYnq(String questionType) {
         Map<String, String> questionTypeMap = new HashMap<String, String>();
@@ -99,22 +92,13 @@ public class YnqServiceImpl implements YnqService {
         /* get YNQ for person */
         boolean certificationRequired = false;
         
-        if(proposalPerson.getRole() != null && proposalPerson.getRole().getCertificationRequired().equals("Y"))
-        {
+        if(proposalPerson.getRole() != null && proposalPerson.getRole().getCertificationRequired()) {
             certificationRequired = true;
-        }
-        else if( (isNotBlank(proposalPerson.getOptInCertificationStatus())) && (proposalPerson.getOptInCertificationStatus().equals("Y")))
-        {
+        } else if (proposalPerson.getOptInCertificationStatus()) {
             certificationRequired = true;
-        }
-        else
-        {
+        } else {
             certificationRequired = false;
         }
-        
-        /*if(proposalPerson.getRole() !=  null) {
-            certificationRequired = proposalPerson.getRole().getCertificationRequired();
-        }*/
         
         if(certificationRequired) {
             String questionType = Constants.QUESTION_TYPE_INDIVIDUAL;
@@ -150,8 +134,8 @@ public class YnqServiceImpl implements YnqService {
     protected void addCertificationQuestions(List<Ynq> ynqs, ProposalPerson proposalPerson) {
         for (Ynq type : ynqs) {
             ProposalPersonYnq proposalPersonYnq = new ProposalPersonYnq();
-            proposalPersonYnq.setQuestionId(type.getQuestionId());
             proposalPersonYnq.setYnq(type); 
+            proposalPersonYnq.setProposalPerson(proposalPerson);
             proposalPerson.getProposalPersonYnqs().add(proposalPersonYnq);
         }
     }
@@ -209,9 +193,7 @@ public class YnqServiceImpl implements YnqService {
     }
     
     
-    /**
-     * @see org.kuali.kra.proposaldevelopment.service.YnqService#populateQuestions()
-     */
+    @Override
     /* get YNQ for proposal */
     public void populateProposalQuestions(List<ProposalYnq> proposalYnqs, List<YnqGroupName> ynqGroupNames, ProposalDevelopmentDocument document) {
         String questionType = Constants.QUESTION_TYPE_PROPOSAL;

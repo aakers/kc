@@ -22,16 +22,14 @@ import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.institutionalproposal.IndirectcostRateType;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposalUnrecoveredFandA;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalUnrecoveredFandARuleImpl extends KcTransactionalDocumentRuleBase implements
         InstitutionalProposalUnrecoveredFandARule {
     
@@ -40,18 +38,14 @@ public class InstitutionalProposalUnrecoveredFandARuleImpl extends KcTransaction
     
     private static final String NEW_PROPOSAL_UNRECOVERED_FNA = "newInstitutionalProposalUnrecoveredFandA";
 
-    /**
-     * @see org.kuali.kra.institutionalproposal.rules.InstitutionalProposalUnrecoveredFandARule#processAddInstitutionalProposalUnrecoveredFandABusinessRules(org.kuali.kra.institutionalproposal.rules.InstitutionalProposalAddUnrecoveredFandARuleEvent)
-     */
+    @Override
     public boolean processAddInstitutionalProposalUnrecoveredFandABusinessRules(
             InstitutionalProposalAddUnrecoveredFandARuleEvent institutionalProposalAddUnrecoveredFandARuleEvent) {
         return processCommonValidations(institutionalProposalAddUnrecoveredFandARuleEvent.getUnrecoveredFandAForValidation(), 
                 institutionalProposalAddUnrecoveredFandARuleEvent.getInstitutionalProposalUnrecoveredFandAs());
     }
 
-    /**
-     * @see org.kuali.kra.institutionalproposal.rules.InstitutionalProposalUnrecoveredFandARule#processSaveInstitutionalProposalUnrecoveredFandABusinessRules(org.kuali.kra.institutionalproposal.rules.InstitutionalProposalSaveUnrecoveredFandARuleEvent)
-     */
+    @Override
     public boolean processSaveInstitutionalProposalUnrecoveredFandABusinessRules(
             InstitutionalProposalSaveUnrecoveredFandARuleEvent institutionalProposalAddUnrecoveredFandARuleEvent) {
         return processCommonValidations(institutionalProposalAddUnrecoveredFandARuleEvent.getUnrecoveredFandAForValidation(), 
@@ -114,9 +108,9 @@ public class InstitutionalProposalUnrecoveredFandARuleImpl extends KcTransaction
         return valid;
     }
 
-    private boolean validatePercentage(KualiDecimal percentage) {
+    private boolean validatePercentage(ScaleTwoDecimal percentage) {
         boolean isValid = true;
-        if (percentage!=null && percentage.isLessThan(new KualiDecimal(0))) {
+        if (percentage!=null && percentage.isLessThan(new ScaleTwoDecimal(0))) {
             isValid = false;
             this.reportError(Constants.IP_UNRECOVERED_FNA_ACTION_PROPERTY_KEY + ".costSharePercentage", KeyConstants.ERROR_PROPOSAL_UFNA_APPLICABLE_RATE_INVALID);
         }
@@ -155,13 +149,13 @@ public class InstitutionalProposalUnrecoveredFandARuleImpl extends KcTransaction
         return isValid;
     }
 
-    private boolean validateAmount(KualiDecimal amount) {
+    private boolean validateAmount(ScaleTwoDecimal amount) {
         boolean isValid = true;
         if (amount == null) {
             isValid = false;
             this.reportError(Constants.IP_UNRECOVERED_FNA_ACTION_PROPERTY_KEY + ".commitmentAmount", KeyConstants.ERROR_PROPOSAL_UFNA_AMOUNT_REQUIRED);
         }
-        else if (amount.isLessThan(new KualiDecimal(0))) {
+        else if (amount.isLessThan(new ScaleTwoDecimal(0))) {
             isValid = false;
             this.reportError(Constants.IP_UNRECOVERED_FNA_ACTION_PROPERTY_KEY + ".commitmentAmount", KeyConstants.ERROR_PROPOSAL_UFNA_AMOUNT_INVALID, new String[] { amount.toString() });
         }

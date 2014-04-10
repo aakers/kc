@@ -22,20 +22,26 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.coeus.common.framework.unit.Unit;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentAction;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentForm;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonComparator;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonDegree;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonUnit;
+import org.kuali.coeus.propdev.impl.print.ProposalDevelopmentPrintingService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.hierarchy.service.ProposalHierarchyService;
-import org.kuali.kra.proposaldevelopment.printing.service.ProposalDevelopmentPrintingService;
 import org.kuali.kra.proposaldevelopment.questionnaire.ProposalPersonQuestionnaireHelper;
 import org.kuali.kra.proposaldevelopment.questionnaire.ProposalPersonQuestionnaireHelperComparator;
 import org.kuali.kra.proposaldevelopment.rule.event.AddKeyPersonEvent;
 import org.kuali.kra.proposaldevelopment.rule.event.CalculateCreditSplitEvent;
 import org.kuali.kra.proposaldevelopment.rule.event.ChangeKeyPersonEvent;
 import org.kuali.kra.proposaldevelopment.rule.event.SaveKeyPersonEvent;
-import org.kuali.kra.proposaldevelopment.web.struts.form.ProposalDevelopmentForm;
 import org.kuali.kra.questionnaire.answer.AnswerHeader;
 import org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService;
 import org.kuali.kra.questionnaire.print.QuestionnairePrintingService;
@@ -55,7 +61,7 @@ import static org.kuali.rice.krad.util.KRADConstants.METHOD_TO_CALL_ATTRIBUTE;
 
 /**
  * Handles actions from the Key Persons page of the 
- * <code>{@link org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument}</code>
+ * <code>{@link org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument}</code>
  *
  * @author $Author: gmcgrego $
  * @version $Revision: 1.63 $
@@ -176,8 +182,8 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
 
     
     /**
-     * Called to handle situations when the <code>{@link ProposalPersonRole}</code> is changed on a <code>{@link ProposalPerson}</code>. It
-     * does this by looping through a <code>{@link List}</code> of <code>{@link ProposalPerson}</code> instances in a 
+     * Called to handle situations when the <code>{@link org.kuali.coeus.propdev.impl.person.ProposalPersonRole}</code> is changed on a <code>{@link ProposalPerson}</code>. It
+     * does this by looping through a <code>{@link List}</code> of <code>{@link org.kuali.coeus.propdev.impl.person.ProposalPerson}</code> instances in a
      * <code>{@link ProposalDevelopmentDocument}</code>
      *  
      * @param document <code>{@link ProposalDevelopmentDocument}</code> instance with <code>{@link List}</code> of 
@@ -277,11 +283,11 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         
         if (isNotBlank(pdform.getNewProposalPerson().getProposalPersonRoleId())) {
             if (pdform.getNewProposalPerson().getProposalPersonRoleId().equals(PRINCIPAL_INVESTIGATOR_ROLE) || pdform.getNewProposalPerson().equals(CO_INVESTIGATOR_ROLE)) {
-                pdform.getNewProposalPerson().setOptInUnitStatus("Y");
-                pdform.getNewProposalPerson().setOptInCertificationStatus("Y");
+                pdform.getNewProposalPerson().setOptInUnitStatus(true);
+                pdform.getNewProposalPerson().setOptInCertificationStatus(true);
             } else {
-                pdform.getNewProposalPerson().setOptInUnitStatus("N");
-                pdform.getNewProposalPerson().setOptInCertificationStatus("N");
+                pdform.getNewProposalPerson().setOptInUnitStatus(false);
+                pdform.getNewProposalPerson().setOptInCertificationStatus(false);
             }
         }
         // check any business rules
@@ -537,31 +543,6 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
                 }
                 pdform.getAnswerHeadersToDelete().clear();
             }
-            
-            List<ProposalPerson> keyPersonnel = pdform.getProposalDevelopmentDocument().getDevelopmentProposal().getProposalPersons();
-            List<ProposalPerson> personsToDelete = pdform.getProposalPersonsToDelete();
-            /**
-             * There is a key constraint error the happens when the Propoal Person and the Proposal Person Extended attribute objects are saved
-             * at the same time.  In repository.xml the auto-update attribute is set to false on ProposalPerson.proposalPersonExtendedAttributes, 
-             * and we manually save them in correct order here. This may be a bug in how it's set up, but this works well, so we are going with it.  
-             * Please feel free to to fix if you like.
-             */
-            List peopleObjectsToSave = new ArrayList();
-            for (ProposalPerson proposalPerson : keyPersonnel) {
-                this.getBusinessObjectService().save(proposalPerson);
-                if (proposalPerson.getProposalPersonExtendedAttributes() != null) {
-                    peopleObjectsToSave.add(proposalPerson);
-                    peopleObjectsToSave.add(proposalPerson.getProposalPersonExtendedAttributes());
-                    //this.getBusinessObjectService().save(proposalPerson.getProposalPersonExtendedAttributes());
-                }
-            }
-            this.getBusinessObjectService().save(peopleObjectsToSave);
-            
-            for (ProposalPerson person : personsToDelete) {
-                if (person.getProposalPersonExtendedAttributes() != null) {
-                    this.getBusinessObjectService().delete(person.getProposalPersonExtendedAttributes());
-                }
-            }
             pdform.setPropsoalPersonsToDelete(new ArrayList<ProposalPerson>());
             
             return super.save(mapping, form, request, response);
@@ -587,7 +568,7 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         if (isNotBlank(person.getHomeUnit()) && getKeyPersonnelService().isValidHomeUnit(person,person.getHomeUnit())){
             getKeyPersonnelService().addUnitToPerson(person,getKeyPersonnelService().createProposalPersonUnit(person.getHomeUnit(), person));
         }
-        person.setOptInUnitStatus("Y");
+        person.setOptInUnitStatus(true);
         getKeyPersonnelService().populateProposalPerson(person, document);
         return mapping.findForward(MAPPING_BASIC);
     }
@@ -606,7 +587,7 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         ProposalDevelopmentForm pdform = (ProposalDevelopmentForm) form;
         ProposalDevelopmentDocument document = pdform.getProposalDevelopmentDocument();
         ProposalPerson selectedPerson = getSelectedPerson(request, document);
-        selectedPerson.setOptInUnitStatus("N");
+        selectedPerson.setOptInUnitStatus(false);
         selectedPerson.getUnits().clear();
         document.getDevelopmentProposal().getInvestigators().remove(selectedPerson);
         return mapping.findForward(MAPPING_BASIC);
@@ -625,7 +606,7 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         ProposalDevelopmentForm pdform = (ProposalDevelopmentForm) form;
         ProposalDevelopmentDocument document = pdform.getProposalDevelopmentDocument();
         ProposalPerson selectedPerson = getSelectedPerson(request, document);
-        selectedPerson.setOptInCertificationStatus("Y");
+        selectedPerson.setOptInCertificationStatus(true);
         getKeyPersonnelService().populateProposalPerson(selectedPerson, document);
         return mapping.findForward(MAPPING_BASIC);
     }
@@ -645,7 +626,7 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         ProposalDevelopmentPrintingService printService = KcServiceLocator.getService(ProposalDevelopmentPrintingService.class);
         Map<String,Object> reportParameters = new HashMap<String,Object>();
         reportParameters.put(ProposalDevelopmentPrintingService.PRINT_CERTIFICATION_PERSON, selectedPerson);
-        AttachmentDataSource dataStream = printService.printProposalDevelopmentReport(document.getDevelopmentProposal(), 
+        AttachmentDataSource dataStream = printService.printProposalDevelopmentReport(document.getDevelopmentProposal(),
                 ProposalDevelopmentPrintingService.PRINT_CERTIFICATION_REPORT, reportParameters);
         streamToResponse(dataStream, response);
         return null;
@@ -664,7 +645,7 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         ProposalDevelopmentForm pdform = (ProposalDevelopmentForm) form;
         ProposalDevelopmentDocument document = pdform.getProposalDevelopmentDocument();
         ProposalPerson selectedPerson = getSelectedPerson(request, document);
-        selectedPerson.setOptInCertificationStatus("N");
+        selectedPerson.setOptInCertificationStatus(false);
         selectedPerson.getProposalPersonYnqs().clear();
         return mapping.findForward(MAPPING_BASIC);
     }
@@ -732,9 +713,6 @@ public class ProposalDevelopmentKeyPersonnelAction extends ProposalDevelopmentAc
         }
     }
 
-    /**
-     * @see org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase#reload(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward reload(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {

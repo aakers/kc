@@ -16,28 +16,28 @@
 package org.kuali.kra.subaward.bo;
 
 import org.kuali.coeus.common.framework.org.Organization;
+import org.kuali.coeus.common.framework.org.OrganizationService;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.rolodex.nonorg.NonOrganizationalRolodex;
 import org.kuali.coeus.common.framework.sequence.owner.SequenceOwner;
+import org.kuali.coeus.common.framework.type.ProposalType;
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.common.framework.unit.UnitService;
+import org.kuali.coeus.common.framework.version.VersionStatus;
 import org.kuali.coeus.common.permissions.impl.PermissionableKeys;
 import org.kuali.coeus.sys.framework.auth.perm.Permissionable;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.home.AwardType;
 import org.kuali.kra.bo.*;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.negotiations.bo.Negotiable;
 import org.kuali.kra.negotiations.bo.NegotiationPersonDTO;
-import org.kuali.kra.proposaldevelopment.bo.ProposalType;
-import org.kuali.kra.service.OrganizationService;
 import org.kuali.kra.subaward.customdata.SubAwardCustomData;
 import org.kuali.kra.subaward.document.SubAwardDocument;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.springframework.util.AutoPopulatingList;
 
@@ -105,6 +105,8 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 
     private SubAwardCloseout subAwardCloseout;
 
+    private SubAwardReports subAwardReports;
+
     private SubAwardAmountInfo subAwardAmountInfo;
 
     private String organizationName;
@@ -122,16 +124,129 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
     private AwardType subAwardType;
     private KcPerson kcPerson;
     private String subAwardSequenceStatus;
-    private static boolean newVersion;
-    private KualiDecimal totalObligatedAmount ;
-    private KualiDecimal totalAnticipatedAmount;
-    private KualiDecimal totalAmountReleased;
-    private KualiDecimal totalAvailableAmount;
+    private boolean newVersion;
+    private ScaleTwoDecimal totalObligatedAmount ;
+    private ScaleTwoDecimal totalAnticipatedAmount;
+    private ScaleTwoDecimal totalAmountReleased;
+    private ScaleTwoDecimal totalAvailableAmount;
     private transient String docIdStatus;
     private transient String lastUpdate;
     private String awardNumber;
     private transient boolean editSubAward = false;
     private transient boolean defaultOpen = true;
+
+    private Integer costType;
+    
+    private Date executionDate;
+    
+    private String requisitionId;
+    
+    private SubAwardCostType subAwardCostType;
+
+    private Date modificationEffectiveDate;
+    private String modificationId;
+    private Date performanceStartDate;
+    private Date performanceEnddate;
+    private List<SubAwardAttachments> subAwardAttachments;
+    private List<SubAwardReports> subAwardReportList;
+    private List<SubAwardTemplateInfo> subAwardTemplateInfo;
+
+    /**
+         * Gets the subAwardTemplateInfo attribute. 
+         * @return Returns the subAwardTemplateInfo.
+         */
+        public List<SubAwardTemplateInfo> getSubAwardTemplateInfo() {
+            if (this.subAwardTemplateInfo == null) {
+                this.subAwardTemplateInfo = new ArrayList<SubAwardTemplateInfo>();
+            }
+            return subAwardTemplateInfo;
+        }
+
+        /**
+         * Sets the subAwardTemplateInfo attribute value.
+         * @param subAwardTemplateInfo The subAwardTemplateInfo to set.
+         */
+        public void setSubAwardTemplateInfo(List<SubAwardTemplateInfo> subAwardTemplateInfo) {
+            this.subAwardTemplateInfo = subAwardTemplateInfo;
+        }
+    
+    
+    /**
+     * Gets the subAwardReports attribute. 
+     * @return Returns the subAwardReports.
+     */
+    public SubAwardReports getSubAwardReports() {
+        return subAwardReports;
+    }
+
+    /**
+     * Sets the subAwardReports attribute value.
+     * @param subAwardReports The subAwardReports to set.
+     */
+    public void setSubAwardReports(SubAwardReports subAwardReports) {
+        this.subAwardReports = subAwardReports;
+    }
+    
+    /**
+     * Gets the subAwardReportList attribute. 
+     * @return Returns the subAwardReportList.
+     */
+    public List<SubAwardReports> getSubAwardReportList() {
+        if (this.subAwardReportList == null) {
+            this.subAwardReportList = new ArrayList<SubAwardReports>();
+        }
+        return this.subAwardReportList;
+    }
+    
+    public List<SubAwardAttachments> getSubAwardAttachments() { 
+        if (this.subAwardAttachments == null) {
+            this.subAwardAttachments = new ArrayList<SubAwardAttachments>();
+        }
+
+        return this.subAwardAttachments;
+    }
+
+    public void setAttachments(List<SubAwardAttachments> attachments) {
+            this.subAwardAttachments = attachments;
+       }
+    
+    public void setReports(List<SubAwardReports> reports) {
+        this.subAwardReportList = reports;
+   }
+    /**
+     * Gets an attachment.
+     * @param index the index
+     * @return an attachment personnel
+     */
+    public SubAwardReports getSubAwardReportList(int index) {
+        return this.subAwardReportList.get(index);
+    }
+    
+    public SubAwardAttachments getSubAwardAttachment(int index) {
+        return this.subAwardAttachments.get(index);
+    }
+    /**
+     * add an attachment.
+     * @param attachment the attachment
+     * @throws IllegalArgumentException if attachment is null
+     */
+    public void addAttachment(SubAwardAttachments attachment) {
+        this.getSubAwardAttachments().add(attachment);
+        attachment.setSubAward(this);
+    }
+    /**
+     * add an attachment.
+     * @param report 
+     * @throws IllegalArgumentException if attachment is null
+     */
+    public void addReport(SubAwardReports report) {
+        this.getSubAwardReportList().add(report);
+        report.setSubAward(this);
+    }
+    /**.
+     * This is the Getter Method for rolodex
+     * @return Returns the rolodex.
+     */
 
 
     /**.
@@ -796,8 +911,6 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 		this.subAwardFundingSourceList = subAwardFundingSourceList;
 	}
 
-	
-
     /**.
 	 * This is the Getter Method for subAwardAmountInfoList
 	 * @return Returns the subAwardAmountInfoList.
@@ -897,6 +1010,8 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
         SubAwardCloseout>(SubAwardCloseout.class);
         subAwardCustomDataList = new AutoPopulatingList<
         SubAwardCustomData>(SubAwardCustomData.class);
+        subAwardReportList = new AutoPopulatingList<
+        SubAwardReports>(SubAwardReports.class);
     }
     /**.
 	 * This is the Setter Method for subAwardDocument
@@ -966,7 +1081,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 
     @Override
     public List<String> getRoleNames() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
@@ -982,7 +1097,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 
     @Override
     public String getDocumentRoleTypeCode() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
@@ -992,29 +1107,18 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
             qualifiedRoleAttributes.put("documentNumber", getSubAwardDocument().getDocumentNumber());
 
     }
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#incrementSequenceNumber()
-     */
+    @Override
     public void incrementSequenceNumber() {
         this.sequenceNumber++;
     }
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#getOwnerSequenceNumber()
-     */
     @Override
     public void setSequenceOwner(SubAward newlyVersionedOwner) {
-        // TODO Auto-generated method stub
+
     }
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#getSequenceOwner()
-     */
     @Override
     public SubAward getSequenceOwner() {
         return this;
     }
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
     @Override
     public void resetPersistenceState() {
        this.subAwardId=null;
@@ -1054,7 +1158,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Getter Method for totalObligatedAmount
 	 * @return Returns the totalObligatedAmount.
 	 */
-	public KualiDecimal getTotalObligatedAmount() {
+	public ScaleTwoDecimal getTotalObligatedAmount() {
 		return totalObligatedAmount;
 	}
 
@@ -1078,7 +1182,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Setter Method for totalObligatedAmount
 	 * @param totalObligatedAmount The totalObligatedAmount to set.
 	 */
-	public void setTotalObligatedAmount(KualiDecimal totalObligatedAmount) {
+	public void setTotalObligatedAmount(ScaleTwoDecimal totalObligatedAmount) {
 		this.totalObligatedAmount = totalObligatedAmount;
 	}
 
@@ -1086,7 +1190,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Getter Method for totalAnticipatedAmount
 	 * @return Returns the totalAnticipatedAmount.
 	 */
-	public KualiDecimal getTotalAnticipatedAmount() {
+	public ScaleTwoDecimal getTotalAnticipatedAmount() {
 		return totalAnticipatedAmount;
 	}
 
@@ -1094,7 +1198,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Setter Method for totalAnticipatedAmount
 	 * @param totalAnticipatedAmount The totalAnticipatedAmount to set.
 	 */
-	public void setTotalAnticipatedAmount(KualiDecimal totalAnticipatedAmount) {
+	public void setTotalAnticipatedAmount(ScaleTwoDecimal totalAnticipatedAmount) {
 		this.totalAnticipatedAmount = totalAnticipatedAmount;
 	}
 
@@ -1102,7 +1206,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Getter Method for totalAmountReleased
 	 * @return Returns the totalAmountReleased.
 	 */
-	public KualiDecimal getTotalAmountReleased() {
+	public ScaleTwoDecimal getTotalAmountReleased() {
 		return totalAmountReleased;
 	}
 
@@ -1110,7 +1214,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Setter Method for totalAmountReleased
 	 * @param totalAmountReleased The totalAmountReleased to set.
 	 */
-	public void setTotalAmountReleased(KualiDecimal totalAmountReleased) {
+	public void setTotalAmountReleased(ScaleTwoDecimal totalAmountReleased) {
 		this.totalAmountReleased = totalAmountReleased;
 	}
 
@@ -1118,7 +1222,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Getter Method for totalAvailableAmount
 	 * @return Returns the totalAvailableAmount.
 	 */
-	public KualiDecimal getTotalAvailableAmount() {
+	public ScaleTwoDecimal getTotalAvailableAmount() {
 		return totalAvailableAmount;
 	}
 
@@ -1126,7 +1230,7 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
 	 * This is the Setter Method for totalAvailableAmount
 	 * @param totalAvailableAmount The totalAvailableAmount to set.
 	 */
-	public void setTotalAvailableAmount(KualiDecimal totalAvailableAmount) {
+	public void setTotalAvailableAmount(ScaleTwoDecimal totalAvailableAmount) {
 		this.totalAvailableAmount = totalAvailableAmount;
 	}
 
@@ -1317,4 +1421,131 @@ implements Permissionable, SequenceOwner<SubAward>, Negotiable {
         this.defaultOpen = defaultOpen;
     }
 
+    /**
+     * Gets the costType attribute. 
+     * @return Returns the costType.
+     */
+    public Integer getCostType() {
+        return costType;
+    }
+
+    /**
+     * Sets the costType attribute value.
+     * @param costType The costType to set.
+     */
+    public void setCostType(Integer costType) {
+        this.costType = costType;
+    }
+
+    /**
+     * Gets the executionDate attribute. 
+     * @return Returns the executionDate.
+     */
+    public Date getExecutionDate() {
+        return executionDate;
+    }
+
+    /**
+     * Sets the executionDate attribute value.
+     * @param executionDate The executionDate to set.
+     */
+    public void setExecutionDate(Date executionDate) {
+        this.executionDate = executionDate;
+    }
+
+    /**
+     * Gets the requisitionId attribute. 
+     * @return Returns the requisitionId.
+     */
+    public String getRequisitionId() {
+        return requisitionId;
+    }
+
+    /**
+     * Sets the requisitionId attribute value.
+     * @param requisitionId The requisitionId to set.
+     */
+    public void setRequisitionId(String requisitionId) {
+        this.requisitionId = requisitionId;
+    }
+
+    /**
+     * Gets the subAwardCostType attribute. 
+     * @return Returns the subAwardCostType.
+     */
+    public SubAwardCostType getSubAwardCostType() {
+        return subAwardCostType;
+    }
+
+    /**
+     * Sets the subAwardCostType attribute value.
+     * @param subAwardCostType The subAwardCostType to set.
+     */
+    public void setSubAwardCostType(SubAwardCostType subAwardCostType) {
+        this.subAwardCostType = subAwardCostType;
+    }
+    
+    /**.
+     * This is the Getter Method for modificationEffectiveDate
+     * @return Returns the modificationEffectiveDate.
+     */
+    public Date getModificationEffectiveDate() {
+        return modificationEffectiveDate;
+    }
+
+    /**.
+     * This is the Setter Method for modificationEffectiveDate
+     * @param modificationEffectiveDate The modificationEffectiveDate to set.
+     */
+    public void setModificationEffectiveDate(Date modificationEffectiveDate) {
+        this.modificationEffectiveDate = modificationEffectiveDate;
+    }
+    
+    /**.
+     * This is the Getter Method for modificationId
+     * @return Returns the modificationId.
+     */
+    public String getModificationId() {
+        return modificationId;
+    }
+
+    /**.
+     * This is the Setter Method for modificationId
+     * @param modificationId The modificationId to set.
+     */
+    public void setModificationId(String modificationId) {
+        this.modificationId = modificationId;
+    }
+
+    /**.
+     * This is the Getter Method for performanceStartDate
+     * @return Returns the performanceStartDate.
+     */
+    public Date getPerformanceStartDate() {
+        return performanceStartDate;
+    }
+
+    /**.
+     * This is the Setter Method for performanceStartDate
+     * @param performanceStartDate The performanceStartDate to set.
+     */
+    public void setPerformanceStartDate(Date performanceStartDate) {
+        this.performanceStartDate = performanceStartDate;
+    }
+
+    /**.
+     * This is the Getter Method for performanceEnddate
+     * @return Returns the performanceEnddate.
+     */
+    public Date getPerformanceEnddate() {
+        return performanceEnddate;
+    }
+
+    /**.
+     * This is the Setter Method for performanceEnddate
+     * @param performanceEnddate The performanceEnddate to set.
+     */
+    public void setPerformanceEnddate(Date performanceEnddate) {
+        this.performanceEnddate = performanceEnddate;
+    }
 }

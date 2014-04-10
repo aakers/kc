@@ -26,7 +26,7 @@ import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.irb.Protocol;
 import org.kuali.kra.irb.ProtocolAction;
 import org.kuali.kra.irb.ProtocolForm;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.questionnaire.answer.AnswerHeader;
 import org.kuali.kra.questionnaire.answer.ModuleQuestionnaireBean;
 import org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService;
@@ -53,11 +53,6 @@ public class ProtocolQuestionnaireAction extends ProtocolAction {
     private static final String TEMPLATE             = "template";
 
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.irb.ProtocolAction#preSave(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, 
-     *      javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public void preSave(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         super.preSave(mapping, form, request, response);
@@ -120,11 +115,6 @@ public class ProtocolQuestionnaireAction extends ProtocolAction {
     }
     
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.irb.ProtocolAction#saveOnClose(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, 
-     *      javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     protected ActionForward saveOnClose(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = mapping.findForward(Constants.MAPPING_BASIC);

@@ -16,8 +16,8 @@
 package org.kuali.kra.budget.distributionincome;
 
 import org.kuali.kra.budget.parameters.BudgetPeriod;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 /**
  * 
@@ -36,70 +36,36 @@ public class BudgetProjectIncome extends BudgetDistributionAndIncomeComponent im
 
     private String description;
 
-    private KualiDecimal projectIncome;
+    private ScaleTwoDecimal projectIncome;
 
     private String hierarchyProposalNumber;
 
     private boolean hiddenInHierarchy;
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
     public Integer getBudgetPeriodNumber() {
         return budgetPeriodNumber;
     }
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
-    public KualiDecimal getProjectIncome() {
+    public ScaleTwoDecimal getProjectIncome() {
         return projectIncome;
     }
 
-    /**
-     * 
-     * This method...
-     * @param budgetPeriodNumber
-     */
     public void setBudgetPeriodNumber(Integer budgetPeriodNumber) {
         this.budgetPeriodNumber = (budgetPeriodNumber != null && budgetPeriodNumber.intValue() > 0) ? budgetPeriodNumber : null;
     }
 
-    /**
-     * 
-     * This method...
-     * @param description
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * 
-     * This method...
-     * @param income
-     */
-    public void setProjectIncome(KualiDecimal income) {
+    public void setProjectIncome(ScaleTwoDecimal income) {
         this.projectIncome = income;
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeComponent#getDocumentComponentIdKey()
-     */
     @Override
     public String getDocumentComponentIdKey() {
         return DOCUMENT_COMPONENT_ID_KEY;

@@ -15,23 +15,30 @@
  */
 package org.kuali.kra.protocol.auth;
 
+import org.kuali.kra.protocol.ProtocolBase;
+import org.kuali.kra.protocol.actions.submit.ProtocolSubmissionBase;
+
 
 /**
  * Is the user allowed to create a renewal for the protocol?
  */
 public abstract class CreateRenewalAuthorizerBase extends ProtocolAuthorizerBase {
 
-    /**
-     * @see org.kuali.kra.protocol.auth.ProtocolAuthorizerBase#isAuthorized(java.lang.String, org.kuali.kra.protocol.auth.ProtocolTaskBase)
-     */
+    @Override
     public boolean isAuthorized(String userId, ProtocolTaskBase task) {
         return !isAmendmentOrRenewal(task.getProtocol()) &&
                canExecuteAction(task.getProtocol(), getActionTypeRenewalCreatedHook()) &&
                (hasPermission(userId, task.getProtocol(), getPermissionCreateRenewalHook())
-                    || hasPermission(userId, task.getProtocol(), getPermissionCreateAnyRenewalHook()));
+                    || hasPermission(userId, task.getProtocol(), getPermissionCreateAnyRenewalHook())) &&
+               !(isRequestForSuspension(findSubmisionHook(task.getProtocol()), getProtocolSubmissionTypeHook()) & !isAdmin(userId, getAdminNamespaceHook(), getAdminRoleHook()));
     }
 
     protected abstract String getActionTypeRenewalCreatedHook();
     protected abstract String getPermissionCreateRenewalHook();
     protected abstract String getPermissionCreateAnyRenewalHook();
+    protected abstract String getAdminNamespaceHook();
+    protected abstract String getAdminRoleHook();
+    protected abstract String getProtocolSubmissionTypeHook();
+    protected abstract ProtocolSubmissionBase findSubmisionHook(ProtocolBase protocol);
+
 }

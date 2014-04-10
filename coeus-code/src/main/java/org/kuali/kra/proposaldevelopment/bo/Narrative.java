@@ -22,14 +22,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.struts.upload.FormFile;
 import org.kuali.coeus.common.framework.attachment.KcAttachment;
 import org.kuali.coeus.common.framework.attachment.KcAttachmentService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentForm;
 import org.kuali.coeus.sys.framework.auth.task.TaskAuthorizationService;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.TaskName;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.document.authorization.NarrativeTask;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
-import org.kuali.kra.proposaldevelopment.web.struts.form.ProposalDevelopmentForm;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
 import org.kuali.rice.krad.data.jpa.converters.BooleanYNConverter;
 
@@ -448,9 +448,6 @@ public class Narrative extends KcPersistableBusinessObjectBase implements Hierar
         return managedLists;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -471,9 +468,6 @@ public class Narrative extends KcPersistableBusinessObjectBase implements Hierar
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

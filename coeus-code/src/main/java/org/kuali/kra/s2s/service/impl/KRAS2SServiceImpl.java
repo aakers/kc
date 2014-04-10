@@ -32,31 +32,30 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentForm;
+import org.kuali.coeus.propdev.impl.s2s.S2sApplication;
+import org.kuali.coeus.propdev.impl.s2s.S2sProvider;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.institutionalproposal.proposaladmindetails.ProposalAdminDetails;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
-import org.kuali.kra.proposaldevelopment.web.struts.form.ProposalDevelopmentForm;
 import org.kuali.kra.s2s.S2SException;
-import org.kuali.kra.s2s.bo.*;
+import org.kuali.coeus.propdev.impl.s2s.*;
 import org.kuali.kra.s2s.formmapping.FormMappingInfo;
 import org.kuali.kra.s2s.formmapping.FormMappingLoader;
 import org.kuali.kra.s2s.generator.S2SBaseFormGenerator;
 import org.kuali.kra.s2s.generator.S2SGeneratorNotFoundException;
 import org.kuali.kra.s2s.generator.bo.AttachmentData;
 import org.kuali.kra.s2s.service.*;
+import org.kuali.kra.s2s.util.AuditError;
 import org.kuali.kra.s2s.util.GrantApplicationHash;
 import org.kuali.kra.s2s.util.S2SConstants;
 import org.kuali.kra.s2s.validator.OpportunitySchemaParser;
 import org.kuali.rice.core.api.config.property.ConfigurationService;
-import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.kns.authorization.AuthorizationConstants;
 import org.kuali.rice.kns.util.AuditCluster;
-import org.kuali.rice.kns.util.AuditError;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -81,11 +80,8 @@ import java.util.*;
 public class KRAS2SServiceImpl implements S2SService {
 	private static final Log LOG = LogFactory.getLog(KRAS2SServiceImpl.class);
 	private BusinessObjectService businessObjectService;
-	private DateTimeService dateTimeService;
 	private S2SFormGeneratorService s2SFormGeneratorService;
-	private S2SProposalValidatorService s2SProposalValidatorService;
 	private S2SUtilService s2SUtilService;
-	private PrintService printService;
 	private S2SValidatorService s2SValidatorService;
 	private ConfigurationService configurationService;
 	private static final String GRANTS_GOV_STATUS_ERROR = "ERROR";
@@ -127,13 +123,13 @@ public class KRAS2SServiceImpl implements S2SService {
 	}
 
 	/**
-	 * 
+	 *
 	 * This method returns the list of forms for a given opportunity
-	 * 
+	 *
 	 * @param opportunity
 	 * @return {@link List} of {@link S2sOppForms} which are included in the
 	 *         given {@link S2sOpportunity}
-	 * @see org.kuali.kra.s2s.service.S2SService#parseOpportunityForms(org.kuali.kra.s2s.bo.S2sOpportunity)
+	 * @see org.kuali.kra.s2s.service.S2SService#parseOpportunityForms(org.kuali.coeus.propdev.impl.s2s.S2sOpportunity)
 	 */
 	public List<S2sOppForms> parseOpportunityForms(S2sOpportunity opportunity) throws S2SException{
         String opportunityContent = getOpportunityContent(opportunity.getSchemaUrl());
@@ -168,13 +164,13 @@ public class KRAS2SServiceImpl implements S2SService {
 	/**
 	 * This method checks for the status of submission for the given
 	 * {@link ProposalDevelopmentDocument} on Grants.gov
-	 * 
+	 *
 	 * @param pdDoc
 	 *            for which status has to be checked
 	 * @return boolean, <code>true</code> if status has changed, false
 	 *         otherwise
 	 * @throws S2SException
-	 * @see org.kuali.kra.s2s.service.S2SService#refreshGrantsGov(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
+	 * @see org.kuali.kra.s2s.service.S2SService#refreshGrantsGov(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument)
 	 */
 	public boolean refreshGrantsGov(ProposalDevelopmentDocument pdDoc)
 			throws S2SException {
@@ -214,8 +210,6 @@ public class KRAS2SServiceImpl implements S2SService {
 	 * 
 	 * @param pdDoc
 	 *            {@link ProposalDevelopmentDocument}
-	 * @param appSubmission
-	 *            {@link S2sAppSubmission}
 	 * @param applicationListResponse
 	 *            {@link GetApplicationListResponse} response from Grants Gov
 	 * @throws S2SException
@@ -298,7 +292,7 @@ public class KRAS2SServiceImpl implements S2SService {
 
 	/**
 	 * This method populates the {@link S2sAppSubmission} BO with details from
-	 * {@link ApplicationInformationType}
+	 * {@link ProposalDevelopmentDocument}
 	 * 
 	 * @param appSubmission
 	 * @param ggApplication
@@ -327,11 +321,16 @@ public class KRAS2SServiceImpl implements S2SService {
 					.getGrantsGovApplicationStatus().toString());
 		}
 	}
-	
-	/**
-	 * @see org.kuali.kra.s2s.service.S2SService#populateSponsorProposalId(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, org.kuali.kra.s2s.bo.S2sAppSubmission)
-	 */
-	public void populateSponsorProposalId(ProposalDevelopmentDocument pdDoc, S2sAppSubmission appSubmission) {
+
+    /**
+     *
+     * Takes the appSubmission and proposal and if a federal tracking id has been specified, will
+     * set on both the proposal development doc and the related institutional proposal doc
+     * if there is not a sponsor proposal id already.
+     * @param pdDoc
+     * @param appSubmission
+     */
+	protected void populateSponsorProposalId(ProposalDevelopmentDocument pdDoc, S2sAppSubmission appSubmission) {
 	    if (StringUtils.isNotBlank(appSubmission.getAgencyTrackingId())) {
 	        if (StringUtils.isBlank(pdDoc.getDevelopmentProposal().getSponsorProposalNumber())) {
 	            pdDoc.getDevelopmentProposal().setSponsorProposalNumber(appSubmission.getAgencyTrackingId());
@@ -369,7 +368,7 @@ public class KRAS2SServiceImpl implements S2SService {
 	 *         opportunities for the corresponding parameters.
 	 * @throws S2SException
 	 * @see org.kuali.kra.s2s.service.S2SService#searchOpportunity(java.lang.String,
-	 *      java.lang.String, java.lang.String)
+	 *      java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public List<S2sOpportunity> searchOpportunity(String providerCode, String cfdaNumber,
 			String opportunityId, String competitionId) throws S2SException {
@@ -407,7 +406,7 @@ public class KRAS2SServiceImpl implements S2SService {
 	 *            Proposal Development Document.
 	 * @return true if submitted false otherwise.
 	 * @throws S2SException
-	 * @see org.kuali.kra.s2s.service.S2SService#submitApplication(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
+	 * @see org.kuali.kra.s2s.service.S2SService#submitApplication(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument)
 	 */
 	public boolean submitApplication(ProposalDevelopmentDocument pdDoc)
 			throws S2SException {
@@ -485,19 +484,15 @@ public class KRAS2SServiceImpl implements S2SService {
 		grantSubmissionHeader.setSubmissionTitle(s2sOpportunity.getProposalNumber());
 		
         // set closing date unless null
-        Date closingDate = s2sOpportunity.getClosingDate();
+        Calendar closingDate = s2sOpportunity.getClosingDate();
         if (closingDate != null) {
-            Calendar calClosingDate = Calendar.getInstance();
-            calClosingDate.setTime(closingDate);
-            grantSubmissionHeader.setClosingDate(calClosingDate);
+            grantSubmissionHeader.setClosingDate(closingDate);
         }
         
 		// set opening date unless null
-		Date openingDate = s2sOpportunity.getOpeningDate();
+		Calendar openingDate = s2sOpportunity.getOpeningDate();
 		if (openingDate != null) {
-	        Calendar calOpeningDate = Calendar.getInstance();
-		    calOpeningDate.setTime(openingDate);
-	        grantSubmissionHeader.setOpeningDate(calOpeningDate);
+	        grantSubmissionHeader.setOpeningDate(openingDate);
 		}
         String applicationXml = getXmlFromDocument(grantApplication);
         String hashVal = GrantApplicationHash.computeGrantFormsHash(applicationXml);
@@ -578,13 +573,6 @@ public class KRAS2SServiceImpl implements S2SService {
 			}
 
 			appSubmission.setSubmissionNumber(submissionNumber);
-//			appList.add(appSubmission);
-			// appSubmission.setStatus(S2SConstants.GRANTS_GOV_SUBMISSION_MESSAGE);
-			// appSubmission.setComments(S2SConstants.GRANTS_GOV_PROCESSING_MESSAGE);
-			// pdDoc.getDevelopmentProposal().setS2sAppSubmission(appList);
-//			List<PersistableBusinessObject> saveList = new ArrayList<PersistableBusinessObject>();
-//			saveList.add(appSubmission);
-//			saveList.add(application);
 
 			businessObjectService.save(appSubmission);
 			pdDoc.getDevelopmentProposal().refreshReferenceObject("s2sAppSubmission");
@@ -599,7 +587,7 @@ public class KRAS2SServiceImpl implements S2SService {
 	 *            Proposal Development Document.
 	 * @return boolean true if valid false otherwise.
 	 * @throws S2SException
-	 * @see org.kuali.kra.s2s.service.S2SService#validateApplication(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
+	 * @see org.kuali.kra.s2s.service.S2SService#validateApplication(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument)
 	 */
 	public boolean validateApplication(
 			ProposalDevelopmentDocument proposalDevelopmentDocument)
@@ -656,7 +644,7 @@ public class KRAS2SServiceImpl implements S2SService {
 			FormMappingInfo info = null;
 			S2SBaseFormGenerator s2sFormGenerator = null;
 			try {
-				info = new FormMappingLoader().getFormInfo(opportunityForm.getOppNameSpace());
+				info = new FormMappingLoader().getFormInfo(opportunityForm.getS2sOppFormsId().getOppNameSpace());
 				s2sFormGenerator = (S2SBaseFormGenerator)s2SFormGeneratorService.getS2SGenerator(info.getNameSpace());
 			} catch (S2SGeneratorNotFoundException e) {
 				continue;
@@ -724,9 +712,9 @@ public class KRAS2SServiceImpl implements S2SService {
 
 	protected void setValidationErrorMessage(List<AuditError> errors) {
 		LOG.info("Error list size:" + errors.size() + errors.toString());
-		List<AuditError> auditErrors = new ArrayList<AuditError>();
+		List<org.kuali.rice.kns.util.AuditError> auditErrors = new ArrayList<>();
 		for (AuditError error : errors) {
-			auditErrors.add(new AuditError(error.getErrorKey(),
+			auditErrors.add(new org.kuali.rice.kns.util.AuditError(error.getErrorKey(),
 					Constants.GRANTS_GOV_GENERIC_ERROR_KEY, error.getLink(),
 					new String[] { error.getMessageKey() }));
 		}
@@ -761,8 +749,8 @@ public class KRAS2SServiceImpl implements S2SService {
 	/**
 	 * This method convert OpportunityInformationType to OpportunityInfo
 	 * 
-	 * @param oppInfoType
-	 *            {OpportunityInformationType}
+	 * @param providerCode
+	 *
 	 * @return OpportunityInfo containing Opportunity information corresponding
 	 *         to the OpportunityInformationType object.
 	 */
@@ -773,15 +761,15 @@ public class KRAS2SServiceImpl implements S2SService {
 		s2Opportunity.setCfdaNumber(oppInfo.getCFDANumber());
 		s2Opportunity
 				.setClosingDate(oppInfo.getClosingDate() == null ? null
-						: new java.sql.Timestamp(oppInfo.getClosingDate()
-								.toGregorianCalendar().getTimeInMillis()));
+						: oppInfo.getClosingDate()
+								.toGregorianCalendar());
 		
 		s2Opportunity.setCompetetionId(oppInfo.getCompetitionID());
 		s2Opportunity.setInstructionUrl(oppInfo.getInstructionsURL());
 		s2Opportunity
 				.setOpeningDate(oppInfo.getOpeningDate() == null ? null
-						: new java.sql.Timestamp(oppInfo.getOpeningDate()
-								.toGregorianCalendar().getTimeInMillis()));
+						: oppInfo.getOpeningDate()
+								.toGregorianCalendar());
 		
 		s2Opportunity.setOpportunityId(oppInfo.getFundingOpportunityNumber());
 		s2Opportunity.setOpportunityTitle(oppInfo.getFundingOpportunityTitle());
@@ -818,40 +806,15 @@ public class KRAS2SServiceImpl implements S2SService {
 	}
 
 	/**
-	 * 
-	 * Setter for {@link S2SProposalValidatorService}
-	 * 
-	 * @param s2SProposalValidatorService
-	 */
-	public void setS2SProposalValidatorService(
-			S2SProposalValidatorService s2SProposalValidatorService) {
-		this.s2SProposalValidatorService = s2SProposalValidatorService;
-	}
-
-	/**
 	 * Sets the s2sUtilService attribute value.
 	 * 
-	 * @param generatorUtilService
+	 * @param s2SUtilService
 	 *            The s2sUtilService to set.
 	 */
 	public void setS2SUtilService(S2SUtilService s2SUtilService) {
 		this.s2SUtilService = s2SUtilService;
 	}
 
-	/**
-	 * 
-	 * This method is used to print selected forms.
-	 * 
-	 * @param pdDoc
-	 *            Proposal Development Document.
-	 * @return AttachmentDataSource for the selected form.
-	 * @throws S2SException
-	 */
-	public AttachmentDataSource printForm(ProposalDevelopmentDocument pdDoc)
-			throws S2SException,PrintingException {
-		return printService.printForm(pdDoc);
-	}
-	
 	public File getGrantsGovSavedFile(ProposalDevelopmentDocument pdDoc)
 	        throws IOException {
         String loggingDirectory = KcServiceLocator.getService(ConfigurationService.class).getPropertyValueAsString(Constants.PRINT_XML_DIRECTORY);
@@ -872,40 +835,12 @@ public class KRAS2SServiceImpl implements S2SService {
 	}
 
 	/**
-	 * Gets the printService attribute.
-	 * 
-	 * @return Returns the printService.
-	 */
-	public PrintService getPrintService() {
-		return printService;
-	}
-
-	/**
-	 * Sets the printService attribute value.
-	 * 
-	 * @param printService
-	 *            The printService to set.
-	 */
-	public void setPrintService(PrintService printService) {
-		this.printService = printService;
-	}
-
-	/**
 	 * Gets the s2SFormGeneratorService attribute.
 	 * 
 	 * @return Returns the s2SFormGeneratorService.
 	 */
 	public S2SFormGeneratorService getS2SFormGeneratorService() {
 		return s2SFormGeneratorService;
-	}
-
-	/**
-	 * Gets the s2SProposalValidatorService attribute.
-	 * 
-	 * @return Returns the s2SProposalValidatorService.
-	 */
-	public S2SProposalValidatorService getS2SProposalValidatorService() {
-		return s2SProposalValidatorService;
 	}
 
 	/**
@@ -924,25 +859,6 @@ public class KRAS2SServiceImpl implements S2SService {
 	 */
 	public BusinessObjectService getBusinessObjectService() {
 		return businessObjectService;
-	}
-
-	/**
-	 * Gets the dateTimeService attribute.
-	 * 
-	 * @return Returns the dateTimeService.
-	 */
-	public DateTimeService getDateTimeService() {
-		return dateTimeService;
-	}
-
-	/**
-	 * Sets the dateTimeService attribute value.
-	 * 
-	 * @param dateTimeService
-	 *            The dateTimeService to set.
-	 */
-	public void setDateTimeService(DateTimeService dateTimeService) {
-		this.dateTimeService = dateTimeService;
 	}
 
 	/**

@@ -18,6 +18,7 @@ package org.kuali.kra.award.maintenance;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
+import org.kuali.coeus.common.framework.sponsor.term.SponsorTerm;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.validation.ErrorReporter;
 import org.kuali.kra.award.home.AwardTemplate;
@@ -25,7 +26,6 @@ import org.kuali.kra.award.home.AwardTemplateReportTerm;
 import org.kuali.kra.award.home.AwardTemplateReportTermRecipient;
 import org.kuali.kra.award.home.ValidBasisMethodPayment;
 import org.kuali.kra.award.paymentreports.awardreports.AwardReportTermRuleImpl;
-import org.kuali.kra.bo.SponsorTerm;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.maintenance.KraMaintainableImpl;
@@ -48,9 +48,7 @@ import java.util.Map;
  */
 public class AwardTemplateMaintainableImpl extends KraMaintainableImpl {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -3368480537790330757L;
     
     private static final String ERROR_KEY_PREFIX = "document.newMaintainableObject.add.templateReportTerms[";
@@ -70,10 +68,7 @@ public class AwardTemplateMaintainableImpl extends KraMaintainableImpl {
         super.addMultipleValueLookupResults(document, collectionName, rawValues, needsBlank, bo);
     }
     
-    /**
-     * 
-     * @see org.kuali.rice.kns.maintenance.KualiMaintainableImpl#processBeforeAddLine(java.lang.String, java.lang.Class, org.kuali.rice.krad.bo.BusinessObject)
-     */
+    @Override
     public void processBeforeAddLine(String colName, Class colClass, BusinessObject addBO) {
         if (colName.contains("[") && colName.contains("]")) {
             String numString = (String) colName.subSequence(colName.indexOf("[") + 1, colName.indexOf("]"));
@@ -232,9 +227,6 @@ public class AwardTemplateMaintainableImpl extends KraMaintainableImpl {
         return !validBasisMethodPayments.isEmpty();
     }
     
-    /**
-     * @see org.kuali.rice.kns.maintenance.Maintainable#refresh(String refreshCaller, Map fieldValues, MaintenanceDocument document)
-     */
     @Override
     @SuppressWarnings("unchecked")
     public void refresh(String refreshCaller, Map fieldValues, MaintenanceDocument document) {

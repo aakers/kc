@@ -17,25 +17,21 @@ package org.kuali.kra.institutionalproposal.contacts;
 
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.unit.UnitContactType;
 import org.kuali.coeus.common.framework.unit.UnitService;
 import org.kuali.coeus.common.framework.unit.admin.UnitAdministrator;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.award.home.ContactType;
-import org.kuali.kra.bo.UnitContactType;
 import org.kuali.kra.institutionalproposal.web.struts.form.InstitutionalProposalForm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalUnitContactsBean extends InstitutionalProposalContactsBean {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -1563581536920498669L;
     private static final String DEFAULT_GROUP_CODE_FOR_UNIT_CONTACTS = "U";
 
@@ -87,9 +83,7 @@ public class InstitutionalProposalUnitContactsBean extends InstitutionalProposal
         return (KcPersonService) KcServiceLocator.getService(KcPersonService.class);
     }
 
-    /**
-     * @return
-     */
+
     public InstitutionalProposalUnitContact getUnitContact() {
        return (InstitutionalProposalUnitContact) newInstitutionalProposalContact; 
     }
@@ -123,17 +117,11 @@ public class InstitutionalProposalUnitContactsBean extends InstitutionalProposal
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContactsBean#getContactRoleType()
-     */
     @Override
     protected Class<? extends ContactRole> getContactRoleType() {
         return ContactType.class;
     }
 
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContactsBean#init()
-     */
     @Override
     protected InstitutionalProposalContact createNewContact() {
         return new InstitutionalProposalUnitContact(UnitContactType.CONTACT);

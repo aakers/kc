@@ -23,13 +23,12 @@ import org.kuali.kra.irb.actions.ProtocolActionType;
  */
 public class CreateAmendmentAuthorizer extends ProtocolAuthorizer {
 
-    /**
-     * @see org.kuali.kra.irb.auth.ProtocolAuthorizer#isAuthorized(java.lang.String, org.kuali.kra.irb.auth.ProtocolTask)
-     */
+    @Override
     public boolean isAuthorized(String userId, ProtocolTask task) {
-        return !isAmendmentOrRenewal(task.getProtocol()) &&
-               canExecuteAction(task.getProtocol(), ProtocolActionType.AMENDMENT_CREATED) &&
-               (hasPermission(userId, task.getProtocol(), PermissionConstants.CREATE_AMMENDMENT)
-                    || hasPermission(userId, task.getProtocol(), PermissionConstants.CREATE_ANY_AMENDMENT));
+        return  !isAmendmentOrRenewal(task.getProtocol()) &&
+                canExecuteAction(task.getProtocol(), ProtocolActionType.AMENDMENT_CREATED) &&
+                (hasPermission(userId, task.getProtocol(), PermissionConstants.CREATE_AMMENDMENT)  
+                   || hasPermission(userId, task.getProtocol(), PermissionConstants.CREATE_ANY_AMENDMENT)) &&
+                !(isRequestForSuspension(task.getProtocol()) & !isIrbAdmin(userId));
     }
 }

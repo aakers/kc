@@ -16,8 +16,8 @@
 package org.kuali.kra.bo;
 
 import org.kuali.coeus.common.framework.unit.Unit;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.budget.BudgetDecimal;
 import org.kuali.kra.budget.rates.AbstractBudgetRate;
 import org.kuali.kra.budget.rates.RateClass;
 import org.kuali.kra.budget.rates.RateType;
@@ -42,9 +42,9 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
 
     private String unitNumber;
 
-    private BudgetDecimal instituteRate;
+    private ScaleTwoDecimal instituteRate;
     
-    private BudgetDecimal externalApplicableRate;
+    private ScaleTwoDecimal externalApplicableRate;
 
     private RateClass rateClass;
 
@@ -128,11 +128,11 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
         this.unitNumber = unitNumber;
     }
 
-    public BudgetDecimal getInstituteRate() {
+    public ScaleTwoDecimal getInstituteRate() {
         return instituteRate;
     }
 
-    public void setInstituteRate(BudgetDecimal rate) {
+    public void setInstituteRate(ScaleTwoDecimal rate) {
         this.instituteRate = rate;
     }
 
@@ -183,9 +183,6 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
         this.nonEditableRateFlag = flatRateCalculation;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -204,9 +201,6 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -253,7 +247,7 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
      * Gets the externalApplicableRate attribute. 
      * @return Returns the externalApplicableRate.
      */
-    public BudgetDecimal getExternalApplicableRate() {
+    public ScaleTwoDecimal getExternalApplicableRate() {
         return externalApplicableRate==null?getInstituteRate():externalApplicableRate;
     }
 
@@ -261,7 +255,7 @@ public abstract class AbstractInstituteRate extends KcPersistableBusinessObjectB
      * Sets the externalApplicableRate attribute value.
      * @param externalApplicableRate The externalApplicableRate to set.
      */
-    public void setExternalApplicableRate(BudgetDecimal externalApplicableRate) {
+    public void setExternalApplicableRate(ScaleTwoDecimal externalApplicableRate) {
         this.externalApplicableRate = externalApplicableRate;
     }
 }

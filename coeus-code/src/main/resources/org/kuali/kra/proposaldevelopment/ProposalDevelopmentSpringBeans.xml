@@ -68,16 +68,19 @@
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalInitiatePage.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalInitiateView.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalOpportunitySearchPage.xml</value>
+                <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalDeliveryInfoPage.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalOrganizationLocationsPage.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalPersonnelPage.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalQuestionnairePage.xml</value>
                 <value>classpath:org/kuali/kra/datadictionary/krad/propdev/S2sOpportunityLookup.xml</value>
+                <value>classpath:org/kuali/kra/datadictionary/krad/propdev/ProposalSponsorProgramInfoPage.xml</value>
             </list>
        </property>     
     </bean>
  
 	<context:annotation-config />
 	<context:component-scan base-package="org.kuali.kra.proposaldevelopment.web.krad"/> 
+        <context:component-scan base-package="org.kuali.coeus.propdev.impl"/>
     
     <bean id="transactionalDocumentControllerService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="transactionalDocumentControllerService"/>
@@ -212,6 +215,10 @@
         <property name="serviceName" value="questionnaireService" />
     </bean>
     
+    <bean id="questionService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+        <property name="serviceName" value="questionService" />
+    </bean>
+    
     <bean id="questionnaireAnswerService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="questionnaireAnswerService" />
     </bean>
@@ -254,18 +261,22 @@
     <bean id="kcKrmsJavaFunctionTermService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="kcKrmsJavaFunctionTermService"/>
     </bean>
-    <bean id="s2SService" class="org.kuali.rice.krad.config.GlobalResourceLoaderServiceFactoryBean">
+    <bean id="s2SService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="s2SService"/>
     </bean> 
     
     <bean id="attachmentService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="attachmentService" />
     </bean>
-
-    <bean id="documentHelperService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
-        <property name="serviceName" value="documentHelperService" />
-    </bean>
     
+    <bean id="kualiRuleService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+        <property name="serviceName" value="kualiRuleService" />
+    </bean>
+
+    <bean id="personEditableService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+        <property name="serviceName" value="personEditableService" />
+    </bean>    
+
   <bean id="kcPersonLookupableHelperServiceTarget" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean" lazy-init="true">
         <property name="serviceName" value="kcPersonLookupableHelperService" />
   </bean>
@@ -295,7 +306,7 @@
     </bean>
     
     <!-- Proposal Development Services -->
-	<bean id="proposalDevelopmentService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalDevelopmentServiceImpl">
+	<bean id="proposalDevelopmentService" class="org.kuali.coeus.propdev.impl.core.ProposalDevelopmentServiceImpl">
 		<property name="businessObjectService" ref="businessObjectService" />
         <property name="dataObjectService" ref="dataObjectService" />
 		<property name="unitAuthorizationService" ref="unitAuthorizationService" />
@@ -316,7 +327,7 @@
 		<property name="lookupableHelperService" ref="proposalDevelopmentLookupableHelperService" />
 	</bean>
 	
-    <bean id="proposalDevelopmentLookupableHelperService" class="org.kuali.kra.proposaldevelopment.service.impl.DevelopmentProposalLookupableHelperServiceImpl" 
+    <bean id="proposalDevelopmentLookupableHelperService" class="org.kuali.coeus.propdev.impl.core.DevelopmentProposalLookupableHelperServiceImpl" 
           parent="parentLookupableHelperService" scope="prototype">
         <property name="kraAuthorizationService" ref="kcAuthorizationService" />
     </bean>
@@ -325,7 +336,7 @@
 		<property name="lookupableHelperService" ref="lookupableDevelopmentProposalLookupableHelperService" />
 	</bean>
     
-    <bean id="lookupableDevelopmentProposalLookupableHelperService" class="org.kuali.kra.proposaldevelopment.service.impl.LookupableDevelopmentProposalLookupableHelperServiceImpl" 
+    <bean id="lookupableDevelopmentProposalLookupableHelperService" class="org.kuali.coeus.propdev.impl.core.LookupableDevelopmentProposalLookupableHelperServiceImpl" 
           parent="parentLookupableHelperService" scope="prototype">
         <property name="proposalPersonDao" ref="proposalPersonDao" />
         <property name="businessObjectService" ref="businessObjectService" />
@@ -336,17 +347,17 @@
         <property name="lookupDao" ref="lookupDao" />
         <property name="dataDictionaryService" ref="dataDictionaryService" />
     </bean>  
-
+    
     <bean id="lookupDao" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="lookupDao" />
     </bean>
     
-    <bean id="proposalAbstractsService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalAbstractsServiceImpl">
+    <!--<bean id="proposalAbstractsService" class="org.kuali.coeus.propdev.impl.abstrct.ProposalAbstractsServiceImpl">
         <property name="personService" ref="personService" />
     </bean>
-    
+    -->
     <bean id="proposalAllUnitAdministratorDerivedRoleTypeService" 
-          class="org.kuali.kra.proposaldevelopment.service.impl.ProposalAllUnitAdministratorDerivedRoleTypeServiceImpl">
+          class="org.kuali.coeus.propdev.impl.auth.ProposalAllUnitAdministratorDerivedRoleTypeServiceImpl">
         <property name="unitService" ref="unitService" />
     </bean>
 
@@ -365,19 +376,7 @@
 		p:callbackService-ref="proposalAllUnitAdministratorDerivedRoleTypeService" 
 		p:localServiceName="proposalAllUnitAdministratorDerivedRoleTypeService" 
 		p:serviceInterface="org.kuali.rice.kim.framework.role.RoleTypeService"/>
-    
-    <bean id="proposalCopyService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalCopyServiceImpl">
-        <property name="businessObjectService" ref="businessObjectService" />
-        <property name="keyPersonnelService" ref="keyPersonnelService" />
-        <property name="documentService" ref="documentService" />
-        <property name="parameterService" ref="parameterService" />
-        <property name="dateTimeService" ref="dateTimeService" />
-        <property name="budgetService" ref="budgetService" />
-        <property name="budgetSummaryService" ref="budgetSummaryService" />
-        <property name="questionnaireService" ref="questionnaireService"/>
-        <property name="questionnaireAnswerService" ref="questionnaireAnswerService"/>
-    </bean>
-    
+ 
     <bean id="keyPersonnelService" class="org.kuali.kra.proposaldevelopment.service.impl.KeyPersonnelServiceImpl">
         <property name="businessObjectService" ref="businessObjectService" />
         <property name="narrativeService" ref="narrativeService" />
@@ -386,7 +385,7 @@
         <property name="sponsorService" ref="sponsorService"/>
     </bean>
 
-    <bean id="proposalLockService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalLockServiceImpl">
+    <bean id="proposalLockService" class="org.kuali.coeus.propdev.impl.lock.ProposalLockServiceImpl">
     		<property name="dataDictionaryService" ref="dataDictionaryService"/>
     		<property name="dataObjectService" ref="dataObjectService" />
     </bean>
@@ -408,7 +407,7 @@
         <property name="dbPlatform" ref="dbPlatform" />
     </bean>
 
-    <bean id="proposalHierarchyDao" parent="platformAwareDao" class="org.kuali.kra.proposaldevelopment.hierarchy.dao.ojb.ProposalHierarchyDaoOjb" />
+    <bean id="proposalHierarchyDao" parent="platformAwareDao" class="org.kuali.coeus.propdev.impl.hierarchy.ProposalHierarchyDaoOjb" />
     
     <bean id="proposalHierarchyService" class="org.kuali.kra.proposaldevelopment.hierarchy.service.impl.ProposalHierarchyServiceImpl">
         <property name="businessObjectService" ref="businessObjectService" />
@@ -426,12 +425,7 @@
         <property name="sessionDocumentService" ref="knsSessionDocumentService" />
         <property name="workflowDocumentService" ref="kradWorkflowDocumentService" />       
     </bean>
-    
-    <bean id="proposalPersonService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalPersonServiceImpl">
-        <property name="businessObjectService" ref="businessObjectService" />
-        <property name="kcPersonService" ref="kcPersonService" />
-    </bean>
-    
+
     <bean id="proposalPersonBiographyService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalPersonBiographyServiceImpl">
         <property name="businessObjectService" ref="businessObjectService" />
         <property name="attachmentDao" ref="attachmentDao" />
@@ -442,7 +436,7 @@
         <property name="systemAuthorizationService" ref="systemAuthorizationService" />
     </bean>
     
-    <bean id="proposalRoleTemplateService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalRoleTemplateServiceImpl">
+    <bean id="proposalRoleTemplateService" class="org.kuali.coeus.propdev.impl.docperm.ProposalRoleTemplateServiceImpl">
         <property name="kraAuthorizationService" ref="kcAuthorizationService" />
         <property name="roleManagementService" ref="roleService" />
         <property name="proposalRoleService" ref="proposalRoleService" />
@@ -457,10 +451,6 @@
 		p:localServiceName="proposalRoleTypeService" 
 		p:serviceInterface="org.kuali.rice.kim.framework.role.RoleTypeService"/>
 	
-    <bean id="proposalStatusService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalStatusServiceImpl">
-        <property name="dataObjectService" ref="dataObjectService" />
-    </bean>
-
 	<bean id="narrativeService" class="org.kuali.kra.proposaldevelopment.service.impl.NarrativeServiceImpl">
 		<property name="systemAuthorizationService" ref="systemAuthorizationService" />
 		<property name="dateTimeService" ref="dateTimeService" />
@@ -480,19 +470,7 @@
         <property name="kraAuthorizationService" ref="kcAuthorizationService" />
     </bean>
 
-    <!-- Proposal Development Printing Services -->
-    
-    <bean id="proposalDevelopmentPrintingService" class="org.kuali.kra.proposaldevelopment.printing.service.impl.ProposalDevelopmentPrintingServiceImpl"
-          lazy-init="true">
-        <property name="printCertificationPrint" ref="printCertificationPrint" />
-        <property name="proposalSponsorFormsPrint" ref="proposalSponsorFormsPrint" />
-        <property name="printingService" ref="printingService" />
-        <property name="s2SUtilService" ref="s2SUtilService" />
-        <property name="businessObjectService" ref="businessObjectService" />
-        <property name="parameterService" ref="parameterService" />
-    </bean>
-    
-    <bean id="printCertificationPrint" class="org.kuali.kra.proposaldevelopment.printing.print.PrintCertificationPrint" scope="prototype">
+    <bean id="printCertificationPrint" class="org.kuali.coeus.propdev.impl.print.PrintCertificationPrint" scope="prototype">
         <property name="xmlStream" ref="printCertificationXmlStream" />
     </bean>
     
@@ -502,9 +480,18 @@
         <property name="proposalDevelopmentXmlStream" ref="proposalDevelopmentXmlStream" />
     </bean>
     
-    <bean id="proposalBaseStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.ProposalBaseStream" abstract="true">
-        <property name="businessObjectService" ref="businessObjectService" />
-        <property name="dateTimeService" ref="dateTimeService" />
+    <bean id="questionnairePrint" class="org.kuali.kra.questionnaire.print.QuestionnairePrint" scope="prototype">
+           <property name="xmlStream" ref="questionnaireXmlStream" />
+    </bean>
+
+    <bean id="questionnaireXmlStream" class="org.kuali.kra.questionnaire.print.QuestionnaireXmlStream" scope="prototype">
+            <property name="businessObjectService" ref="businessObjectService" />
+            <property name="dateTimeService" ref="dateTimeService" />
+            <property name="documentService" ref="documentService" />
+            <property name="questionnaireService" ref="questionnaireService" />
+            <property name="questionService" ref="questionService" />
+            <property name="questionnaireAnswerService" ref="questionnaireAnswerService" />
+            <property name="kcPersonService" ref="kcPersonService" />
     </bean>
     
     <bean id="printCertificationXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.PrintCertificationXmlStream" 
@@ -512,11 +499,20 @@
 
     <bean id="proposalSubmissionXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.ProposalSubmissionXmlStream" 
           parent="proposalBaseStream" />
+
+    <bean id="proposalBaseStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.ProposalBaseStream" abstract="true">
+        <property name="businessObjectService" ref="businessObjectService" />
+        <property name="dateTimeService" ref="dateTimeService" />
+    </bean>
     
+    <bean id="budgetPersonService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
+        <property name="serviceName" value="budgetPersonService" />
+    </bean>
+
     <bean id="abstractResearchAndRelatedStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.AbstractResearchAndRelatedStream" abstract="true" 
           parent="proposalBaseStream">
         <property name="kcPersonService" ref="kcPersonService" />
-        <property name="s2SUtilService" ref="s2SUtilService" />
+        <property name="budgetPersonService" ref="budgetPersonService" />
     </bean>
     
     <bean id="researchAndRelatedXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.ResearchAndRelatedXmlStream" 
@@ -525,16 +521,16 @@
     <bean id="nihResearchAndRelatedXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.NIHResearchAndRelatedXmlStream"
           parent="abstractResearchAndRelatedStream" lazy-init="true">
         <property name="parameterService" ref="parameterService" />
-        <property name="awardService" ref="awardService" />
         <property name="sponsorService" ref="sponsorService" />
+        <property name="proposalDevelopmentService" ref="proposalDevelopmentService" />
     </bean>
     
-    <bean id="proposalDevelopmentXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.ProposalDevelopmentXmlStream" 
+    <bean id="proposalDevelopmentXmlStream" class="org.kuali.coeus.propdev.impl.print.ProposalDevelopmentXmlStream" 
           parent="proposalBaseStream" />
 
     <!-- Current and Pending Report Services -->
     
-    <bean id="currentAndPendingReportService" class="org.kuali.kra.printing.service.impl.CurrentAndPendingReportServiceImpl" scope="prototype">
+    <bean id="currentAndPendingReportService" class="org.kuali.coeus.common.proposal.impl.report.CurrentAndPendingReportServiceImpl" scope="prototype">
         <property name="currentReportDao" ref="currentReportDao" />
         <property name="pendingReportDao" ref="pendingReportDao" />
         <property name="currentProposalPrint" ref="currentProposalPrint" />
@@ -542,34 +538,26 @@
         <property name="printingService" ref="printingService" />
     </bean>
     
-    <bean id="currentReportDao" parent="platformAwareDao" class="org.kuali.kra.dao.ojb.CurrentReportDaoOjb" />
+    <bean id="currentReportDao" parent="platformAwareDao" class="org.kuali.coeus.common.proposal.impl.report.CurrentReportDaoOjb" />
     
-    <bean id="pendingReportDao" parent="platformAwareDao" class="org.kuali.kra.dao.ojb.PendingReportDaoOjb" />
+    <bean id="pendingReportDao" parent="platformAwareDao" class="org.kuali.coeus.common.proposal.impl.report.PendingReportDaoOjb" />
     
-    <bean id="currentProposalPrint" class="org.kuali.kra.printing.print.CurrentProposalPrint" scope="prototype">
+    <bean id="currentProposalPrint" class="org.kuali.coeus.common.proposal.impl.report.CurrentProposalPrint" scope="prototype">
         <property name="xmlStream" ref="currentProposalXmlStream" />
     </bean>
     
-    <bean id="pendingProposalPrint" class="org.kuali.kra.printing.print.PendingProposalPrint" scope="prototype">
+    <bean id="pendingProposalPrint" class="org.kuali.coeus.common.proposal.impl.report.PendingProposalPrint" scope="prototype">
         <property name="xmlStream" ref="pendingProposalXmlStream" />
     </bean>
 
-    <bean id="currentProposalXmlStream" class="org.kuali.kra.printing.xmlstream.CurrentProposalXmlStream">
+    <bean id="currentProposalXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.CurrentProposalXmlStream">
         <property name="businessObjectService" ref="businessObjectService" />
         <property name="dateTimeService" ref="dateTimeService" />
     </bean>
     
-    <bean id="pendingProposalXmlStream" class="org.kuali.kra.printing.xmlstream.PendingProposalXmlStream">
+    <bean id="pendingProposalXmlStream" class="org.kuali.kra.proposaldevelopment.printing.xmlstream.PendingProposalXmlStream">
         <property name="businessObjectService" ref="businessObjectService" />
         <property name="dateTimeService" ref="dateTimeService" />
-    </bean>
-
-    <!-- Proposal Development S2s Questionnaire Services -->
-    
-    <bean id = "proposalDevelopmentS2sQuestionnaireService" class = "org.kuali.kra.proposaldevelopment.service.impl.ProposalDevelopmentS2sQuestionnaireServiceImpl">
-        <property name="businessObjectService" ref="businessObjectService"/>
-        <property name="questionnaireAnswerService" ref="questionnaireAnswerService"/>
-        <property name="questionnaireService" ref="questionnaireService"/>
     </bean>
 
 	<!-- Proposal Development Task Authorizers -->
@@ -731,11 +719,11 @@
 	</bean>
 
 	<bean id="proposalDevelopmentWebAuthorizer" class="org.kuali.coeus.sys.framework.auth.task.WebAuthorizer">
-		<property name="classname" value="org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentAction" />
+		<property name="classname" value="org.kuali.coeus.propdev.impl.core.ProposalDevelopmentAction" />
 		<property name="mappings">
 			<map>
 				<entry key="save">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="modifyProposal" />
 					</bean>
 				</entry>
@@ -744,11 +732,11 @@
 	</bean>
 	
     <bean id="proposalGrantsGovWebAuthorizer" class="org.kuali.coeus.sys.framework.auth.task.WebAuthorizer">
-        <property name="classname" value="org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentGrantsGovAction" />
+        <property name="classname" value="org.kuali.coeus.propdev.impl.s2s.ProposalDevelopmentGrantsGovAction" />
         <property name="mappings">
             <map>
                 <entry key="printForms">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="printProposal" />
                     </bean>
                 </entry>
@@ -761,22 +749,22 @@
         <property name="mappings">
             <map>
                 <entry key="addCertificationQuestion">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="modifyProposal" />
                     </bean>
                 </entry>
                 <entry key="removeCertificationQuestion">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="modifyProposal" />
                     </bean>
                 </entry>
                 <entry key="addUnitDetails">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="modifyProposal" />
                     </bean>
                 </entry>
                 <entry key="removeUnitDetails">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="modifyProposal" />
                     </bean>
                 </entry>
@@ -785,11 +773,11 @@
     </bean>
 
 	<bean id="proposalAbstractsAttachmentsWebAuthorizer" class="org.kuali.coeus.sys.framework.auth.task.WebAuthorizer">
-		<property name="classname" value="org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentAbstractsAttachmentsAction" />
+		<property name="classname" value="org.kuali.coeus.propdev.impl.abstrct.ProposalDevelopmentAbstractsAttachmentsAction" />
 		<property name="mappings">
 			<map>
 				<entry key="addProposalAttachment">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="addNarrative" />
 					</bean>
 				</entry>
@@ -814,7 +802,7 @@
 					</bean>
 				</entry>
 				<entry key="addInstitutionalAttachment">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="addNarrative" />
 					</bean>
 				</entry>
@@ -852,17 +840,17 @@
         <property name="mappings">
             <map>
                 <entry key="addBudgetVersion">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="addBudget" />
                     </bean>
                 </entry>
                 <entry key="openBudgetVersion">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="openBudgets" />
                     </bean>
                 </entry>
                 <entry key="copyBudgetVersion">
-                    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+                    <bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
                         <property name="taskName" value="addBudget" />
                     </bean>
                 </entry>
@@ -871,21 +859,21 @@
     </bean>
 
 	<bean id="proposalPermissionsWebAuthorizer" class="org.kuali.coeus.sys.framework.auth.task.WebAuthorizer">
-		<property name="classname" value="org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentPermissionsAction" />
+		<property name="classname" value="org.kuali.coeus.propdev.impl.docperm.ProposalDevelopmentPermissionsAction" />
 		<property name="mappings">
 			<map>
 				<entry key="addProposalUser">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="modifyProposalRoles" />
 					</bean>
 				</entry>
 				<entry key="deleteProposalUser">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="modifyProposalRoles" />
 					</bean>
 				</entry>
 				<entry key="setEditRoles">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="modifyProposalRoles" />
 					</bean>
 				</entry>
@@ -894,63 +882,56 @@
 	</bean>
 
 	<bean id="proposalActionsWebAuthorizer" class="org.kuali.coeus.sys.framework.auth.task.WebAuthorizer">
-		<property name="classname" value="org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentActionsAction" />
+		<property name="classname" value="org.kuali.coeus.propdev.impl.action.ProposalDevelopmentActionsAction" />
 		<property name="mappings">
 			<map>
 				<entry key="printForms">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="printProposal" />
 					</bean>
 				</entry>
 				<entry key="route">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="submitToWorkflow" />
 					</bean>
 				</entry>
 				<entry key="submitToSponsor">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="submitToSponsor" />
 					</bean>
 				</entry>
 				<entry key="resubmit">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="submitToSponsor" />
 					</bean>
 				</entry>
 				<entry key="approve">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="hierarchyChildWorkflowAction" />
 					</bean>
 				</entry>
 				<entry key="reject">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="rejectProposal" />
 					</bean>
 				</entry>
 				<entry key="disapprove">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="hierarchyChildWorkflowAction" />
 					</bean>
 				</entry>
-				<!-- 
-				<entry key="cancel"> 
-				    <bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
-				        <property name="taskName" value="hierarchyChildWorkflowAction" />
-				    </bean>
-				</entry>
-				-->
 				<entry key="blanketApprove">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="hierarchyChildWorkflowAction" />
 					</bean>
 				</entry>
 				<entry key="acknowledge">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="hierarchyChildAcknowledgeAction" />
 					</bean>
 				</entry>
 				<entry key="fyi">
-					<bean class="org.kuali.kra.proposaldevelopment.web.struts.authorization.ProposalTaskFactory">
+					<bean class="org.kuali.coeus.propdev.impl.auth.task.ProposalTaskFactory">
 						<property name="taskName" value="hierarchyChildWorkflowAction" />
 					</bean>
 				</entry>
@@ -958,24 +939,9 @@
 		</property>
 	</bean>
 	
-	<bean id="proposalDevelopmentFactBuilderService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalDevelopmentFactBuilderServiceImpl">
-		  <property name="documentService" ref="documentService" />
-	</bean>
-    <bean id="propDevJavaFunctionKrmsTermService" class="org.kuali.kra.proposaldevelopment.service.impl.PropDevJavaFunctionKrmsTermServiceImpl">
-    	<property name="businessObjectService" ref="businessObjectService" />
-    	<property name="unitService" ref="unitService" />
-    	<property name="parameterService" ref="parameterService" />
-    	<property name="documentService" ref="documentService" />
-        <property name="dateTimeService" ref="dateTimeService" />
-    </bean>
-
     <bean id="countryService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
         <property name="serviceName" value="countryService" />
     </bean>
-
-	<bean id="proposalCountryService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalCountryServiceImpl">
-		 <property name="countryService" ref="countryService" />
-	</bean>
 	
 	<bean id="proposalDevelopmentProtocolDocumentService" class="org.kuali.rice.core.framework.resourceloader.GlobalResourceLoaderServiceFactoryBean">
   	<property name="serviceName" value="proposalDevelopmentProtocolDocumentService" />
@@ -990,20 +956,7 @@
   	<property name="serviceName" value="iacucProtocolSpecialReviewService" />
   </bean>  
 	
-	<bean id="proposalDevelopmentSpecialReviewService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalDevelopmentSpecialReviewServiceImpl">
-		<property name="proposalDevelopmentProtocolDocumentService" ref="proposalDevelopmentProtocolDocumentService"/>
-		<property name="iacucProtocolProposalDevelopmentProtocolDocumentService" ref="iacucProtocolProposalDevelopmentProtocolDocumentService" />
-		<property name="protocolSpecialReviewService" ref="protocolSpecialReviewService" />
-		<property name="iacucProtocolSpecialReviewService" ref="iacucProtocolSpecialReviewService" />
-		<property name="parameterService" ref="parameterService" />
-	</bean>
-	
-	<bean id="proposalDevelopmentPermissionsService" class="org.kuali.kra.proposaldevelopment.service.impl.ProposalDevelopmentPermissionsServiceImpl">
+	<bean id="proposalDevelopmentPermissionsService" class="org.kuali.coeus.propdev.impl.auth.perm.ProposalDevelopmentPermissionsServiceImpl">
 		<property name="kraAuthorizationService" ref="kcAuthorizationService" />
 	</bean>
-
-    <bean id="propDevWorkflowService" class="org.kuali.kra.proposaldevelopment.service.impl.PropDevWorkflowServiceImpl">
-        <property name="proposalService" ref="proposalDevelopmentService" />
-        <property name="documentHelperService" ref="documentHelperService" />
-    </bean>
 </beans>

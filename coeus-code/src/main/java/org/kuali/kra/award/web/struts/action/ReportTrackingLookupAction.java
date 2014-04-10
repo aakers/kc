@@ -20,6 +20,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.Printable;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.auth.UnitAuthorizationService;
 import org.kuali.coeus.sys.framework.controller.DocHandlerService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
@@ -30,12 +35,8 @@ import org.kuali.kra.award.paymentreports.awardreports.reporting.service.AwardRe
 import org.kuali.kra.award.paymentreports.awardreports.reporting.service.ReportTrackingDao;
 import org.kuali.kra.award.paymentreports.awardreports.reporting.service.ReportTrackingPrintingService;
 import org.kuali.kra.award.paymentreports.awardreports.reporting.service.ReportTrackingType;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.award.infrastructure.AwardPermissionConstants;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.printing.Printable;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.ken.util.NotificationConstants;
 import org.kuali.rice.kew.api.KewApiConstants;
@@ -184,7 +185,7 @@ public class ReportTrackingLookupAction extends KualiLookupAction {
             printables = getReportTrackingPrintingService().getReportPrintable(ReportTrackingType.AWARD_REPORT_TRACKING,detailResult,printables);
             printableArtifactLists.add((AwardReportTracking) printables.clone());
         }
-        org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource attachmentDataSource =
+        AttachmentDataSource attachmentDataSource =
             getReportTrackingPrintingService()
             .printAwardReportTracking(printableArtifactLists);
         streamToResponse(attachmentDataSource, response);
@@ -202,7 +203,7 @@ public class ReportTrackingLookupAction extends KualiLookupAction {
         printable = getReportTrackingPrintingService().getReportPrintable(
                 ReportTrackingType.AWARD_REPORT_TRACKING,reportTracking,printable);
         printableArtifactList.add(printable);
-        org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource attachmentDataSource =
+        AttachmentDataSource attachmentDataSource =
             getReportTrackingPrintingService()
             .printAwardReportTracking(printableArtifactList);
         streamToResponse(attachmentDataSource, response);
@@ -347,7 +348,7 @@ public class ReportTrackingLookupAction extends KualiLookupAction {
      * @param response
      * @throws Exception
      */
-    protected void streamToResponse(org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource attachmentDataSource,
+    protected void streamToResponse(AttachmentDataSource attachmentDataSource,
             HttpServletResponse response) throws Exception {
         byte[] xbts = attachmentDataSource.getContent();
         ByteArrayOutputStream baos = null;

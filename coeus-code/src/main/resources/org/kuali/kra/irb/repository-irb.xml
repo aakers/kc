@@ -30,7 +30,7 @@
         <collection-descriptor name="protocolList" proxy="true" element-class-ref="org.kuali.kra.irb.Protocol" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
             <inverse-foreignkey field-ref="documentNumber" />
         </collection-descriptor>
-        <collection-descriptor name="customDataList" proxy="true" element-class-ref="org.kuali.kra.bo.CustomAttributeDocValue" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
+        <collection-descriptor name="customDataList" proxy="true" element-class-ref="org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocValue" collection-class="org.apache.ojb.broker.util.collections.ManageableArrayList" auto-retrieve="true" auto-update="object" auto-delete="object">
 			 <inverse-foreignkey field-ref="documentNumber"/>
 		</collection-descriptor>     
         <!-- GENERATE NEXT VALUE -->
@@ -1233,7 +1233,7 @@
         <field-descriptor name="protoCorrespTypeCode" column="PROTO_CORRESP_TYPE_CODE" jdbc-type="VARCHAR" />
         <field-descriptor name="committeeId" column="COMMITTEE_ID" jdbc-type="VARCHAR" />
         <field-descriptor name="fileName" column="FILE_NAME" jdbc-type="VARCHAR" />
-        <field-descriptor name="correspondenceTemplate" column="CORRESPONDENCE_TEMPLATE" jdbc-type="CLOB" conversion="org.kuali.coeus.sys.framework.persistence.OjbBlobClobFieldConersion"/>
+        <field-descriptor name="correspondenceTemplate" column="CORRESPONDENCE_TEMPLATE" jdbc-type="CLOB" conversion="org.kuali.coeus.sys.framework.persistence.OjbBlobClobFieldConversion"/>
         <field-descriptor name="updateTimestamp" column="UPDATE_TIMESTAMP" jdbc-type="TIMESTAMP" />
         <field-descriptor name="updateUser" column="UPDATE_USER" jdbc-type="VARCHAR" />
         <field-descriptor name="versionNumber" column="VER_NBR" jdbc-type="BIGINT" locking="true" />
@@ -1297,7 +1297,7 @@
     
     
     	<class-descriptor class="org.kuali.kra.irb.actions.submit.ValidProtoSubRevType" table="VALID_PROTO_SUB_REV_TYPE">
-		<field-descriptor name="validProtoSubRevTypeId" column="VALID_PROTO_SUB_REV_TYPE_ID" jdbc-type="BIGINT" primarykey="true" sequence-name="SEQ_PROTOCOL_ID" autoincrement="true"/>
+		<field-descriptor name="validProtoSubRevTypeId" column="VALID_PROTO_SUB_REV_TYPE_ID" jdbc-type="BIGINT" primarykey="true" sequence-name="SEQ_VAL_PROTO_SUB_REV_TYP_ID" autoincrement="true"/>
 		<field-descriptor name="submissionTypeCode" column="SUBMISSION_TYPE_CODE" jdbc-type="VARCHAR" />
 		<field-descriptor name="protocolReviewTypeCode" column="PROTOCOL_REVIEW_TYPE_CODE" jdbc-type="VARCHAR" />
 		<field-descriptor name="updateTimestamp" column="UPDATE_TIMESTAMP" jdbc-type="TIMESTAMP" />
@@ -1313,7 +1313,7 @@
 	</class-descriptor>
 	
 	<class-descriptor class="org.kuali.kra.irb.actions.submit.ValidProtoSubTypeQual" table="VALID_PROTO_SUB_TYPE_QUAL">
-		<field-descriptor name="validProtoSubTypeQualId" column="VALID_PROTO_SUB_TYPE_QUAL_ID" jdbc-type="BIGINT" primarykey="true" sequence-name="SEQ_PROTOCOL_ID" autoincrement="true"/>
+		<field-descriptor name="validProtoSubTypeQualId" column="VALID_PROTO_SUB_TYPE_QUAL_ID" jdbc-type="BIGINT" primarykey="true" sequence-name="SEQ_VAL_PROTO_SUB_TYP_QUAL_ID" autoincrement="true"/>
 		<field-descriptor name="submissionTypeCode" column="SUBMISSION_TYPE_CODE" jdbc-type="VARCHAR" />
 		<field-descriptor name="submissionTypeQualCode" column="SUBMISSION_TYPE_QUAL_CODE" jdbc-type="VARCHAR" />
 		<field-descriptor name="updateTimestamp" column="UPDATE_TIMESTAMP" jdbc-type="TIMESTAMP" />
@@ -1328,7 +1328,7 @@
 		</reference-descriptor>
 	</class-descriptor>
 	
-	<class-descriptor class="org.kuali.kra.bo.OrganizationCorrespondent" table="ORGANIZATION_CORRESPONDENT">
+	<class-descriptor class="org.kuali.coeus.common.framework.org.crrspndnt.OrganizationCorrespondent" table="ORGANIZATION_CORRESPONDENT">
 		<field-descriptor name="correspondentId" column="ORGANIZATION_CORRESPONDENT_ID" jdbc-type="INTEGER" primarykey="true" sequence-name="SEQ_ORG_CORRESP_ID" autoincrement="true" />
 		<field-descriptor name="organizationId" column="ORGANIZATION_ID" jdbc-type="VARCHAR" />
 		<field-descriptor name="correspondentTypeCode" column="CORRESPONDENT_TYPE_CODE" jdbc-type="INTEGER" />
@@ -1347,7 +1347,7 @@
 		</reference-descriptor>
 	</class-descriptor>
 	
-	<class-descriptor class="org.kuali.kra.bo.UnitCorrespondent" table="UNIT_CORRESPONDENT">
+	<class-descriptor class="org.kuali.coeus.common.framework.unit.crrspndnt.UnitCorrespondent" table="UNIT_CORRESPONDENT">
 		<field-descriptor name="correspondentId" column="UNIT_CORRESPONDENT_ID" jdbc-type="INTEGER" primarykey="true" sequence-name="SEQ_UNIT_CORRESP_ID" autoincrement="true" />
 		<field-descriptor name="unitNumber" column="UNIT_NUMBER" jdbc-type="VARCHAR" />
 		<field-descriptor name="correspondentTypeCode" column="CORRESPONDENT_TYPE_CODE" jdbc-type="INTEGER" />

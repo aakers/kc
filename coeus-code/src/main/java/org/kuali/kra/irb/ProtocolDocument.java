@@ -24,10 +24,10 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocValue;
 import org.kuali.coeus.common.notification.impl.bo.KcNotification;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.CustomAttributeDocValue;
-import org.kuali.kra.bo.DocumentCustomData;
 import org.kuali.kra.bo.ResearchAreaBase;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.irb.actions.ProtocolAction;
@@ -76,9 +76,7 @@ import org.kuali.rice.krms.api.engine.Facts.Builder;
 @COMPONENT(component=ParameterConstants.DOCUMENT_COMPONENT)
 public class ProtocolDocument extends ProtocolDocumentBase { 
     
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 803158468103165087L;
 
     private static final Log LOG = LogFactory.getLog(ProtocolDocument.class);

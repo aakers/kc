@@ -20,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.kuali.coeus.common.framework.person.KcPerson;
+import org.kuali.coeus.common.framework.unit.admin.UnitAdministratorType;
 import org.kuali.kfs.integration.cg.dto.AccountCreationStatusDTO;
 import org.kuali.kfs.integration.cg.dto.AccountParametersDTO;
 import org.kuali.kfs.module.external.kc.service.AccountCreationService;
@@ -27,7 +28,6 @@ import org.kuali.kra.award.commitments.AwardFandaRate;
 import org.kuali.kra.award.contacts.AwardUnitContact;
 import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.home.Award;
-import org.kuali.kra.bo.UnitAdministratorType;
 import org.kuali.kra.award.external.award.AccountCreationClient;
 import org.kuali.kra.award.external.award.FinancialIndirectCostRecoveryTypeCode;
 import org.kuali.kra.infrastructure.Constants;
@@ -73,9 +73,7 @@ public abstract class AccountCreationClientBase implements AccountCreationClient
     
     protected abstract AccountCreationService getServiceHandle();
     
-    /**
-     * @see org.kuali.kra.award.external.award.AccountCreationClient#isValidAccountNumber(java.lang.String)
-     */
+    @Override
     public String isValidAccountNumber(String accountNumber) {
         boolean isValidAccountNumber = false;
         
@@ -90,9 +88,7 @@ public abstract class AccountCreationClientBase implements AccountCreationClient
         return isValidAccountNumber + "";
     }
     
-    /**
-     * @see org.kuali.kra.award.external.award.AccountCreationClient#isValidChartAccount(java.lang.String, java.lang.String)
-     */
+    @Override
     public String isValidChartAccount(String chartOfAccountsCode, String accountNumber) {
         boolean isValidChartOfAccountsCode = false;
         

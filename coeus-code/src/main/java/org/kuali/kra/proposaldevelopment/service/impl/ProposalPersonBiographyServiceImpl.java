@@ -16,14 +16,14 @@
 package org.kuali.kra.proposaldevelopment.service.impl;
 
 import org.apache.struts.upload.FormFile;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.bo.DocumentNextvalue;
 import org.kuali.kra.bo.PropPerDocType;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiography;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiographyAttachment;
 import org.kuali.kra.proposaldevelopment.dao.AttachmentDao;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService;
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.kim.api.identity.PersonService;
@@ -44,7 +44,7 @@ public class ProposalPersonBiographyServiceImpl implements ProposalPersonBiograp
     
     /**
      * 
-     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#addProposalPersonBiography(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument,
+     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#addProposalPersonBiography(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument,
      *      org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiography)
      */
     public void addProposalPersonBiography(ProposalDevelopmentDocument proposaldevelopmentDocument,
@@ -96,8 +96,8 @@ public class ProposalPersonBiographyServiceImpl implements ProposalPersonBiograp
 
     /**
      * 
-     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#removePersonnelAttachmentForDeletedPerson(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument,
-     *      org.kuali.kra.proposaldevelopment.bo.ProposalPerson)
+     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#removePersonnelAttachmentForDeletedPerson(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument,
+     *      org.kuali.coeus.propdev.impl.person.ProposalPerson)
      */
     public void removePersonnelAttachmentForDeletedPerson(ProposalDevelopmentDocument proposaldevelopmentDocument,
             ProposalPerson person) {
@@ -116,7 +116,7 @@ public class ProposalPersonBiographyServiceImpl implements ProposalPersonBiograp
 
     /**
      * 
-     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#deleteProposalPersonBiography(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument,
+     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#deleteProposalPersonBiography(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument,
      *      int)
      */
     public void deleteProposalPersonBiography(ProposalDevelopmentDocument proposaldevelopmentDocument, int lineToDelete) {
@@ -161,10 +161,7 @@ public class ProposalPersonBiographyServiceImpl implements ProposalPersonBiograp
         this.businessObjectService = businessObjectService;
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.service.ProposalPersonBiographyService#setPersonnelBioTimeStampUser(java.util.List)
-     */
+    @Override
     public void setPersonnelBioTimeStampUser(List<ProposalPersonBiography> proposalPersonBios) {
 
         for (ProposalPersonBiography proposalPersonBiography : proposalPersonBios) {

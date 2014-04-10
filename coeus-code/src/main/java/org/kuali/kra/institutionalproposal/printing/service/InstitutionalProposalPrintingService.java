@@ -15,9 +15,9 @@
  */
 package org.kuali.kra.institutionalproposal.printing.service;
 
+import org.kuali.coeus.common.framework.print.PrintingException;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.printing.PrintingException;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 
 import java.util.Map;
 

@@ -35,7 +35,7 @@ public class EquipmentCapitalizationMinimumLoader implements Serializable {
     
     private static final String CONFIG_PARM_MISSING_MSG = "Configuration parameter %s is missing";
     
-    private static final String CONFIG_PARM_NOT_NUMERIC_MSG = "Configuration parameter %s is not numeric";
+    private static final String CONFIG_PARM_NOT_NUMERIC_MSG = "Configuration parameter %s=%s is not numeric";
     private ParameterService parameterService;
     
     /**
@@ -70,18 +70,12 @@ public class EquipmentCapitalizationMinimumLoader implements Serializable {
         return getParameterService().getParameterValueAsString(AwardDocument.class, parmName);
     }
 
-    /**
-     * 
-     * @return
-     */
+
     protected double getFederalCapitalizationMinimum() {
         return getValueFromParameter(FEDERAL_CAPITALIZATION_MIN_PARM_NAME);
     }
     
-    /**
-     * 
-     * @return
-     */
+
     protected double getInstitutionCapitalizationMinimum() {
         return getValueFromParameter(INSTITUTE_CAPITALIZATION_MIN_PARM_NAME);
     }
@@ -107,7 +101,7 @@ public class EquipmentCapitalizationMinimumLoader implements Serializable {
      */
     void validateParmIsNumber(String parmName, String parmValue) {
         if(!NumberUtils.isNumber(parmValue)) {
-            String msg = String.format(CONFIG_PARM_NOT_NUMERIC_MSG, parmName);
+            String msg = String.format(CONFIG_PARM_NOT_NUMERIC_MSG, parmName, parmValue);
             throw new ConfigurationException(msg);
         }
     }

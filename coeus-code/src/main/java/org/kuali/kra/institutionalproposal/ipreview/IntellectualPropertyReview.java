@@ -18,8 +18,8 @@ package org.kuali.kra.institutionalproposal.ipreview;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.sequence.owner.SequenceOwner;
+import org.kuali.coeus.common.framework.version.VersionStatus;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.institutionalproposal.InstitutionalProposalAssociate;
 import org.kuali.kra.institutionalproposal.ProposalComment;
 import org.kuali.kra.institutionalproposal.ProposalIpReviewJoin;
@@ -414,23 +414,17 @@ public class IntellectualPropertyReview extends InstitutionalProposalAssociate i
         return KcServiceLocator.getService(InstitutionalProposalVersioningService.class);
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#getOwnerSequenceNumber()
-     */
+    @Override
     public Integer getOwnerSequenceNumber() {
         return null;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#incrementSequenceNumber()
-     */
+    @Override
     public void incrementSequenceNumber() {
         this.setSequenceNumber(this.getSequenceNumber() + 1);
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.associate.SequenceAssociate#getSequenceOwner()
-     */
+    @Override
     public IntellectualPropertyReview getSequenceOwner() {
         return this;
     }
@@ -438,16 +432,12 @@ public class IntellectualPropertyReview extends InstitutionalProposalAssociate i
     public void setSequenceOwner(IntellectualPropertyReview newlyVersionedOwner) {
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.ipReviewId = null;
     }
 
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.owner.SequenceOwner#getName()
-     */
+    @Override
     public String getVersionNameField() {
         return "proposalNumber";
     }

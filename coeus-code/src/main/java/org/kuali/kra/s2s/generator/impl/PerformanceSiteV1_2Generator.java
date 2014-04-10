@@ -21,11 +21,11 @@ import gov.grants.apply.forms.performanceSite12V12.SiteLocationDataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.org.Organization;
+import org.kuali.coeus.common.framework.org.OrganizationYnq;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
-import org.kuali.kra.bo.OrganizationYnq;
-import org.kuali.kra.proposaldevelopment.bo.CongressionalDistrict;
-import org.kuali.kra.proposaldevelopment.bo.ProposalSite;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.location.CongressionalDistrict;
+import org.kuali.coeus.propdev.impl.location.ProposalSite;
 import org.kuali.kra.s2s.generator.S2SBaseFormGenerator;
 import org.kuali.kra.s2s.util.S2SConstants;
 

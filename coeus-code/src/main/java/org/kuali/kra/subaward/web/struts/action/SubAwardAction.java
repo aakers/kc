@@ -15,21 +15,25 @@
  */
 package org.kuali.kra.subaward.web.struts.action;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
 import org.kuali.coeus.sys.framework.controller.AuditActionHelper;
 import org.kuali.coeus.sys.framework.controller.AuditActionHelper.ValidationState;
 import org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.kra.subaward.SubAwardForm;
 import org.kuali.kra.subaward.bo.SubAward;
 import org.kuali.kra.subaward.customdata.SubAwardCustomData;
+import org.kuali.kra.subaward.bo.SubAwardTemplateInfo;
 import org.kuali.kra.subaward.document.SubAwardDocument;
 import org.kuali.kra.subaward.notification.SubAwardNotificationContext;
 import org.kuali.kra.subaward.service.SubAwardService;
@@ -37,6 +41,7 @@ import org.kuali.kra.subaward.subawardrule.SubAwardDocumentRule;
 import org.kuali.rice.kew.api.KewApiConstants;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.kns.util.KNSGlobalVariables;
+import org.kuali.rice.kns.util.WebUtils;
 import org.kuali.rice.kns.web.struts.form.KualiDocumentFormBase;
 import org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent;
 import org.kuali.rice.krad.service.KRADServiceLocatorWeb;
@@ -53,7 +58,6 @@ import javax.servlet.http.HttpServletResponse;
 public class SubAwardAction extends KcTransactionalDocumentActionBase {
 
     private transient SubAwardService subAwardService;
-
     /**
      * @see org.kuali.kra.web.struts.action.
      * KraTransactionalDocumentActionBase#execute(
@@ -190,11 +194,12 @@ public class SubAwardAction extends KcTransactionalDocumentActionBase {
 
         SubAward subAward = subAwardForm.getSubAwardDocument().getSubAward();
         checkSubAwardCode(subAward);
+        checkSubAwardTemplateCode(subAward);
         String userId = GlobalVariables.getUserSession().getPrincipalName();
         if (subAward.getSubAwardId() == null) {
             getVersionHistoryService().updateVersionHistory(subAward, VersionStatus.PENDING, userId);
         }
-        if (new SubAwardDocumentRule().processAddSubAwardBusinessRules(subAward)) {
+        if (new SubAwardDocumentRule().processAddSubAwardBusinessRules(subAward) && new SubAwardDocumentRule().processAddSubAwardTemplateInfoBusinessRules(subAward)) {
             ActionForward forward = super.save(mapping, form, request, response);
             getSubAwardService().updateSubAwardSequenceStatus(subAward, VersionStatus.PENDING);
             return forward;
@@ -247,6 +252,20 @@ public class SubAwardAction extends KcTransactionalDocumentActionBase {
 
        return mapping.findForward(Constants.MAPPING_FINANCIAL_PAGE);
    }
+   /**
+   *
+   * This method gets called upon navigation to template information tab.
+* @param mapping the ActionMapping
+    * @param form the ActionForm
+    * @param request the Request
+    * @param response the Response
+   * @return ActionForward
+   */
+   public ActionForward templateInformation(ActionMapping mapping, ActionForm form,
+           HttpServletRequest request, HttpServletResponse response) {
+
+        return mapping.findForward(Constants.MAPPING_TEMPLATE_PAGE);
+    }
    /**
    *
    * This method gets called upon navigation to amountReleased tab.
@@ -366,6 +385,17 @@ protected void checkSubAwardCode(SubAward subAward){
     }
 }
 
+protected void checkSubAwardTemplateCode(SubAward subAward){
+    for (SubAwardTemplateInfo subAwardTemplateInfo : subAward.getSubAwardTemplateInfo()) {
+        if (subAward.getSubAwardCode()!=null && subAwardTemplateInfo.getSubAwardCode() == null) { 
+            String subAwardCode = subAward.getSubAwardCode();
+            Integer subAwardSequenceNumber = subAward.getSequenceNumber();
+            subAwardTemplateInfo.setSubAwardCode(subAwardCode);
+            subAwardTemplateInfo.setSequenceNumber(subAwardSequenceNumber);
+        }
+    }
+}
+
 @Override
 public ActionForward route(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -480,5 +510,12 @@ public ActionForward blanketApprove(ActionMapping mapping,
   protected KcNotificationService getNotificationService() {
       return KcServiceLocator.getService(KcNotificationService.class);
   }
+  /**
+   * 
+   * Handy method to stream the byte array to response object
+   * @param attachmentDataSource
+   * @param response
+   * @throws Exception
+   */
 
 }

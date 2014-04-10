@@ -15,33 +15,29 @@
  */
 package org.kuali.kra.award.budget;
 
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.personnel.BudgetPersonnelCalculatedAmount;
 
-/**
- * This class...
- */
+
 public class AwardBudgetPersonnelCalculatedAmountExt extends BudgetPersonnelCalculatedAmount {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 6923231644959086280L;
-    private BudgetDecimal obligatedAmount;
+    private ScaleTwoDecimal obligatedAmount;
     
 
     /**
      * Gets the obligatedAmount attribute. 
      * @return Returns the obligatedAmount.
      */
-    public BudgetDecimal getObligatedAmount() {
-        return obligatedAmount==null?BudgetDecimal.ZERO:obligatedAmount;
+    public ScaleTwoDecimal getObligatedAmount() {
+        return obligatedAmount==null? ScaleTwoDecimal.ZERO:obligatedAmount;
     }
     /**
      * Sets the obligatedAmount attribute value.
      * @param obligatedAmount The obligatedAmount to set.
      */
-    public void setObligatedAmount(BudgetDecimal obligatedAmount) {
+    public void setObligatedAmount(ScaleTwoDecimal obligatedAmount) {
         this.obligatedAmount = obligatedAmount;
     }
 

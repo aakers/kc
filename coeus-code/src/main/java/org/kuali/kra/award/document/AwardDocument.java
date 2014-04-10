@@ -18,6 +18,9 @@ package org.kuali.kra.award.document;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.custom.DocumentCustomData;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.common.permissions.impl.PermissionableKeys;
 import org.kuali.coeus.sys.framework.auth.perm.Permissionable;
 import org.kuali.coeus.sys.framework.auth.task.Task;
@@ -42,8 +45,6 @@ import org.kuali.kra.award.paymentreports.awardreports.AwardReportTerm;
 import org.kuali.kra.award.paymentreports.awardreports.AwardReportTermRecipient;
 import org.kuali.kra.award.specialreview.AwardSpecialReview;
 import org.kuali.kra.award.specialreview.AwardSpecialReviewExemption;
-import org.kuali.kra.bo.DocumentCustomData;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.budget.document.BudgetDocument;
 import org.kuali.kra.budget.document.BudgetParentDocument;
 import org.kuali.kra.budget.versions.BudgetDocumentVersion;
@@ -56,7 +57,6 @@ import org.kuali.kra.institutionalproposal.service.InstitutionalProposalService;
 import org.kuali.kra.krms.KcKrmsConstants;
 import org.kuali.kra.krms.KrmsRulesContext;
 import org.kuali.kra.krms.service.KcKrmsFactBuilderService;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.config.property.ConfigurationService;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants;
@@ -97,9 +97,7 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
     
     public static final String PLACEHOLDER_DOC_DESCRIPTION = "*****PLACEHOLDER*****";
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 1668673531338660064L;
     
     public static final String DOCUMENT_TYPE_CODE = "AWRD";
@@ -121,9 +119,7 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
     private transient boolean documentSaveAfterVersioning;
     private transient AwardService awardService;
     
-    /**
-     * Constructs a AwardDocument object
-     */
+
     public AwardDocument(){        
         super();        
         init();
@@ -149,10 +145,7 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         awardList.set(0, award);
     }
    
-    /**
-     *
-     * @return
-     */
+
     public List<Award> getAwardList() {
         return awardList;
     }
@@ -169,9 +162,7 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         return DOCUMENT_TYPE_CODE;
     }
     
-    /**
-     * @return
-     */
+
     public boolean isDocumentSaveAfterVersioning() {
         return documentSaveAfterVersioning;
     }
@@ -183,12 +174,8 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         this.documentSaveAfterVersioning = documentSaveAfterVersioning;
     }
     
-    /**
-     * 
-     * @see org.kuali.core.bo.PersistableBusinessObjectBase#buildListOfDeletionAwareLists()
-     */
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public List buildListOfDeletionAwareLists() {
         List managedLists = super.buildListOfDeletionAwareLists();
         
@@ -232,9 +219,6 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         return managedLists;
     }
     
-    /**
-     * @see org.kuali.rice.krad.document.DocumentBase#doRouteStatusChange(org.kuali.rice.kew.framework.postprocessor.DocumentRouteStatusChange)
-     */
     @Override
     public void doRouteStatusChange(DocumentRouteStatusChange statusChangeEvent) {
         super.doRouteStatusChange(statusChangeEvent);
@@ -277,9 +261,6 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         }
     }
     
-    /**
-     * @see org.kuali.coeus.sys.framework.model.KcTransactionalDocumentBase#answerSplitNodeQuestion(java.lang.String)
-     */
     @Override
     public boolean answerSplitNodeQuestion( String routeNodeName ) {
         LOG.debug("Processing answerSplitNodeQuestion:"+routeNodeName );
@@ -364,9 +345,7 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
         managedLists.add(personSplits);
     }
     
-    /**
-     * @return
-     */
+
     protected VersionHistoryService getVersionHistoryService() {
         return KcServiceLocator.getService(VersionHistoryService.class);
     }
@@ -388,13 +367,13 @@ public class AwardDocument extends BudgetParentDocument<Award> implements  Copya
 
     @Override
     public void saveBudgetFinalVersionStatus(BudgetDocument budgetDocument) {
-        // TODO Auto-generated method stub
+
         
     }
 
     @Override
     public void processAfterRetrieveForBudget(BudgetDocument budgetDocument) {
-        // TODO Auto-generated method stub
+
         
     }
 

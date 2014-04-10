@@ -17,9 +17,10 @@ package org.kuali.kra.negotiations.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.kra.award.budget.AwardBudgetService;
 import org.kuali.kra.award.home.Award;
-import org.kuali.kra.bo.versioning.VersionHistory;
 import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.institutionalproposal.proposallog.ProposalLog;
 import org.kuali.kra.institutionalproposal.service.InstitutionalProposalService;
@@ -27,7 +28,6 @@ import org.kuali.kra.kim.service.impl.UnitAdministratorDerivedRoleTypeServiceImp
 import org.kuali.kra.negotiations.bo.*;
 import org.kuali.kra.negotiations.document.NegotiationDocument;
 import org.kuali.kra.negotiations.notifications.NegotiationNotification;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.kra.subaward.bo.SubAward;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.krad.bo.BusinessObject;
@@ -105,10 +105,7 @@ public class NegotiationServiceImpl implements NegotiationService {
         }
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.negotiations.service.NegotiationService#buildNegotiationAssociatedDetailBean(org.kuali.kra.negotiations.bo.Negotiation)
-     */
+    @Override
     public NegotiationAssociatedDetailBean buildNegotiationAssociatedDetailBean(Negotiation negotiation) {
         negotiation.refreshReferenceObject("negotiationAssociationType");
         if (negotiation.getNegotiationAssociationType() != null) {
@@ -233,9 +230,6 @@ public class NegotiationServiceImpl implements NegotiationService {
         return nat.isActive();
     }
 
-    /**
-     * @see org.kuali.kra.negotiations.service.NegotiationService#checkForPropLogPromotion(org.kuali.kra.negotiations.bo.Negotiation)
-     */
     @Override
     public void checkForPropLogPromotion(Negotiation negotiation) {
         if (negotiation.getNegotiationAssociationType() != null 
@@ -256,10 +250,7 @@ public class NegotiationServiceImpl implements NegotiationService {
         
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.negotiations.service.NegotiationService#findAndLoadNegotiationUnassociatedDetail(org.kuali.kra.negotiations.bo.Negotiation, boolean)
-     */
+    @Override
     public NegotiationUnassociatedDetail findAndLoadNegotiationUnassociatedDetail(Negotiation negotiation) {
         if (negotiation.getNegotiationAssociationType() != null 
                 && StringUtils.equalsIgnoreCase(negotiation.getNegotiationAssociationType().getCode(), NegotiationAssociationType.NONE_ASSOCIATION) 
@@ -272,10 +263,7 @@ public class NegotiationServiceImpl implements NegotiationService {
         }
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.negotiations.service.NegotiationService#getNegotiationActivityHistoryLineBeans(java.util.List)
-     */
+    @Override
     public List<NegotiationActivityHistoryLineBean> getNegotiationActivityHistoryLineBeans(List<NegotiationActivity> activities) {
         List<NegotiationActivityHistoryLineBean> beans = new ArrayList<NegotiationActivityHistoryLineBean>();
         for (NegotiationActivity activity : activities) {
@@ -360,10 +348,7 @@ public class NegotiationServiceImpl implements NegotiationService {
         return startOk && endOk;
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.negotiations.service.NegotiationService#promoteProposalLogNegotiation(java.lang.String, java.lang.String)
-     */
+    @Override
     public void promoteProposalLogNegotiation(String proposalLogProposalNumber, String institutionalProposalProposalNumber) {
         Collection<Negotiation> negotiations = getAssociatedNegotiations(proposalLogProposalNumber, NegotiationAssociationType.PROPOSAL_LOG_ASSOCIATION);
         ArrayList<Negotiation> negotiationsToSave = new ArrayList<Negotiation>();

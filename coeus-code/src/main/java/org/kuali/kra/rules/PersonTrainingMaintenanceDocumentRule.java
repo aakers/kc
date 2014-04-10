@@ -16,8 +16,8 @@
 package org.kuali.kra.rules;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.person.attr.PersonTraining;
 import org.kuali.coeus.sys.framework.rule.KcMaintenanceDocumentRuleBase;
-import org.kuali.kra.bo.PersonTraining;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.rice.kns.document.MaintenanceDocument;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -28,19 +28,12 @@ import java.util.Map;
 
 public class PersonTrainingMaintenanceDocumentRule extends KcMaintenanceDocumentRuleBase {
 
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */ 
+    @Override
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         PersonTraining personTraining = (PersonTraining)document.getNoteTarget();
         return validate(personTraining);
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         PersonTraining personTraining = (PersonTraining)document.getNoteTarget();

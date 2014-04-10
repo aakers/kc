@@ -15,7 +15,7 @@
  */
 package org.kuali.kra.iacuc.customdata;
 
-import org.kuali.kra.bo.CustomAttributeDocument;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.kra.iacuc.IacucProtocol;
 import org.kuali.kra.iacuc.IacucProtocolDocument;
 import org.kuali.kra.iacuc.IacucProtocolForm;
@@ -33,9 +33,7 @@ import java.util.Map;
  */
 public class IacucProtocolCustomDataHelper extends ProtocolCustomDataHelperBase<IacucProtocolCustomData> { 
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -5964117436714994219L;
 
     /**

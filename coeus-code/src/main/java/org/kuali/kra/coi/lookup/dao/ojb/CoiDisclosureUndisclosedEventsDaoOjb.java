@@ -16,6 +16,8 @@
 package org.kuali.kra.coi.lookup.dao.ojb;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ojb.broker.query.Criteria;
 import org.apache.ojb.broker.query.QueryByCriteria;
 import org.apache.ojb.broker.query.QueryFactory;
@@ -28,7 +30,7 @@ import org.kuali.kra.iacuc.protocol.funding.IacucProtocolFundingSource;
 import org.kuali.kra.institutionalproposal.contacts.InstitutionalProposalPerson;
 import org.kuali.kra.irb.personnel.ProtocolPerson;
 import org.kuali.kra.irb.protocol.funding.ProtocolFundingSource;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.protocol.protocol.funding.ProtocolFundingSourceBase;
 import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.framework.persistence.ojb.dao.PlatformAwareDaoBaseOjb;
@@ -41,6 +43,8 @@ import java.util.Map;
 
 
 public class CoiDisclosureUndisclosedEventsDaoOjb extends PlatformAwareDaoBaseOjb implements OjbCollectionAware, CoiDisclosureUndisclosedEventsDao {
+
+    private static final Log LOG = LogFactory.getLog(CoiDisclosureUndisclosedEventsDaoOjb.class);
 
     private static final String PERSON_ID = "personId";
     private static final String DEV_PROPOSAL_SAVE_DATE = "developmentProposal.updateTimestamp";
@@ -141,7 +145,7 @@ public class CoiDisclosureUndisclosedEventsDaoOjb extends PlatformAwareDaoBaseOj
                 createDateTo = CoreApiServiceLocator.getDateTimeService().convertToSqlDate(strDateTo);
             }
         }catch(Exception ex) {
-            ex.printStackTrace();
+            LOG.error(ex.getMessage(), ex);
         }
         
         if(!StringUtils.isBlank(personId)) {

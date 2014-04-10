@@ -16,14 +16,14 @@
 package org.kuali.kra.proposaldevelopment.hierarchy.service;
 
 import org.apache.struts.upload.FormFile;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.kra.budget.document.BudgetDocument;
 import org.kuali.kra.budget.personnel.HierarchyPersonnelSummary;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.budget.bo.ProposalDevelopmentBudgetExt;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
-import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarchyErrorDto;
-import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarchyException;
-import org.kuali.kra.proposaldevelopment.hierarchy.bo.HierarchyProposalSummary;
+import org.kuali.coeus.propdev.impl.hierarchy.ProposalHierarchyErrorDto;
+import org.kuali.coeus.propdev.impl.hierarchy.ProposalHierarchyException;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyProposalSummary;
 import org.kuali.rice.kew.api.WorkflowDocument;
 import org.kuali.rice.kew.api.exception.WorkflowException;
 import org.kuali.rice.kew.framework.postprocessor.DocumentRouteStatusChange;
@@ -31,9 +31,7 @@ import org.kuali.rice.kew.framework.postprocessor.DocumentRouteStatusChange;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * This class...
- */
+
 public interface ProposalHierarchyService {
     
     //Constants for Proposal Routing

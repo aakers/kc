@@ -198,7 +198,7 @@ public class KcPerson extends TransientBusinessObjectBase implements Contactable
         return person;
     }
     
-    /** {@inheritDoc} */
+    @Override
     public void refresh() {
         this.refreshEntity();
         this.refreshExtendedAttributes();
@@ -223,7 +223,7 @@ public class KcPerson extends TransientBusinessObjectBase implements Contactable
         }
     }
     
-    /** {@inheritDoc} */
+
     public void prepareForWorkflow() {
         //do nothing
     }
@@ -768,6 +768,10 @@ public class KcPerson extends TransientBusinessObjectBase implements Contactable
     public String getCounty() {
         return this.extendedAttributes.getCounty();
     }
+    
+    public Integer getCitizenshipTypeCode() {
+    	return this.extendedAttributes.getCitizenshipTypeCode();
+    }
 
     /**
      * Gets the value of state.
@@ -843,29 +847,29 @@ public class KcPerson extends TransientBusinessObjectBase implements Contactable
         return Boolean.valueOf(this.entity.isActive());
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getIdentifier() {
         return this.getPersonId();
     }
     
-    /** {@inheritDoc} */
+    @Override
     public Unit getUnit() {
         final String org = this.getOrganizationIdentifier();
         
         return org != null ? (Unit) this.getBusinessObjectService().findByPrimaryKey(Unit.class, Collections.singletonMap("unitNumber", org)) : null; 
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getPhoneNumber() {
         return this.getOfficePhone();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getContactOrganizationName() {
         return this.getUnit() != null ? this.getUnit().getUnitName() : null;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getOrganizationIdentifier() {
         final EntityEmploymentContract emp = this.entity.getPrimaryEmployment();
         if (emp == null) {
@@ -1066,7 +1070,6 @@ public class KcPerson extends TransientBusinessObjectBase implements Contactable
         });
     }
     
-    /** {@inheritDoc} */       
     @Override()
     public String toString(){
         StringBuffer retVal = new StringBuffer(50);

@@ -15,14 +15,14 @@
  */
 package org.kuali.kra.proposaldevelopment.rules;
 
-import org.kuali.kra.proposaldevelopment.rule.event.SaveProposalSitesEvent;
+import org.kuali.coeus.propdev.impl.location.SaveProposalSitesEvent;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
 
 public interface SaveProposalSitesRule extends BusinessRule {
     
     /**
      * A rule that checks all Proposal Sites of a proposal when saving the
-     * <code>{@link org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument}</code>
+     * <code>{@link org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument}</code>
      *
      * @return boolean
      */

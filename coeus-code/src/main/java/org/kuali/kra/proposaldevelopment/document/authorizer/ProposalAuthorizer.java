@@ -16,10 +16,10 @@
 package org.kuali.kra.proposaldevelopment.document.authorizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
 import org.kuali.coeus.sys.framework.auth.task.Task;
 import org.kuali.coeus.sys.framework.auth.task.TaskAuthorizerBase;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.document.authorization.ProposalTask;
 
 /**
@@ -31,9 +31,7 @@ public abstract class ProposalAuthorizer extends TaskAuthorizerBase {
     private KcAuthorizationService kraAuthorizationService;
     private boolean requiresWritableDoc = false;
     
-    /**
-     * @see org.kuali.coeus.sys.framework.auth.task.TaskAuthorizer#isAuthorized(java.lang.String, org.kuali.coeus.sys.framework.auth.task.Task)
-     */
+    @Override
     public final boolean isAuthorized(String userId, Task task) {
         if (isRequiresWritableDoc() && ((ProposalTask)task).getDocument().isViewOnly() && task.getTaskName() != null && !StringUtils.equals(task.getTaskName(),"rejectProposal")) {
             return false;

@@ -17,17 +17,17 @@ package org.kuali.kra.protocol.protocol.funding.impl;
 
 import org.kuali.coeus.common.framework.editable.PersonEditableService;
 import org.kuali.coeus.common.specialreview.impl.service.impl.SpecialReviewServiceImpl;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentUtils;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.bo.SpecialReviewApprovalType;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.RoleConstants;
-import org.kuali.kra.proposaldevelopment.ProposalDevelopmentUtils;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.service.KeyPersonnelService;
-import org.kuali.kra.proposaldevelopment.service.ProposalDevelopmentService;
 import org.kuali.kra.proposaldevelopment.service.impl.KeyPersonnelServiceImpl;
 import org.kuali.kra.proposaldevelopment.specialreview.ProposalSpecialReview;
 import org.kuali.kra.protocol.ProtocolBase;
@@ -155,8 +155,8 @@ public abstract class ProtocolProposalDevelopmentDocumentServiceImplBase impleme
         proposalPerson.setProposalNumber(proposalDocument.getDevelopmentProposal().getProposalNumber());
         proposalPerson.setProposalPersonNumber(new Integer(1));
 
-        proposalPerson.setOptInUnitStatus("Y");
-        proposalPerson.setOptInCertificationStatus("Y");
+        proposalPerson.setOptInUnitStatus(true);
+        proposalPerson.setOptInCertificationStatus(true);
         proposalDocument.getDevelopmentProposal().getProposalPersons().add(proposalPerson);
 
         KeyPersonnelService keyPersonnelService = (KeyPersonnelServiceImpl) KcServiceLocator.getService(KeyPersonnelService.class);
@@ -186,7 +186,7 @@ public abstract class ProtocolProposalDevelopmentDocumentServiceImplBase impleme
 
 
     protected boolean isAuthorizedCreateProposal(ProtocolHelperBase protocolHelper) {
-        // TODO Auto-generated method stub
+
         boolean canCreateProposal = protocolHelper.isCanCreateProposalDevelopment();
         return canCreateProposal;
     }

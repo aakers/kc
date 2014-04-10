@@ -21,7 +21,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ojb.broker.core.proxy.ProxyHelper;
 import org.kuali.coeus.common.framework.version.VersionException;
+import org.kuali.coeus.common.framework.version.VersionStatus;
 import org.kuali.coeus.common.framework.version.VersioningService;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.coeus.sys.framework.util.CollectionUtils;
 import org.kuali.kra.award.AwardAmountInfoService;
@@ -41,14 +44,11 @@ import org.kuali.kra.award.paymentreports.specialapproval.foreigntravel.AwardApp
 import org.kuali.kra.award.specialreview.AwardSpecialReview;
 import org.kuali.kra.award.timeandmoney.AwardDirectFandADistribution;
 import org.kuali.kra.award.version.service.AwardVersionService;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.service.VersionHistoryService;
 import org.kuali.kra.timeandmoney.AwardHierarchyNode;
 import org.kuali.kra.timeandmoney.document.TimeAndMoneyDocument;
 import org.kuali.kra.timeandmoney.transactions.PendingTransaction;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.core.web.format.FormatException;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
@@ -116,9 +116,7 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         return copyAwardAsChildOfAnotherNode(sourceNode, targetParentNode);
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#copyAwardAsNewHierarchy(AwardHierarchy)
-     */
+    @Override
     public AwardHierarchy copyAwardAsNewHierarchy(AwardHierarchy targetNode) {
         String nextAwardNumber = awardNumberService.getNextAwardNumber();
         Award newAward = copyAward(targetNode.getAward(), nextAwardNumber);
@@ -136,9 +134,7 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         return newNode;
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#createBasicHierarchy(java.lang.String)
-     */
+    @Override
     public AwardHierarchy createBasicHierarchy(String awardNumber){
         return new AwardHierarchy(awardNumber, Constants.AWARD_HIERARCHY_DEFAULT_PARENT_OF_ROOT, awardNumber, awardNumber);
     }
@@ -214,16 +210,12 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         return newNode;
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#loadAwardHierarchy(java.lang.String)
-     */
+    @Override
     public AwardHierarchy loadAwardHierarchy(String awardNumber) {
         return awardNumber == null || awardNumber.equals(Award.DEFAULT_AWARD_NUMBER) ? null : loadAwardHierarchyBranch(awardNumber);
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#loadAwardHierarchy(java.lang.String)
-     */
+    @Override
     public AwardHierarchy loadAwardHierarchyBranch(String awardNumber) {
         Map<String, AwardHierarchy> hierarchy = getAwardHierarchy(awardNumber, new ArrayList<String>());
         return hierarchy.get(awardNumber);
@@ -275,16 +267,12 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         return result;
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#getAwardHierarchy(java.lang.String, java.util.List)
-     */
+    @Override
     public Map<String, AwardHierarchy> getAwardHierarchy(String awardNumber, List<String> order) {
         return getAwardHierarchy(loadSingleAwardHierarchyNode(awardNumber), order);
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#loadFullHierarchyFromAnyNode(java.lang.String)
-     */
+    @Override
     public AwardHierarchy loadFullHierarchyFromAnyNode(String awardNumber) {
         List<String> order = new ArrayList<String>();
         Map<String, AwardHierarchy> hierarchy = getAwardHierarchy(awardNumber, order);
@@ -295,9 +283,7 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#loadPlaceholderDocument()
-     */
+    @Override
     public AwardDocument loadPlaceholderDocument() {
         DocumentHeader header = findPlaceholderDocumentHeader();
         try {
@@ -307,9 +293,7 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#persistAwardHierarchy(org.kuali.kra.award.awardhierarchy.AwardHierarchy)
-     */
+    @Override
     public void persistAwardHierarchy(AwardHierarchy node) {
         if(node.isNew()) {            // only save new nodes; no updates or deletes
             legacyDataAdapter.save(node);
@@ -328,9 +312,7 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.awardhierarchy.AwardHierarchyService#persistAwardHierarchy(org.kuali.kra.award.awardhierarchy.AwardHierarchy, boolean)
-     */
+    @Override
     public void persistAwardHierarchy(AwardHierarchy branchNode, boolean recurse) {
         AwardDocument placeholderDocument = loadPlaceholderDocument();
         if(placeholderDocument != null) { // should only be null in unit test because we can't new AwardDocument
@@ -672,12 +654,12 @@ public class AwardHierarchyServiceImpl implements AwardHierarchyService {
             awardHierarchyNode.setObliDistributableAmount(awardAmountInfo.getObliDistributableAmount());
             awardHierarchyNode.setAntDistributableAmount(awardAmountInfo.getAntDistributableAmount());
             // we need to add in the pending transactions that are a result of changing totals in single-node view
-            KualiDecimal obligatedTotal = awardAmountInfo.getAmountObligatedToDate();
-            KualiDecimal obligatedTotalDirect = awardAmountInfo.getObligatedTotalDirect();
-            KualiDecimal obligatedTotalIndirect = awardAmountInfo.getObligatedTotalIndirect();
-            KualiDecimal anticipatedTotalAmount = awardAmountInfo.getAnticipatedTotalAmount();
-            KualiDecimal anticipatedTotalDirect = awardAmountInfo.getAnticipatedTotalDirect();
-            KualiDecimal anticipatedTotalIndirect = awardAmountInfo.getAnticipatedTotalIndirect();
+            ScaleTwoDecimal obligatedTotal = awardAmountInfo.getAmountObligatedToDate();
+            ScaleTwoDecimal obligatedTotalDirect = awardAmountInfo.getObligatedTotalDirect();
+            ScaleTwoDecimal obligatedTotalIndirect = awardAmountInfo.getObligatedTotalIndirect();
+            ScaleTwoDecimal anticipatedTotalAmount = awardAmountInfo.getAnticipatedTotalAmount();
+            ScaleTwoDecimal anticipatedTotalDirect = awardAmountInfo.getAnticipatedTotalDirect();
+            ScaleTwoDecimal anticipatedTotalIndirect = awardAmountInfo.getAnticipatedTotalIndirect();
             for (PendingTransaction pendingTransaction: timeAndMoneyDocument.getPendingTransactions()){
                 if (pendingTransaction.getProcessedFlag() == false && pendingTransaction.isSingleNodeTransaction()) {
                     obligatedTotal = obligatedTotal.add(pendingTransaction.getObligatedAmount());

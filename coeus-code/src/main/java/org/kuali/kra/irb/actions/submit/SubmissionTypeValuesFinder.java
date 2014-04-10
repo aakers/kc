@@ -92,6 +92,16 @@ public class SubmissionTypeValuesFinder extends IrbActionsKeyValuesBase {
             if (displayResubmission(currentStatus)) {
                 types.add(ProtocolSubmissionType.RESUBMISSION);
             }
+            if (displayRequestForSuspension(currentStatus, pd.getProtocol())) {
+                //get all submission types from the table
+                Collection<ProtocolSubmissionType> submissionTypes = this.getKeyValuesService().findAll(ProtocolSubmissionType.class);
+                for (ProtocolSubmissionType submissionType : submissionTypes) {
+                    types.add(submissionType.getSubmissionTypeCode());
+                }
+            }
+            if (displayNotifyIrb(currentStatus, pd.getProtocol())) {
+                types.add(ProtocolSubmissionType.NOTIFY_IRB);
+            }
         }
         return types;
     }
@@ -124,6 +134,11 @@ public class SubmissionTypeValuesFinder extends IrbActionsKeyValuesBase {
         return validateCurrentStatus(currentStatus, validStatuses)  && hasRenewalProtocolNumber(protocol.getProtocolNumber());
     }
     
+    protected boolean displayRequestForSuspension(String currentStatus, Protocol protocol) {
+        String validStatuses[] = {  ProtocolStatus.ACTIVE_OPEN_TO_ENROLLMENT};
+        return validateCurrentStatus(currentStatus, validStatuses) && wasRequestForSuspension(protocol.getProtocolSubmission());
+    }
+    
     private boolean hasAmmendmentProtocolNumber(String protocolNumber) {
         return protocolNumber.contains("A");
     }
@@ -137,11 +152,34 @@ public class SubmissionTypeValuesFinder extends IrbActionsKeyValuesBase {
         return validateCurrentStatus(currentStatus, validStatuses);
     }
     
+    protected boolean displayNotifyIrb(String currentStatus, Protocol protocol) {
+        String validStatuses[] = { ProtocolStatus.ACTIVE_OPEN_TO_ENROLLMENT };
+        String validSumissionStatuses[] = { ProtocolSubmissionStatus.SUBMITTED_TO_COMMITTEE};        
+        String currentSubmissionStatus = protocol.getProtocolSubmission().getSubmissionStatusCode();
+        return validateCurrentStatus(currentStatus, validStatuses)  && validateCurrentSubmissionStatus(currentSubmissionStatus, validSumissionStatuses);
+    }
+    
     private boolean validateCurrentStatus(String currentStatus, String[] validStatuses) {
         for (String status : validStatuses) {
             if (StringUtils.equals(currentStatus, status)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    protected boolean validateCurrentSubmissionStatus(String currentSubmissionStatus, String[] validSubmissionStatuses) {
+        for (String status : validSubmissionStatuses) {
+            if (StringUtils.equals(currentSubmissionStatus, status)) {
+                return true;
+            }
+        }
+        return false;
+    }    
+    
+    private boolean wasRequestForSuspension(ProtocolSubmission protocolSubmission) {
+        if (ProtocolSubmissionType.REQUEST_FOR_SUSPENSION.equals(protocolSubmission.getSubmissionTypeCode())){
+            return true;
         }
         return false;
     }

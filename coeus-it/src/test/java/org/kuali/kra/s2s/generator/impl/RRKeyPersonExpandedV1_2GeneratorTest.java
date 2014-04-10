@@ -17,8 +17,10 @@ package org.kuali.kra.s2s.generator.impl;
 
 import org.kuali.coeus.common.framework.org.Organization;
 import org.kuali.coeus.common.framework.unit.Unit;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.location.ProposalSite;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.s2s.generator.S2STestBase;
 import org.kuali.rice.krad.data.DataObjectService;
 
@@ -61,8 +63,8 @@ public class RRKeyPersonExpandedV1_2GeneratorTest extends
         proposalPerson.setProjectRole("Manager");
 		proposalPerson.setYearGraduated("2006");
 		proposalPerson.setEmailAddress("philip@hotmail.com");
-		proposalPerson.setOptInCertificationStatus("Y");
-		proposalPerson.setOptInUnitStatus("Y");
+		proposalPerson.setOptInCertificationStatus(true);
+		proposalPerson.setOptInUnitStatus(true);
 		proposalPerson.setProposalPersonNumber(1001);
 		proposalPerson.setRolodexId(1);
         proposalPerson.setDevelopmentProposal(document.getDevelopmentProposal());
@@ -141,8 +143,8 @@ public class RRKeyPersonExpandedV1_2GeneratorTest extends
 		keyPerson.setProjectRole("Manager");
         keyPerson.setYearGraduated("2006");
 		keyPerson.setEmailAddress("terry@hotmail.com");
-		keyPerson.setOptInCertificationStatus("Y");
-		keyPerson.setOptInUnitStatus("Y");
+		keyPerson.setOptInCertificationStatus(true);
+		keyPerson.setOptInUnitStatus(true);
 		keyPerson.setProposalPersonNumber(1002);
 		keyPerson.setRolodexId(1);
         keyPerson.setDevelopmentProposal(document.getDevelopmentProposal());

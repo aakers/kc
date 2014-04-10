@@ -17,19 +17,17 @@ package org.kuali.kra.budget.rates;
 
 import org.kuali.coeus.common.framework.unit.Unit;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 public class UnitFormulatedCost extends KcPersistableBusinessObjectBase {
     
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 8388817616860002696L;
     private Long unitFormulatedCostId;
     private String formulatedTypeCode; 
     private String unitNumber; 
-    private BudgetDecimal unitCost; 
+    private ScaleTwoDecimal unitCost;
     
     private Unit unit; 
     private FormulatedType formulatedType; 
@@ -62,11 +60,11 @@ public class UnitFormulatedCost extends KcPersistableBusinessObjectBase {
         this.unitNumber = unitNumber;
     }
 
-    public BudgetDecimal getUnitCost() {
+    public ScaleTwoDecimal getUnitCost() {
         return unitCost;
     }
 
-    public void setUnitCost(BudgetDecimal unitCost) {
+    public void setUnitCost(ScaleTwoDecimal unitCost) {
         this.unitCost = unitCost;
     }
 

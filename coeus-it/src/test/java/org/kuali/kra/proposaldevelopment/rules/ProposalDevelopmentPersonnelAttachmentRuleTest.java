@@ -18,11 +18,11 @@ package org.kuali.kra.proposaldevelopment.rules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.bo.PropPerDocType;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPersonBiography;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.event.AddPersonnelAttachmentEvent;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.ErrorMessage;
@@ -195,10 +195,7 @@ public class ProposalDevelopmentPersonnelAttachmentRuleTest extends ProposalDeve
         return foundDocType;
     }
     
-    /**
-     * This method does what its name says
-     * @return
-     */
+
     private String findOtherDocumentTypeCode() {
         return findDocumentTypeForDescription(ProposalDevelopmentPersonnelAttachmentRule.OTHER_DOCUMENT_TYPE_DESCRIPTION).getDocumentTypeCode();
     }

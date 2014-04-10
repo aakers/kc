@@ -16,10 +16,10 @@
 package org.kuali.kra.maintenance;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttribute;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.bo.CustomAttribute;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.ProposalColumnsToAlter;
+import org.kuali.coeus.propdev.impl.editable.ProposalColumnsToAlter;
 import org.kuali.rice.kns.document.MaintenanceDocument;
 import org.kuali.rice.kns.document.MaintenanceDocumentBase;
 import org.kuali.rice.kns.maintenance.KualiMaintainableImpl;
@@ -30,15 +30,9 @@ import org.kuali.rice.krad.util.GlobalVariables;
 
 import java.util.List;
 
-/**
- * This class...
- */
+
 public class KraMaintainableImpl extends KualiMaintainableImpl {
 
-    /**
-     *
-     * @see org.kuali.core.maintenance.Maintainable#prepareForSave()
-     */
     @Override
     public void prepareForSave() {
         super.prepareForSave();

@@ -16,14 +16,14 @@
 package org.kuali.kra.rules;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.persistence.KcPersistenceStructureService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.bo.ProposalColumnsToAlter;
-import org.kuali.kra.proposaldevelopment.bo.ProposalOverview;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.editable.ProposalColumnsToAlter;
+import org.kuali.coeus.propdev.impl.editable.ProposalOverview;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
 import org.kuali.rice.kns.document.MaintenanceDocument;
 import org.kuali.rice.kns.maintenance.rules.MaintenanceDocumentRuleBase;
@@ -48,25 +48,16 @@ public class ProposalColumnsToAlterMaintenanceDocumentRule extends MaintenanceDo
         validationClassesMap.put("org.kuali.rice.kns.datadictionary.validation.charlevel.NumericValidationPattern", "NUMBER");
     }
  
-    /**
-     * Constructs a ProposalColumnsToAlterMaintenanceDocumentRule.java.
-     */
+
     public ProposalColumnsToAlterMaintenanceDocumentRule() {
         super();
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomRouteDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */ 
+    @Override
     protected boolean processCustomRouteDocumentBusinessRules(MaintenanceDocument document) {
         return checkLookupReturn(document);
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomApproveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */
     @Override
     protected boolean processCustomApproveDocumentBusinessRules(MaintenanceDocument document) {
         return checkLookupReturn(document);
@@ -97,10 +88,7 @@ public class ProposalColumnsToAlterMaintenanceDocumentRule extends MaintenanceDo
         return true;
     }
     
-    /**
-     * 
-     * @see org.kuali.core.maintenance.rules.MaintenanceDocumentRuleBase#processCustomSaveDocumentBusinessRules(org.kuali.core.document.MaintenanceDocument)
-     */ 
+    @Override
     protected boolean processCustomSaveDocumentBusinessRules(MaintenanceDocument document) {
         return verifyProposaEditableColumnsDataType(document);
     }

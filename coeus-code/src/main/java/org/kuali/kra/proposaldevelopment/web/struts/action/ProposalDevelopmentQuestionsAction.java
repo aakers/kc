@@ -20,10 +20,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.framework.module.CoeusSubModule;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentAction;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentForm;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
-import org.kuali.kra.proposaldevelopment.web.struts.form.ProposalDevelopmentForm;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.questionnaire.answer.AnswerHeader;
 import org.kuali.kra.questionnaire.answer.QuestionnaireAnswerService;
 import org.kuali.kra.questionnaire.answer.SaveQuestionnaireAnswerEvent;
@@ -41,10 +42,6 @@ import static org.kuali.kra.infrastructure.Constants.MAPPING_BASIC;
 
 public class ProposalDevelopmentQuestionsAction extends ProposalDevelopmentAction{
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentAction#preSave(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public void preSave(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         super.preSave(mapping, form, request, response);
@@ -64,10 +61,6 @@ public class ProposalDevelopmentQuestionsAction extends ProposalDevelopmentActio
         
     }
     
-    /**
-     * {@inheritDoc}
-     * @see org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentAction#saveOnClose(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     protected ActionForward saveOnClose(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = mapping.findForward(Constants.MAPPING_BASIC);

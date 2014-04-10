@@ -16,14 +16,12 @@
 package org.kuali.kra.award.budget;
 
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.core.CostElement;
 
 public class AwardBudgetPeriodSummaryCalculatedAmount extends KcPersistableBusinessObjectBase {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -8085114536868213976L;
 
     private Long awardBudgetPeriodSummaryCalculatedAmountId;
@@ -36,9 +34,9 @@ public class AwardBudgetPeriodSummaryCalculatedAmount extends KcPersistableBusin
 
     private String rateClassType;
 
-    private BudgetDecimal calculatedCost;
+    private ScaleTwoDecimal calculatedCost;
 
-    private BudgetDecimal calculatedCostSharing;
+    private ScaleTwoDecimal calculatedCostSharing;
 
     private CostElement costElementBO;
 
@@ -82,19 +80,19 @@ public class AwardBudgetPeriodSummaryCalculatedAmount extends KcPersistableBusin
         this.rateClassType = rateClassType;
     }
 
-    public BudgetDecimal getCalculatedCost() {
+    public ScaleTwoDecimal getCalculatedCost() {
         return calculatedCost;
     }
 
-    public void setCalculatedCost(BudgetDecimal calculatedCost) {
+    public void setCalculatedCost(ScaleTwoDecimal calculatedCost) {
         this.calculatedCost = calculatedCost;
     }
 
-    public BudgetDecimal getCalculatedCostSharing() {
+    public ScaleTwoDecimal getCalculatedCostSharing() {
         return calculatedCostSharing;
     }
 
-    public void setCalculatedCostSharing(BudgetDecimal calculatedCostSharing) {
+    public void setCalculatedCostSharing(ScaleTwoDecimal calculatedCostSharing) {
         this.calculatedCostSharing = calculatedCostSharing;
     }
 

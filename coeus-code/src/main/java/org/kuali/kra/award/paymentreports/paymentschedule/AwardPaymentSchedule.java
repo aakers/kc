@@ -20,7 +20,7 @@ import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.AwardAssociate;
 import org.kuali.kra.award.paymentreports.ReportStatus;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -29,18 +29,14 @@ import java.sql.Timestamp;
  * 
  * This class represents the AwardPaymentSchedule business object.
  */
-/**
- * This class...
- */
+
 public class AwardPaymentSchedule extends AwardAssociate {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = 1387310207139506329L;
     private Long awardPaymentScheduleId; 
     private Date dueDate; 
-    private KualiDecimal amount; 
+    private ScaleTwoDecimal amount;
     private Date submitDate; 
     private String submittedBy; 
     private String invoiceNumber; 
@@ -63,10 +59,7 @@ public class AwardPaymentSchedule extends AwardAssociate {
 
     private transient KcPersonService kcPersonService;
     
-    /**
-     * 
-     * Constructs a AwardPaymentSchedule.java.
-     */
+
     public AwardPaymentSchedule() { 
     }
     
@@ -92,18 +85,16 @@ public class AwardPaymentSchedule extends AwardAssociate {
         this.dueDate = dueDate;
     }
 
-    public KualiDecimal getAmount() {
+    public ScaleTwoDecimal getAmount() {
         return amount;
     }
     
-    /**
-     * @see org.kuali.coeus.common.framework.sequence.Sequenceable#resetPersistenceState()
-     */
+    @Override
     public void resetPersistenceState() {
         this.awardPaymentScheduleId = null;
     }
 
-    public void setAmount(KualiDecimal amount) {
+    public void setAmount(ScaleTwoDecimal amount) {
         this.amount = amount;
     }
 
@@ -155,9 +146,6 @@ public class AwardPaymentSchedule extends AwardAssociate {
         this.status = status;
     }
 
-    /**
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int PRIME = 31;
@@ -168,9 +156,6 @@ public class AwardPaymentSchedule extends AwardAssociate {
         return result;
     }
 
-    /**
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj){

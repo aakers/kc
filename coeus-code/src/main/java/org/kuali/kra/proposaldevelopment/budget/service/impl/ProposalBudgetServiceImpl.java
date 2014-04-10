@@ -17,6 +17,7 @@ package org.kuali.kra.proposaldevelopment.budget.service.impl;
 
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.budget.calculator.BudgetCalculationService;
+import org.kuali.kra.budget.calculator.QueryList;
 import org.kuali.kra.budget.core.Budget;
 import org.kuali.kra.budget.core.BudgetParent;
 import org.kuali.kra.budget.core.BudgetService;
@@ -25,6 +26,7 @@ import org.kuali.kra.budget.document.BudgetParentDocument;
 import org.kuali.kra.budget.parameters.BudgetPeriod;
 import org.kuali.kra.budget.versions.AddBudgetVersionEvent;
 import org.kuali.kra.budget.versions.BudgetDocumentVersion;
+import org.kuali.kra.budget.versions.BudgetVersionOverview;
 import org.kuali.kra.budget.versions.BudgetVersionRule;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
@@ -37,6 +39,7 @@ import org.kuali.rice.krad.data.DataObjectService;
 import org.kuali.rice.krad.service.DocumentService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class process requests for ProposalBudget
@@ -85,18 +88,34 @@ public class ProposalBudgetServiceImpl implements ProposalBudgetService {
         parentDocument.refreshBudgetDocumentVersions();
         return budgetDocument;
     }
+
+    @Override
+    public BudgetDocument<DevelopmentProposal> getFinalBudgetVersion(BudgetParentDocument<DevelopmentProposal> parentDocument) throws WorkflowException {
+        BudgetDocument<DevelopmentProposal> budgetDocument = null;
+
+        if (parentDocument.getFinalBudgetVersion() != null) {
+            budgetDocument = (BudgetDocument<DevelopmentProposal>) documentService.getByDocumentHeaderId(parentDocument.getFinalBudgetVersion().getDocumentNumber());
+        } else {
+            final List<BudgetDocumentVersion> budgetVersions = parentDocument.getBudgetDocumentVersions();
+
+            QueryList<BudgetVersionOverview> budgetVersionOverviews = new QueryList<BudgetVersionOverview>();
+            for (BudgetDocumentVersion budgetDocumentVersion : budgetVersions) {
+                budgetVersionOverviews.add(budgetDocumentVersion.getBudgetVersionOverview());
+            }
+            if (!budgetVersionOverviews.isEmpty()) {
+                budgetVersionOverviews.sort("budgetVersionNumber", false);
+                BudgetVersionOverview budgetVersionOverview = budgetVersionOverviews.get(0);
+
+                budgetDocument = (BudgetDocument<DevelopmentProposal>) documentService.getByDocumentHeaderId(budgetVersionOverview.getDocumentNumber());
+            }
+        }
+        return budgetDocument;
+    }
+
     public boolean isRateOverridden(BudgetPeriod budgetPeriod){
         return false;
     }
 
-    /**
-     * This method...
-     * @param budgetDocument
-     * @param isProposalBudget
-     * @param budget
-     * @param budgetParent
-     * @throws WorkflowException
-     */
     protected BudgetDocument<DevelopmentProposal> saveBudgetDocument(BudgetDocument<DevelopmentProposal> budgetDocument) throws WorkflowException {
         budgetDocument = (BudgetDocument<DevelopmentProposal>) documentService.saveDocument(budgetDocument);
         return (BudgetDocument<DevelopmentProposal>) documentService.routeDocument(budgetDocument, "Route to Final", new ArrayList());
@@ -190,10 +209,7 @@ public class ProposalBudgetServiceImpl implements ProposalBudgetService {
         // DO NOTHING
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.budget.core.BudgetCommonService#validateAddingNewBudget(org.kuali.kra.budget.document.BudgetParentDocument)
-     */
+    @Override
     public boolean validateAddingNewBudget(BudgetParentDocument<DevelopmentProposal> parentDocument) {
         return true;
     }

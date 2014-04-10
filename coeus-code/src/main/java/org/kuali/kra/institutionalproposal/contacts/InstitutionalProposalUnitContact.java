@@ -17,7 +17,9 @@ package org.kuali.kra.institutionalproposal.contacts;
 
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.rolodex.nonorg.NonOrganizationalRolodex;
+import org.kuali.coeus.common.framework.unit.UnitContactType;
 import org.kuali.coeus.common.framework.unit.admin.UnitAdministrator;
+import org.kuali.coeus.common.framework.unit.admin.UnitAdministratorType;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.award.home.ContactType;
@@ -29,14 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * This class...
- */
+
 public class InstitutionalProposalUnitContact extends InstitutionalProposalContact {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -4018882949510183728L;
     
     public  static final String OSP_ADMINISTRATOR = "OSP_ADMINISTRATOR";
@@ -47,9 +45,7 @@ public class InstitutionalProposalUnitContact extends InstitutionalProposalConta
     private String unitAdministratorTypeCode;
     
     
-    /**
-     * Constructs a AwardUnitContact.java.
-     */
+
     public InstitutionalProposalUnitContact() {
         super();
     }
@@ -98,17 +94,12 @@ public class InstitutionalProposalUnitContact extends InstitutionalProposalConta
             }
     }
     
-    /**
-     * This method...
-     * @return
-     */
+
     protected BusinessObjectService getBusinessObjectService() {
         return (BusinessObjectService) KcServiceLocator.getService("businessObjectService");
     }
     
-    /**
-     * @return
-     */
+
     public UnitContactType getUnitContactType() {
         return unitContactType;
     }
@@ -167,16 +158,10 @@ public class InstitutionalProposalUnitContact extends InstitutionalProposalConta
         this.unitContactType = contactType;
     }
 
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContact#getContactRoleType()
-     */
     @Override
     protected Class<?extends ContactRole> getContactRoleType() {
         return getUnitContactType() == UnitContactType.ADMINISTRATOR ? UnitAdministratorType.class : ContactType.class;
     }
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContact#getContactRoleTypeIdentifier()
-     */
     @Override
     protected String getContactRoleTypeIdentifier() {
         return  getUnitContactType() == UnitContactType.ADMINISTRATOR ? UNIT_ADMINISTRATOR_TYPE_CODE : CONTACT_TYPE_CODE;

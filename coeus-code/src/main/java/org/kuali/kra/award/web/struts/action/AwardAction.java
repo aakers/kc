@@ -23,6 +23,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
+import org.kuali.coeus.common.framework.version.VersionStatus;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
 import org.kuali.coeus.sys.framework.auth.UnitAuthorizationService;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
@@ -60,8 +64,6 @@ import org.kuali.kra.award.service.AwardReportsService;
 import org.kuali.kra.award.service.AwardSponsorTermService;
 import org.kuali.kra.award.timeandmoney.AwardDirectFandADistribution;
 import org.kuali.kra.award.version.service.AwardVersionService;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.bo.versioning.VersionStatus;
 import org.kuali.kra.budget.web.struts.action.BudgetParentActionBase;
 import org.kuali.kra.award.infrastructure.AwardPermissionConstants;
 import org.kuali.kra.award.infrastructure.AwardRoleConstants;
@@ -81,7 +83,7 @@ import org.kuali.rice.core.api.CoreApiServiceLocator;
 import org.kuali.rice.core.api.config.property.ConfigurationService;
 import org.kuali.rice.core.api.util.ConcreteKeyValue;
 import org.kuali.rice.core.api.util.KeyValue;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.coreservice.framework.parameter.ParameterConstants;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kew.api.KewApiConstants;
@@ -212,9 +214,6 @@ public class AwardAction extends BudgetParentActionBase {
     protected void cleanUpUserSession() {
         GlobalVariables.getUserSession().removeObject(GlobalVariables.getUserSession().getKualiSessionId() + Constants.TIME_AND_MONEY_DOCUMENT_STRING_FOR_SESSION);
     }
-    /**
-     * @see org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         AwardForm awardForm = (AwardForm)form;
@@ -375,9 +374,6 @@ public class AwardAction extends BudgetParentActionBase {
         return routeToHoldingPage(basicForward, forward, holdingPageForward, returnLocation);
     }
     
-    /**
-     * @see org.kuali.coeus.sys.framework.controller.KcTransactionalDocumentActionBase#save(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
     @Override
     public ActionForward save(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         // TODO: JF Are all of these saves in a single transaction? 
@@ -656,14 +652,7 @@ public class AwardAction extends BudgetParentActionBase {
         
         return mapping.findForward(Constants.MAPPING_AWARD_HOME_PAGE);
     }
-    
-    
 
-    /**
-     * This method...
-     * @param awardDocument
-     * @param awardForm
-     */
     @SuppressWarnings("unchecked")
     public void setBooleanAwardInMultipleNodeHierarchyOnForm (Award award) {
         Map<String, Object> fieldValues = new HashMap<String, Object>();
@@ -888,10 +877,10 @@ public class AwardAction extends BudgetParentActionBase {
         } else {
             transactionDetail.setAnticipatedAmount(rootAward.getAnticipatedTotal());
             transactionDetail.setAnticipatedDirectAmount(rootAward.getAnticipatedTotal());
-            transactionDetail.setAnticipatedIndirectAmount(new KualiDecimal(0));
+            transactionDetail.setAnticipatedIndirectAmount(new ScaleTwoDecimal(0));
             transactionDetail.setObligatedAmount(rootAward.getObligatedTotal());
             transactionDetail.setObligatedDirectAmount(rootAward.getObligatedTotal());
-            transactionDetail.setObligatedIndirectAmount(new KualiDecimal(0));
+            transactionDetail.setObligatedIndirectAmount(new ScaleTwoDecimal(0));
         }
         transactionDetail.setAwardNumber(rootAward.getAwardNumber());
         transactionDetail.setTransactionId(new Long(0));
@@ -1317,10 +1306,7 @@ public class AwardAction extends BudgetParentActionBase {
         handlePlaceHolderDocument(awardForm, retrievedDocument);        
     }
     
-    /**
-     *
-     * @return
-     */
+
     @Override
     protected DocumentService getDocumentService() {
         return KRADServiceLocatorWeb.getDocumentService();
@@ -1516,7 +1502,7 @@ public class AwardAction extends BudgetParentActionBase {
         retval.setQuestionId(questionId);
         retval.setQuestionType(CONFIRMATION_QUESTION);
 
-        String questionText = this.COMFIRMATION_PARAM_STRING;
+        String questionText = COMFIRMATION_PARAM_STRING;
         for (int i = 0; i < params.length; i++) {
             questionText = replace(questionText, "{" + i + "}", params[i]);
         }
@@ -1642,9 +1628,7 @@ public class AwardAction extends BudgetParentActionBase {
         return KcServiceLocator.getService(AwardLockService.class);
     }
 
-    /**
-     * @return
-     */
+
     protected VersionHistoryService getVersionHistoryService() {
         return KcServiceLocator.getService(VersionHistoryService.class);
     }
@@ -1892,7 +1876,7 @@ public class AwardAction extends BudgetParentActionBase {
                             KRADConstants.CONFIRMATION_QUESTION, methodToCall, "");
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage(), e);
                 }
             } else if(DOCUMENT_ROUTE_QUESTION.equals(question) && ConfirmationQuestion.YES.equals(buttonClicked)) {   
                 awardForm.setSelectedActionRequests((List<String>)GlobalVariables.getUserSession().retrieveObject(SUPER_USER_ACTION_REQUESTS));

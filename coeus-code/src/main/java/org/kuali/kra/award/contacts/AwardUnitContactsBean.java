@@ -17,13 +17,13 @@ package org.kuali.kra.award.contacts;
 
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.unit.UnitContactType;
 import org.kuali.coeus.common.framework.unit.UnitService;
 import org.kuali.coeus.common.framework.unit.admin.UnitAdministrator;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.award.AwardForm;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.award.home.ContactType;
-import org.kuali.kra.bo.UnitContactType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +83,7 @@ public class AwardUnitContactsBean extends AwardContactsBean {
         return (KcPersonService) KcServiceLocator.getService(KcPersonService.class);
     }
 
-    /**
-     * @return
-     */
+
     public AwardUnitContact getUnitContact() {
        return (AwardUnitContact) newAwardContact; 
     }
@@ -119,17 +117,11 @@ public class AwardUnitContactsBean extends AwardContactsBean {
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContactsBean#getContactRoleType()
-     */
     @Override
     protected Class<? extends ContactRole> getContactRoleType() {
         return ContactType.class;
     }
 
-    /**
-     * @see org.kuali.kra.award.contacts.AwardContactsBean#init()
-     */
     @Override
     protected AwardContact createNewContact() {
         return new AwardUnitContact(UnitContactType.CONTACT);

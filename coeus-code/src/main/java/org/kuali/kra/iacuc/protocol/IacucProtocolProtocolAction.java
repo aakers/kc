@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.notification.impl.service.KcNotificationService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.bo.FundingSourceType;
 import org.kuali.kra.bo.ResearchAreaBase;
@@ -37,7 +38,6 @@ import org.kuali.kra.iacuc.protocol.research.IacucProtocolResearchAreaService;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.protocol.ProtocolDocumentBase;
 import org.kuali.kra.protocol.ProtocolEventBase;
 import org.kuali.kra.protocol.ProtocolFormBase;
@@ -543,7 +543,7 @@ public class IacucProtocolProtocolAction extends IacucProtocolAction {
     @Override
     public void postSave(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        // TODO Auto-generated method stub
+
         super.postSave(mapping, form, request, response);     
         fundingSourceNotification(form);
 

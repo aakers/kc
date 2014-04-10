@@ -20,7 +20,7 @@ import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.coi.notesandattachments.attachments.FinancialEntityAttachment;
 import org.kuali.kra.coi.notesandattachments.attachments.FinancialEntityAttachmentSummary;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.lookup.keyvalue.ArgValueLookupValuesFinder;
+import org.kuali.coeus.common.impl.custom.arg.ArgValueLookupValuesFinder;
 import org.kuali.rice.core.api.util.KeyValue;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.util.ObjectUtils;
@@ -31,9 +31,7 @@ import java.util.*;
 
 public class FinancialEntitySummaryHelper implements Serializable {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -6990736543009439730L;
    
     private int currentVersionNumber;

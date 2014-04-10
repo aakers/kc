@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.institutionalproposal.customdata;
 
-import org.kuali.kra.bo.CustomAttributeDocument;
-import org.kuali.kra.common.customattributes.CustomDataHelperBase;
+import org.kuali.coeus.common.framework.custom.CustomDataHelperBase;
+import org.kuali.coeus.common.framework.custom.attr.CustomAttributeDocument;
 import org.kuali.kra.institutionalproposal.web.struts.form.InstitutionalProposalForm;
 import org.kuali.rice.kew.api.WorkflowDocument;
 import org.kuali.rice.krad.document.Document;
@@ -26,9 +26,7 @@ import java.util.Map;
 
 public class InstitutionalProposalCustomDataFormHelper extends CustomDataHelperBase<InstitutionalProposalCustomData> {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -716264183914346452L;
     
     private InstitutionalProposalForm institutionalProposalForm;
@@ -44,7 +42,7 @@ public class InstitutionalProposalCustomDataFormHelper extends CustomDataHelperB
 
     @Override
     public boolean canModifyCustomData() {
-        // TODO Auto-generated method stub
+
         return false;
     }
 

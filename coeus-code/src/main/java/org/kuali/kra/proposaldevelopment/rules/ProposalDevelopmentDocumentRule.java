@@ -17,6 +17,27 @@ package org.kuali.kra.proposaldevelopment.rules;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.audit.KcDocumentBaseAuditRule;
+import org.kuali.coeus.propdev.impl.abstrct.AbstractsRule;
+import org.kuali.coeus.propdev.impl.abstrct.ProposalAbstract;
+import org.kuali.coeus.propdev.impl.copy.CopyProposalRule;
+import org.kuali.coeus.propdev.impl.copy.ProposalCopyCriteria;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentService;
+import org.kuali.coeus.propdev.impl.docperm.ProposalUser;
+import org.kuali.coeus.propdev.impl.docperm.ProposalUserEditRoles;
+import org.kuali.coeus.propdev.impl.docperm.ProposalUserRoles;
+import org.kuali.coeus.propdev.impl.editable.ProposalDataOverrideEvent;
+import org.kuali.coeus.propdev.impl.editable.ProposalDataOverrideRule;
+import org.kuali.coeus.propdev.impl.editable.ProposalDevelopmentDataOverrideRule;
+import org.kuali.coeus.propdev.impl.keyword.PropScienceKeyword;
+import org.kuali.coeus.propdev.impl.location.*;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.resubmit.ResubmissionPromptRule;
+import org.kuali.coeus.propdev.impl.resubmit.ResubmissionRuleEvent;
+import org.kuali.coeus.propdev.impl.ynq.ProposalDevelopmentYnqAuditRule;
+import org.kuali.coeus.propdev.impl.ynq.ProposalYnq;
+import org.kuali.coeus.common.framework.sponsor.SponsorService;
+import org.kuali.coeus.common.framework.ynq.YnqGroupName;
 import org.kuali.coeus.sys.framework.rule.KcBusinessRule;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBaseExtension;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
@@ -26,18 +47,13 @@ import org.kuali.kra.budget.document.BudgetParentDocumentRule;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
-import org.kuali.kra.proposaldevelopment.hierarchy.ProposalHierarchyException;
+import org.kuali.coeus.propdev.impl.hierarchy.ProposalHierarchyException;
 import org.kuali.kra.proposaldevelopment.rule.*;
 import org.kuali.kra.proposaldevelopment.rule.event.*;
-import org.kuali.kra.proposaldevelopment.service.ProposalDevelopmentService;
-import org.kuali.kra.proposaldevelopment.web.bean.ProposalUserRoles;
-import org.kuali.kra.service.SponsorService;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
 import org.kuali.rice.kns.service.DataDictionaryService;
 import org.kuali.rice.krad.bo.BusinessObject;
 import org.kuali.rice.krad.document.Document;
-import org.kuali.rice.krad.rules.rule.DocumentAuditRule;
 import org.kuali.rice.krad.rules.rule.event.ApproveDocumentEvent;
 import org.kuali.rice.krad.util.GlobalVariables;
 import org.kuali.rice.krad.util.MessageMap;
@@ -362,7 +378,7 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
             for ( PropScienceKeyword keyword2 : keywords ) {
                 if ( keyword == keyword2 ) {
                     continue;
-                } else if ( StringUtils.equalsIgnoreCase(keyword.getScienceKeywordCode(), keyword2.getScienceKeywordCode()) ) {
+                } else if ( StringUtils.equalsIgnoreCase(keyword.getScienceKeyword().getScienceKeywordCode(), keyword2.getScienceKeyword().getScienceKeywordCode()) ) {
                     GlobalVariables.getMessageMap().putError("propScienceKeyword", "error.proposalKeywords.duplicate");
                    
                     return false;
@@ -420,9 +436,7 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
         return retval;
     }
 
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.AbstractsRule#processAddAbstractBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, org.kuali.kra.proposaldevelopment.bo.ProposalAbstract)
-     */
+    @Override
     public boolean processAddAbstractBusinessRules(ProposalDevelopmentDocument document, ProposalAbstract proposalAbstract) {
         return new ProposalDevelopmentAbstractsRule().processAddAbstractBusinessRules(document, proposalAbstract);
     }
@@ -435,17 +449,12 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
         return new ProposalDevelopmentNarrativeRule().processReplaceNarrativeBusinessRules(replaceNarrativeEvent);
     }
 
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.CopyProposalRule#processCopyProposalBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, org.kuali.kra.proposaldevelopment.bo.ProposalCopyCriteria)
-     */
+    @Override
     public boolean processCopyProposalBusinessRules(ProposalDevelopmentDocument document, ProposalCopyCriteria criteria) {
         return new ProposalDevelopmentCopyRule().processCopyProposalBusinessRules(document, criteria);
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.rule.AddInstituteAttachmentRule#processAddInstituteAttachmentBusinessRules(org.kuali.kra.proposaldevelopment.rule.event.AddInstituteAttachmentEvent)
-     */
+    @Override
     public boolean processAddInstituteAttachmentBusinessRules(AddInstituteAttachmentEvent addInstituteAttachmentEvent) {
         return new ProposalDevelopmentInstituteAttachmentRule().processAddInstituteAttachmentBusinessRules(addInstituteAttachmentEvent);    
     }
@@ -474,10 +483,7 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
         return new ProposalDevelopmentKeyPersonsRule().processChangeKeyPersonBusinessRules(proposalPerson, source,index);
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.rule.AddProposalSiteRule#processAddProposalSiteBusinessRules(org.kuali.kra.proposaldevelopment.rule.event.AddProposalSiteEvent)
-     */
+    @Override
     public boolean processAddProposalSiteBusinessRules(AddProposalSiteEvent addProposalLocationEvent) {
         return new ProposalDevelopmentProposalLocationRule().processAddProposalSiteBusinessRules(addProposalLocationEvent);    
     }
@@ -486,23 +492,17 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
         return new ProposalDevelopmentProposalLocationRule().processSaveProposalSiteBusinessRules(saveProposalSitesEvent);    
     }
     
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.PermissionsRule#processAddProposalUserBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, java.util.List, org.kuali.kra.proposaldevelopment.bo.ProposalUser)
-     */
+    @Override
     public boolean processAddProposalUserBusinessRules(ProposalDevelopmentDocument document,List<ProposalUserRoles> list, ProposalUser proposalUser) {
         return new ProposalDevelopmentPermissionsRule().processAddProposalUserBusinessRules(document, list, proposalUser);
     }
     
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.PermissionsRule#processDeleteProposalUserBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, java.util.List, int)
-     */
+    @Override
     public boolean processDeleteProposalUserBusinessRules(ProposalDevelopmentDocument document,List<ProposalUserRoles> list, int index) {
         return new ProposalDevelopmentPermissionsRule().processDeleteProposalUserBusinessRules(document, list, index);
     }
     
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.PermissionsRule#processEditProposalUserRolesBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, java.util.List, org.kuali.kra.proposaldevelopment.bo.ProposalUserEditRoles)
-     */
+    @Override
     public boolean processEditProposalUserRolesBusinessRules(ProposalDevelopmentDocument document, List<ProposalUserRoles> list, ProposalUserEditRoles editRoles) {
         return new ProposalDevelopmentPermissionsRule().processEditProposalUserRolesBusinessRules(document, list, editRoles);
     }
@@ -511,16 +511,14 @@ public class ProposalDevelopmentDocumentRule extends BudgetParentDocumentRule im
     /**
      * Delegate to {@link org.kuali.kra.proposaldevelopment.rules.ProposalDevelopmentKeyPersonsRule#processSaveKeyPersonBusinessRules(ProposalDevelopmentDocument)
      * 
-     * @see org.kuali.kra.proposaldevelopment.rule.SaveKeyPersonRule#processSaveKeyPersonBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
+     * @see org.kuali.kra.proposaldevelopment.rule.SaveKeyPersonRule#processSaveKeyPersonBusinessRules(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument)
      */
     public boolean processSaveKeyPersonBusinessRules(ProposalDevelopmentDocument document) {
         LOG.info("In processSaveKeyPersonBusinessRules()");
         return new ProposalDevelopmentKeyPersonsRule().processCustomSaveDocumentBusinessRules(document);
     }
 
-    /**
-     * @see org.kuali.kra.proposaldevelopment.rule.NewNarrativeUserRightsRule#processNewNarrativeUserRightsBusinessRules(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, java.util.List, int)
-     */
+    @Override
     public boolean processNewNarrativeUserRightsBusinessRules(ProposalDevelopmentDocument document,
             List<NarrativeUserRights> newNarrativeUserRights, int narrativeIndex) {
         return new ProposalDevelopmentNarrativeRule().processNewNarrativeUserRightsBusinessRules(document, newNarrativeUserRights, narrativeIndex);

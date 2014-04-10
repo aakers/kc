@@ -21,17 +21,21 @@ import org.apache.commons.logging.LogFactory;
 import org.kuali.coeus.common.framework.person.KcPersonService;
 import org.kuali.coeus.common.framework.rolodex.Rolodex;
 import org.kuali.coeus.common.framework.unit.Unit;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonComparator;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonDegree;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonUnit;
 import org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase;
 import org.kuali.kra.bo.DegreeType;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.proposaldevelopment.bo.*;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.AddKeyPersonRule;
 import org.kuali.kra.proposaldevelopment.rule.CalculateCreditSplitRule;
 import org.kuali.kra.proposaldevelopment.rule.ChangeKeyPersonRule;
 import org.kuali.kra.proposaldevelopment.service.KeyPersonnelService;
 import org.kuali.rice.core.api.util.RiceKeyConstants;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.bo.BusinessObject;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.util.GlobalVariables;
@@ -48,7 +52,7 @@ import static org.kuali.kra.infrastructure.KeyConstants.*;
 
 /**
  * Implementation of business rules required for the Key Persons Page of the 
- * <code>{@link org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument}</code>.
+ * <code>{@link org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument}</code>.
  *
  * @see org.kuali.rice.kns.rules.BusinessRule
  * @author $Author: cdenne $
@@ -61,9 +65,6 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
     private static final int FIELD_ERA_COMMONS_USERNAME_MIN_LENGTH = 6;
     private KcPersonService kcPersonService;
     
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcTransactionalDocumentRuleBase#processCustomSaveDocumentBusinessRules(Document)
-     */
     @Override
     protected boolean processCustomSaveDocumentBusinessRules(Document document) {
         return processSaveKeyPersonBusinessRules((ProposalDevelopmentDocument) document);
@@ -71,7 +72,7 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
 
     /**
      * Rule invoked upon saving persons to a 
-     * <code>{@link org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument}</code>
+     * <code>{@link org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument}</code>
      *
      * @param document ProposalDevelopmentDocument being saved
      * @return boolean
@@ -90,11 +91,9 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
                  
             }
             
-            if (person.getProposalPersonExtendedAttributes() != null 
-                    && person.getProposalPersonExtendedAttributes().getCitizenshipTypeCode() == null) {
+            if (person.getCitizenshipTypeCode() == null) {
                 LOG.debug("error.noCitizenshipType");
-                //document.developmentProposalList[0].proposalPersons[0].proposalPersonExtendedAttributes.citizenshipTypeCode
-                reportError("document.developmentProposalList[0].proposalPersons[" + personIndex + "].proposalPersonExtendedAttributes.citizenshipTypeCode", ERROR_MISSING_CITIZENSHIP_TYPE);
+                reportError("document.developmentProposalList[0].proposalPersons[" + personIndex + "].citizenshipTypeCode", ERROR_MISSING_CITIZENSHIP_TYPE);
                 retval = false;
             }
             
@@ -117,7 +116,7 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
                             ERROR_ONE_UNIT, person.getFullName());            
                 retval = false;
             }
-            if(isKeyPerson(person) && (person.getOptInUnitStatus().equals("Y")) && (person.getUnits()!= null) && (person.getUnits().size() ==0)){
+            if(isKeyPerson(person) && person.getOptInUnitStatus() && (person.getUnits()!= null) && (person.getUnits().size() ==0)){
                 reportError("newProposalPersonUnit[" + personIndex + "].unitNumber",
                             ERROR_ONE_UNIT, person.getFullName());  
                 retval = false;
@@ -128,8 +127,8 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
                 //retval = false;
             }
             
-            if(person.getPercentageEffort()!= null && (person.getPercentageEffort().isLessThan(new KualiDecimal(0)) 
-                    || person.getPercentageEffort().isGreaterThan(new KualiDecimal(100)))){
+            if(person.getPercentageEffort()!= null && (person.getPercentageEffort().isLessThan(new ScaleTwoDecimal(0))
+                    || person.getPercentageEffort().isGreaterThan(new ScaleTwoDecimal(100)))){
                 GlobalVariables.getMessageMap().putError("document.developmentProposalList[0].proposalPersons[" + personIndex + "].percentageEffort", ERROR_PERCENTAGE,
                         new String[] {"Percentage Effort" });
                 //retval = false;
@@ -252,23 +251,14 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
         return retval;
     }
 
-    /**
-     * @see KeyPersonnelService#isPrincipalInvestigator(ProposalPerson)
-     */
     private boolean isPrincipalInvestigator(ProposalPerson person) {
         return getKeyPersonnelService().isPrincipalInvestigator(person);
     }
 
-    /**
-     * @see KeyPersonnelService#isPrincipalInvestigator(ProposalPerson)
-     */
     private boolean hasPrincipalInvestigator(ProposalDevelopmentDocument document) {
         return getKeyPersonnelService().hasPrincipalInvestigator(document);
     }
 
-    /**
-     * @see KeyPersonnelService#isCoInvestigator(ProposalPerson)
-     */
     private boolean isCoInvestigator(ProposalPerson person){
         return getKeyPersonnelService().isCoInvestigator(person);
     }
@@ -277,9 +267,6 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
         return isCoInvestigator(person) || isPrincipalInvestigator(person);
     }
     
-    /**
-     * @see KeyPersonnelService#isCoInvestigator(ProposalPerson)
-     */
     private boolean isKeyPerson(ProposalPerson person){
         return getKeyPersonnelService().isKeyPerson(person);
     }
@@ -307,7 +294,7 @@ public class ProposalDevelopmentKeyPersonsRule extends KcTransactionalDocumentRu
     /**
      * Either adding a degree or unit can trigger this rule to be validated
      * 
-     * @see org.kuali.kra.proposaldevelopment.rule.ChangeKeyPersonRule#processChangeKeyPersonBusinessRules(org.kuali.kra.proposaldevelopment.bo.ProposalPerson, org.kuali.rice.krad.bo.BusinessObject)
+     * @see org.kuali.kra.proposaldevelopment.rule.ChangeKeyPersonRule#processChangeKeyPersonBusinessRules(org.kuali.coeus.propdev.impl.person.ProposalPerson, org.kuali.rice.krad.bo.BusinessObject)
      * @see org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentKeyPersonnelAction#insertDegree(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      * @see org.kuali.kra.proposaldevelopment.web.struts.action.ProposalDevelopmentKeyPersonnelAction#insertUnit(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */

@@ -22,7 +22,7 @@ import org.kuali.kra.SkipVersioning;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.proposaldevelopment.bo.CreditSplit;
 import org.kuali.kra.proposaldevelopment.bo.InvestigatorCreditType;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.krad.service.BusinessObjectService;
 
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public final class AwardPersonUnitCreditSplit extends KcPersistableBusinessObjec
     @SkipVersioning
     private AwardPersonUnit awardPersonUnit;
 
-    private KualiDecimal credit = new KualiDecimal(0);
+    private ScaleTwoDecimal credit = new ScaleTwoDecimal(0);
 
     private InvestigatorCreditType investigatorCreditType;
 
@@ -55,18 +55,11 @@ public final class AwardPersonUnitCreditSplit extends KcPersistableBusinessObjec
 
     private String invCreditTypeCode;
 
-    /**
-     * Default Constructor
-     */
+
     public AwardPersonUnitCreditSplit() {
     }
 
-    /**
-     * Convenience Constructor
-     * @param investigatorCreditType
-     * @param credit
-     */
-    AwardPersonUnitCreditSplit(InvestigatorCreditType investigatorCreditType, KualiDecimal credit) {
+    AwardPersonUnitCreditSplit(InvestigatorCreditType investigatorCreditType, ScaleTwoDecimal credit) {
         setInvestigatorCreditType(investigatorCreditType);
         setCredit(credit);
     }
@@ -160,7 +153,7 @@ public final class AwardPersonUnitCreditSplit extends KcPersistableBusinessObjec
      *
      * @return the value of credit
      */
-    public KualiDecimal getCredit() {
+    public ScaleTwoDecimal getCredit() {
         return this.credit;
     }
 
@@ -169,13 +162,11 @@ public final class AwardPersonUnitCreditSplit extends KcPersistableBusinessObjec
      *
      * @param argCredit Value to assign to this.credit
      */
-    public void setCredit(KualiDecimal credit) {
-        this.credit = credit != null ? credit : new KualiDecimal(0);
+    public void setCredit(ScaleTwoDecimal credit) {
+        this.credit = credit != null ? credit : new ScaleTwoDecimal(0);
     }
 
-    /**
-     * @return
-     */
+
     protected BusinessObjectService getBusinessObjectService() {
         return KcServiceLocator.getService(BusinessObjectService.class);
     }

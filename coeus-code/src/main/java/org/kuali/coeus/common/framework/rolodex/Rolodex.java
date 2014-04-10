@@ -30,6 +30,7 @@ import java.io.Serializable;
 @Table(name = "ROLODEX")
 public class Rolodex extends KcPersistableBusinessObjectBase implements Contactable, MutableInactivatable {
 
+
     private static final long serialVersionUID = -278526635683595863L;
 
     @Id
@@ -95,9 +96,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     @Convert(converter = BooleanYNConverter.class)
     private Boolean sponsorAddressFlag;
 
-    @Transient
-    private String isSponsorAddress = "N";
-
     @Column(name = "SPONSOR_CODE")
     private String sponsorCode;
 
@@ -117,10 +115,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     @ManyToOne(targetEntity = Sponsor.class, cascade = { CascadeType.REFRESH })
     @JoinColumn(name = "SPONSOR_CODE", referencedColumnName = "SPONSOR_CODE", insertable = false, updatable = false)
     private Sponsor sponsor;
-
-    @ManyToOne(targetEntity = Organization.class, cascade = { CascadeType.REFRESH })
-    @JoinColumn(name = "ORGANIZATION", referencedColumnName = "ORGANIZATION_ID", insertable = false, updatable = false)
-    private Organization organizations;
 
     @Column(name = "CREATE_USER")
     private String createUser;
@@ -153,18 +147,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     }
 
     public String getAddressLine1() {
-        if (this.isSponsorAddress != null) {
-            if (this.isSponsorAddress.equalsIgnoreCase("Y")) {
-                if (sponsor != null && sponsor.getPostalCode() != null) {
-                    return sponsor.getPostalCode();
-                }
-            }
-            if (this.isSponsorAddress.equalsIgnoreCase("N")) {
-                if (organizations != null && organizations.getAddress() != null) {
-                    return organizations.getAddress();
-                }
-            }
-        }
         return addressLine1;
     }
 
@@ -173,18 +155,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     }
 
     public String getAddressLine2() {
-        if (this.isSponsorAddress != null) {
-            if (this.isSponsorAddress.equalsIgnoreCase("Y")) {
-                if (sponsor != null && sponsor.getState() != null) {
-                    return sponsor.getState();
-                }
-            }
-            if (this.isSponsorAddress.equalsIgnoreCase("N")) {
-                if (organizations != null) {
-                    return null;
-                }
-            }
-        }
         return addressLine2;
     }
 
@@ -193,18 +163,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     }
 
     public String getAddressLine3() {
-        if (this.isSponsorAddress != null) {
-            if (this.isSponsorAddress.equalsIgnoreCase("Y")) {
-                if (sponsor != null && sponsor.getCountryCode() != null) {
-                    return sponsor.getCountryCode();
-                }
-            }
-            if (this.isSponsorAddress.equalsIgnoreCase("N")) {
-                if (organizations != null) {
-                    return null;
-                }
-            }
-        }
         return addressLine3;
     }
 
@@ -293,18 +251,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
     }
 
     public String getOrganization() {
-        if (this.isSponsorAddress != null) {
-            if (this.isSponsorAddress.equalsIgnoreCase("Y")) {
-                if (sponsor != null && sponsor.getSponsorName() != null) {
-                    return sponsor.getSponsorName();
-                }
-            }
-            if (this.isSponsorAddress.equalsIgnoreCase("N")) {
-                if (organizations != null && organizations.getOrganizationName() != null) {
-                    return organizations.getOrganizationName();
-                }
-            }
-        }
         return organization;
     }
 
@@ -350,22 +296,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
 
     public void setSponsorAddressFlag(Boolean sponsorAddressFlag) {
         this.sponsorAddressFlag = sponsorAddressFlag;
-    }
-
-    /**
-     * Gets the isSponsorAddress attribute. 
-     * @return Returns the isSponsorAddress.
-     */
-    public String getIsSponsorAddress() {
-        return isSponsorAddress;
-    }
-
-    /**
-     * Sets the isSponsorAddress attribute value.
-     * @param isSponsorAddress The isSponsorAddress to set.
-     */
-    public void setIsSponsorAddress(String isSponsorAddress) {
-        this.isSponsorAddress = isSponsorAddress;
     }
 
     public String getSponsorCode() {
@@ -436,14 +366,6 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
         return sponsor;
     }
 
-    public void setOrganizations(Organization organizations) {
-        this.organizations = organizations;
-    }
-
-    public Organization getOrganizations() {
-        return organizations;
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -482,17 +404,17 @@ public class Rolodex extends KcPersistableBusinessObjectBase implements Contacta
         return name.length() > 0 ? name.toString() : null;
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getContactOrganizationName() {
         return this.getUnit().getUnitName();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public Serializable getIdentifier() {
         return this.getRolodexId();
     }
 
-    /** {@inheritDoc} */
+    @Override
     public String getOrganizationIdentifier() {
         return this.getUnit().getOrganizationId();
     }

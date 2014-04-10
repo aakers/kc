@@ -15,8 +15,8 @@
  */
 package org.kuali.kra.budget.distributionincome;
 
-import org.kuali.kra.budget.BudgetDecimal;
-import org.kuali.kra.proposaldevelopment.hierarchy.HierarchyMaintainable;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
+import org.kuali.coeus.propdev.impl.hierarchy.HierarchyMaintainable;
 
 /**
  * 
@@ -27,18 +27,15 @@ public class BudgetCostShare extends BudgetDistributionAndIncomeComponent implem
     public static final String DOCUMENT_COMPONENT_ID_KEY = "BUDGET_COST_SHARE_KEY";
     
     private Integer projectPeriod;
-    private BudgetDecimal shareAmount;
-    private BudgetDecimal sharePercentage;
+    private ScaleTwoDecimal shareAmount;
+    private ScaleTwoDecimal sharePercentage;
     private String sourceAccount;
     private String sourceUnit;
 
     private String hierarchyProposalNumber;
     private boolean hiddenInHierarchy;
 
-    /**
-     * 
-     * Constructs a BudgetCostShare.java.
-     */
+
     public BudgetCostShare() {
         super();
     }
@@ -51,7 +48,7 @@ public class BudgetCostShare extends BudgetDistributionAndIncomeComponent implem
      * @param sharePercentage
      * @param sourceAccount
      */
-    public BudgetCostShare(Integer projectPeriod, BudgetDecimal shareAmount, BudgetDecimal sharePercentage, String sourceAccount) {
+    public BudgetCostShare(Integer projectPeriod, ScaleTwoDecimal shareAmount, ScaleTwoDecimal sharePercentage, String sourceAccount) {
         this();
         this.projectPeriod = projectPeriod;
         this.sharePercentage = sharePercentage;
@@ -59,10 +56,6 @@ public class BudgetCostShare extends BudgetDistributionAndIncomeComponent implem
         this.sourceAccount = sourceAccount;
     }
 
-    /**
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -93,56 +86,29 @@ public class BudgetCostShare extends BudgetDistributionAndIncomeComponent implem
         return true;
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.budget.distributionincome.BudgetDistributionAndIncomeComponent#getDocumentComponentIdKey()
-     */
+    @Override
     public String getDocumentComponentIdKey() {
         return DOCUMENT_COMPONENT_ID_KEY;
     }
-    
-    /**
-     * 
-     * This method...
-     * @return
-     */
+
     public Integer getProjectPeriod() {
         return projectPeriod;
     }
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
-    public BudgetDecimal getShareAmount() {
-         return BudgetDecimal.returnZeroIfNull(shareAmount);
+    public ScaleTwoDecimal getShareAmount() {
+         return ScaleTwoDecimal.returnZeroIfNull(shareAmount);
     }
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
-    public BudgetDecimal getSharePercentage() {
-        return BudgetDecimal.returnZeroIfNull(sharePercentage);
+    public ScaleTwoDecimal getSharePercentage() {
+        return ScaleTwoDecimal.returnZeroIfNull(sharePercentage);
     }
 
-    /**
-     * 
-     * This method...
-     * @return
-     */
     public String getSourceAccount() {
         return sourceAccount;
     }
     
     
 
-    /**
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -153,38 +119,18 @@ public class BudgetCostShare extends BudgetDistributionAndIncomeComponent implem
         return result;
     }
 
-    /**
-     * 
-     * This method...
-     * @param projectPeriod
-     */
     public void setProjectPeriod(Integer projectPeriod) {
         this.projectPeriod = projectPeriod;
     }
 
-    /**
-     * 
-     * This method...
-     * @param shareAmount
-     */
-    public void setShareAmount(BudgetDecimal shareAmount) {
+    public void setShareAmount(ScaleTwoDecimal shareAmount) {
         this.shareAmount = shareAmount;
     }
 
-    /**
-     * 
-     * This method...
-     * @param sharePercentage
-     */
-    public void setSharePercentage(BudgetDecimal sharePercentage) {
+    public void setSharePercentage(ScaleTwoDecimal sharePercentage) {
         this.sharePercentage = sharePercentage;
     }
 
-    /**
-     * 
-     * This method...
-     * @param sourceAcocunt
-     */
     public void setSourceAccount(String sourceAcocunt) {
         this.sourceAccount = sourceAcocunt;
     }

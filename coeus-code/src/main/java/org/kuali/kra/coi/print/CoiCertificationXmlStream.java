@@ -15,9 +15,13 @@
  */
 package org.kuali.kra.coi.print;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.common.framework.print.PrintingException;
+import org.kuali.coeus.common.framework.print.stream.xml.XmlStream;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.coi.CoiDiscDetail;
@@ -25,7 +29,6 @@ import org.kuali.kra.coi.CoiDisclProject;
 import org.kuali.kra.coi.CoiDisclosure;
 import org.kuali.kra.coi.notesandattachments.attachments.CoiDisclosureAttachment;
 import org.kuali.kra.coi.notesandattachments.notes.CoiDisclosureNotepad;
-import org.kuali.kra.printing.PrintingException;
 import org.kuali.kra.printing.schema.ApprovedDisclosureDocument;
 import org.kuali.kra.printing.schema.ApprovedDisclosureDocument.ApprovedDisclosure;
 import org.kuali.kra.printing.schema.CoiDisclosureDetailsDocument.CoiDisclosureDetails;
@@ -33,7 +36,6 @@ import org.kuali.kra.printing.schema.DisclosureDocumentsDocument.DisclosureDocum
 import org.kuali.kra.printing.schema.DisclosureNotesDocument.DisclosureNotes;
 import org.kuali.kra.printing.schema.DisclosureProjectsDocument.DisclosureProjects;
 import org.kuali.kra.printing.schema.PersonDocument;
-import org.kuali.kra.printing.xmlstream.XmlStream;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.krad.service.BusinessObjectService;
 import org.kuali.rice.krad.service.DocumentService;
@@ -41,6 +43,8 @@ import org.kuali.rice.krad.service.DocumentService;
 import java.util.*;
 
 public class CoiCertificationXmlStream implements XmlStream {
+
+    private static final Log LOG = LogFactory.getLog(CoiCertificationXmlStream.class);
 
     private DateTimeService dateTimeService;
     private BusinessObjectService businessObjectService;
@@ -63,8 +67,7 @@ public class CoiCertificationXmlStream implements XmlStream {
         try {
 			approvedDisclosureDoc.setApprovedDisclosure(getDisclosureData(disclosure,reportParameters));
 		} catch (PrintingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		}
         Map<String, XmlObject> xmlObjectList = new LinkedHashMap<String, XmlObject>();
         Map<String, XmlObject> map = new HashMap<String,XmlObject>();

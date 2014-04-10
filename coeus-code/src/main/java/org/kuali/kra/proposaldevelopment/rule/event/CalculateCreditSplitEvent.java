@@ -18,9 +18,9 @@ package org.kuali.kra.proposaldevelopment.rule.event;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBase;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.person.ProposalPerson;
 import org.kuali.kra.proposaldevelopment.rule.CalculateCreditSplitRule;
 import org.kuali.rice.krad.document.Document;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
@@ -73,12 +73,10 @@ public class CalculateCreditSplitEvent  extends KcDocumentEventBase {
     
     
     public Class getRuleInterfaceClass() {
-        // TODO Auto-generated method stub
+
         return CalculateCreditSplitRule.class;
     }
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         LOG.info("Calling processCalculateCreditSplitBusinessRules on " + rule.getClass().getSimpleName());
         return ((CalculateCreditSplitRule) rule).processCalculateCreditSplitBusinessRules((ProposalDevelopmentDocument) getDocument());

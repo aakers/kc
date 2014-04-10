@@ -18,6 +18,7 @@ package org.kuali.kra.proposaldevelopment.service.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.framework.person.KcPerson;
 import org.kuali.coeus.common.framework.person.KcPersonService;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
 import org.kuali.coeus.sys.framework.auth.SystemAuthorizationService;
 import org.kuali.coeus.sys.framework.auth.perm.KcAuthorizationService;
 import org.kuali.coeus.sys.framework.model.KcPersistableBusinessObjectBase;
@@ -30,10 +31,9 @@ import org.kuali.kra.proposaldevelopment.bo.Narrative;
 import org.kuali.kra.proposaldevelopment.bo.NarrativeAttachment;
 import org.kuali.kra.proposaldevelopment.bo.NarrativeUserRights;
 import org.kuali.kra.proposaldevelopment.dao.AttachmentDao;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.service.NarrativeAuthZService;
 import org.kuali.kra.proposaldevelopment.service.NarrativeService;
-import org.kuali.kra.proposaldevelopment.service.ProposalPersonService;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonService;
 import org.kuali.rice.core.api.datetime.DateTimeService;
 import org.kuali.rice.kim.api.identity.Person;
 import org.kuali.rice.kim.api.identity.PersonService;
@@ -252,7 +252,7 @@ public class NarrativeServiceImpl implements NarrativeService {
 
     /**
      * Method to populate personname for all user who have narrative rights
-     * @see org.kuali.kra.proposaldevelopment.service.NarrativeService#populatePersonNameForNarrativeUserRights(org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument, org.kuali.kra.proposaldevelopment.bo.Narrative)
+     * @see org.kuali.kra.proposaldevelopment.service.NarrativeService#populatePersonNameForNarrativeUserRights(org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument, org.kuali.kra.proposaldevelopment.bo.Narrative)
      */
     public void populatePersonNameForNarrativeUserRights(ProposalDevelopmentDocument proposaldevelopmentDocument,Narrative narrative) {
 //        populateNarrativeUserRights(proposaldevelopmentDocument,narrative);
@@ -357,9 +357,7 @@ public class NarrativeServiceImpl implements NarrativeService {
 //        return !(Constants.INSTITUTE_NARRATIVE_TYPE_GROUP_CODE.equals(narrative.getNarrativeType().getNarrativeTypeGroup()));
 //    }
 
-    /**
-     * @see org.kuali.kra.proposaldevelopment.service.NarrativeService#deletePerson(java.lang.String, org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument)
-     */
+    @Override
     public void deletePerson(String userId, ProposalDevelopmentDocument proposalDevelopmentDocument) {
         List<Narrative> narratives = proposalDevelopmentDocument.getDevelopmentProposal().getNarratives();
         for (Narrative narrative : narratives) {
@@ -444,10 +442,7 @@ public class NarrativeServiceImpl implements NarrativeService {
         this.attachmentDao = attachmentDao;
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.proposaldevelopment.service.NarrativeService#setNarrativeTimeStampUser(java.util.List)
-     */
+    @Override
     public void setNarrativeTimeStampUser(List<Narrative> narratives) {
 
         for (Narrative narrative : narratives) {

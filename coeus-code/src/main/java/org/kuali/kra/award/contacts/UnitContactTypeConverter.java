@@ -17,8 +17,8 @@ package org.kuali.kra.award.contacts;
 
 import org.apache.ojb.broker.accesslayer.conversions.ConversionException;
 import org.apache.ojb.broker.accesslayer.conversions.FieldConversion;
-import org.kuali.kra.bo.UnitAdministratorType;
-import org.kuali.kra.bo.UnitContactType;
+import org.kuali.coeus.common.framework.unit.UnitContactType;
+import org.kuali.coeus.common.framework.unit.admin.UnitAdministratorType;
 
 /**
  * This class converts the UnitType type
@@ -30,9 +30,7 @@ public class UnitContactTypeConverter implements FieldConversion {
     private static final String SQL_TYPE_ERROR = "SQL type not a String";
     
 
-    /**
-     * @see org.apache.ojb.broker.accesslayer.conversions.FieldConversion#javaToSql(java.lang.Object)
-     */
+    @Override
     public Object javaToSql(Object source) {
         if(!(source instanceof UnitContactType || source instanceof UnitAdministratorType)) {
             throw new ConversionException(JAVA_TYPE_ERROR);
@@ -41,9 +39,7 @@ public class UnitContactTypeConverter implements FieldConversion {
         return ((UnitContactType)source).name();
     }
 
-    /**
-     * @see org.apache.ojb.broker.accesslayer.conversions.FieldConversion#sqlToJava(java.lang.Object)
-     */
+    @Override
     public Object sqlToJava(Object source) {
         if(!(source instanceof String)) {
             throw new ConversionException(SQL_TYPE_ERROR);

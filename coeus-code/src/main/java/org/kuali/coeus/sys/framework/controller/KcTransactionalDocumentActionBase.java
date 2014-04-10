@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionRedirect;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentForm;
 import org.kuali.coeus.sys.framework.auth.KcTransactionalDocumentAuthorizerBase;
 import org.kuali.coeus.sys.framework.auth.task.Task;
 import org.kuali.coeus.sys.framework.auth.task.TaskAuthorizationService;
@@ -44,8 +45,7 @@ import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.institutionalproposal.web.struts.form.InstitutionalProposalForm;
 import org.kuali.kra.irb.ProtocolForm;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
-import org.kuali.kra.proposaldevelopment.web.struts.form.ProposalDevelopmentForm;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.subaward.SubAwardForm;
 import org.kuali.kra.timeandmoney.TimeAndMoneyForm;
 import org.kuali.kra.web.struts.form.CustomDataDocumentForm;
@@ -359,10 +359,6 @@ public class KcTransactionalDocumentActionBase extends KualiTransactionalDocumen
         return mapping.findForward(Constants.MAPPING_BASIC);
     }
 
-    /** 
-     * {@inheritDoc}
-     * @see org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase#generatePessimisticLockMessage(org.kuali.rice.krad.document.authorization.PessimisticLock)
-     */
     @Override
     protected String generatePessimisticLockMessage(PessimisticLock lock) {
         String descriptor = (lock.getLockDescriptor() != null) ? lock.getLockDescriptor() : "";
@@ -451,9 +447,6 @@ public class KcTransactionalDocumentActionBase extends KualiTransactionalDocumen
         }  
     }
     
-    /**
-     * @see org.kuali.rice.kns.web.struts.action.KualiTransactionalDocumentActionBase#populateAuthorizationFields(org.kuali.rice.kns.web.struts.form.KualiDocumentFormBase)
-     */
     @SuppressWarnings("unchecked")
     @Override
     protected void populateAuthorizationFields(KualiDocumentFormBase formBase) {

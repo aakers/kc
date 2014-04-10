@@ -15,17 +15,15 @@
  */
 package org.kuali.kra.budget.nonpersonnel;
 
-import org.kuali.kra.budget.BudgetDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.budget.deepcopy.DeepCopyIgnore;
 
 public class BudgetRateAndBase extends AbstractBudgetRateAndBase {
 
-    /**
-     * Comment for <code>serialVersionUID</code>
-     */
+
     private static final long serialVersionUID = -6003003851261499575L;
 
-    private BudgetDecimal baseCost;
+    private ScaleTwoDecimal baseCost;
 
     @DeepCopyIgnore
     private Long budgetRateAndBaseId;
@@ -34,11 +32,11 @@ public class BudgetRateAndBase extends AbstractBudgetRateAndBase {
 
     private Long budgetLineItemId;
 
-    public BudgetDecimal getBaseCost() {
+    public ScaleTwoDecimal getBaseCost() {
         return baseCost;
     }
 
-    public void setBaseCost(BudgetDecimal baseCost) {
+    public void setBaseCost(ScaleTwoDecimal baseCost) {
         this.baseCost = baseCost;
     }
 

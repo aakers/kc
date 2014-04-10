@@ -18,6 +18,11 @@ package org.kuali.kra.award.budget;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.kuali.coeus.common.framework.version.history.VersionHistory;
+import org.kuali.coeus.common.framework.version.history.VersionHistoryService;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.kra.award.budget.calculator.AwardBudgetCalculationService;
 import org.kuali.kra.award.budget.document.AwardBudgetDocument;
 import org.kuali.kra.award.budget.document.AwardBudgetDocumentVersion;
@@ -26,8 +31,6 @@ import org.kuali.kra.award.document.AwardDocument;
 import org.kuali.kra.award.home.Award;
 import org.kuali.kra.award.home.AwardService;
 import org.kuali.kra.award.home.fundingproposal.AwardFundingProposal;
-import org.kuali.kra.bo.versioning.VersionHistory;
-import org.kuali.kra.budget.BudgetDecimal;
 import org.kuali.kra.budget.calculator.BudgetCalculationService;
 import org.kuali.kra.budget.calculator.QueryList;
 import org.kuali.kra.budget.calculator.RateClassType;
@@ -54,8 +57,7 @@ import org.kuali.kra.institutionalproposal.home.InstitutionalProposal;
 import org.kuali.kra.institutionalproposal.proposaladmindetails.ProposalAdminDetails;
 import org.kuali.kra.proposaldevelopment.bo.DevelopmentProposal;
 import org.kuali.kra.proposaldevelopment.budget.bo.ProposalDevelopmentBudgetExt;
-import org.kuali.kra.service.VersionHistoryService;
-import org.kuali.rice.core.api.util.type.KualiDecimal;
+import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.rice.coreservice.framework.parameter.ParameterService;
 import org.kuali.rice.kew.api.WorkflowDocument;
 import org.kuali.rice.kew.api.exception.WorkflowException;
@@ -72,7 +74,7 @@ import java.util.*;
  * This class is to process all basic services required for AwardBudget
  */
 public class AwardBudgetServiceImpl implements AwardBudgetService {
-
+    private static final Log LOG = LogFactory.getLog(AwardBudgetServiceImpl.class);
     private final static String BUDGET_VERSION_ERROR_PREFIX = "document.parentDocument.budgetDocumentVersion";
     
     private ParameterService parameterService;
@@ -85,17 +87,13 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
     private VersionHistoryService versionHistoryService;
     private AwardService awardService;
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#post(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public void post(AwardBudgetDocument awardBudgetDocument) {
         processStatusChange(awardBudgetDocument, KeyConstants.AWARD_BUDGET_STATUS_POSTED);
         saveDocument(awardBudgetDocument);
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#post(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public void toggleStatus(AwardBudgetDocument awardBudgetDocument) {
         String currentStatusCode = awardBudgetDocument.getAwardBudget().getAwardBudgetStatusCode();
         if (currentStatusCode.equals(getParameterValue(KeyConstants.AWARD_BUDGET_STATUS_TO_BE_POSTED))) {
@@ -107,21 +105,15 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         saveDocument(awardBudgetDocument);
     }
 
-    /**
-     * This method...
-     * @param awardBudgetDocument
-     */
     protected void saveDocument(AwardBudgetDocument awardBudgetDocument) {
         try {
             getDocumentService().saveDocument(awardBudgetDocument);
         }catch (WorkflowException e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#processApproval(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public void processApproval(AwardBudgetDocument awardBudgetDocument) {
         WorkflowDocument workFlowDocument = getWorkflowDocument(awardBudgetDocument);
         if(workFlowDocument.isFinal()){
@@ -130,16 +122,12 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         saveDocument(awardBudgetDocument);
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#processDisapproval(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public void processDisapproval(AwardBudgetDocument awardBudgetDocument) {
         processStatusChange(awardBudgetDocument, KeyConstants.AWARD_BUDGET_STATUS_REJECTED);
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#processSubmision(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public void processSubmision(AwardBudgetDocument awardBudgetDocument) {
         processStatusChange(awardBudgetDocument, KeyConstants.AWARD_BUDGET_STATUS_SUBMITTED);
     }
@@ -162,9 +150,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return budgetStatus.getDescription();
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#rebudget(org.kuali.kra.award.budget.document.AwardBudgetDocument)
-     */
+    @Override
     public AwardBudgetDocument rebudget(AwardDocument awardDocument,String documentDescription) throws WorkflowException{
         AwardBudgetDocument rebudgetDocument = createNewBudgetDocument(documentDescription, awardDocument, true);
         return rebudgetDocument;
@@ -235,15 +221,12 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
      * Sets the documentService attribute value.
      * @param documentService The documentService to set.
      */
-    public void setDocumentService(DocumentService documentservice) {
-        this.documentService = documentservice;
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 
 
-    /**
-     * 
-     * @see org.kuali.kra.budget.core.BudgetCommonService#getNewBudgetVersion(org.kuali.kra.budget.document.BudgetParentDocument, java.lang.String)
-     */
+    @Override
     public BudgetDocument<Award> getNewBudgetVersion(BudgetParentDocument<Award> parentBudgetDocument, String documentDescription)
     throws WorkflowException {
         
@@ -257,13 +240,6 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return awardBudgetDocument;
     }
 
-    /**
-     * This method...
-     * @param documentDescription
-     * @param parentDocument
-     * @return
-     * @throws WorkflowException
-     */
     protected AwardBudgetDocument createNewBudgetDocument(String documentDescription, AwardDocument parentDocument,boolean rebudget)
             throws WorkflowException {
         boolean success = new AwardBudgetVersionRule().processAddBudgetVersion(
@@ -275,7 +251,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         Integer budgetVersionNumber = parentDocument.getNextBudgetVersionNumber();
         AwardBudgetDocument awardBudgetDocument;
         if (isPostedBudgetExist(parentDocument)) {
-            BudgetDecimal obligatedChangeAmount = getTotalCostLimit(parentDocument);
+            ScaleTwoDecimal obligatedChangeAmount = getTotalCostLimit(parentDocument);
             AwardBudgetExt previousPostedBudget = getLatestPostedBudget(parentDocument);
             BudgetDocument<Award> postedBudgetDocument = (AwardBudgetDocument) previousPostedBudget.getBudgetDocument();
             awardBudgetDocument =  (AwardBudgetDocument) copyBudgetVersion(postedBudgetDocument);
@@ -317,13 +293,9 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         awardBudget.setRateClassTypesReloaded(true);
         setBudgetLimits(awardBudgetDocument, parentDocument);
         if (isPostedBudgetExist(parentDocument)) {
-            if (awardBudget.getTotalCostLimit().equals(BudgetDecimal.ZERO)) {
+            if (awardBudget.getTotalCostLimit().equals(ScaleTwoDecimal.ZERO)) {
                 rebudget = true;
             }
-//            else{
-//                Budget budget = awardBudgetDocument.getBudget();
-//                budget.getBudgetPeriods().clear();
-//            }
         }
         recalculateBudget(awardBudgetDocument.getBudget());
         saveBudgetDocument(awardBudgetDocument,rebudget);
@@ -332,19 +304,11 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
 
         return awardBudgetDocument;
     }
-    
-    /**
-     * This method...
-     * @return
-     */
+
     private String getBudgetParameterValue(String parameter) {
         return parameterService.getParameterValueAsString(BudgetDocument.class, parameter);
     }
 
-    /**
-     * This method...
-     * @return
-     */
     private String getAwardParameterValue(String parameter) {
         return parameterService.getParameterValueAsString(AwardBudgetDocument.class, parameter);
     }
@@ -352,14 +316,14 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
     public void setBudgetLimits(AwardBudgetDocument awardBudgetDocument, AwardDocument parentDocument) {
         AwardBudgetExt awardBudget = awardBudgetDocument.getAwardBudget();
         awardBudget.setTotalCostLimit(getTotalCostLimit(parentDocument));
-        awardBudget.setObligatedTotal(new BudgetDecimal(parentDocument.getAward().getBudgetTotalCostLimit().bigDecimalValue()));
+        awardBudget.setObligatedTotal(new ScaleTwoDecimal(parentDocument.getAward().getBudgetTotalCostLimit().bigDecimalValue()));
         awardBudget.getAwardBudgetLimits().clear();
         for (AwardBudgetLimit limit : parentDocument.getAward().getAwardBudgetLimits()) {
             awardBudget.getAwardBudgetLimits().add(new AwardBudgetLimit(limit));
         }
     }
     
-    protected void copyObligatedAmountToLineItems(AwardBudgetDocument awardBudgetDocument,BudgetDecimal obligatedChangeAmount) {
+    protected void copyObligatedAmountToLineItems(AwardBudgetDocument awardBudgetDocument,ScaleTwoDecimal obligatedChangeAmount) {
         AwardBudgetExt newAwardBudgetFromPosted = awardBudgetDocument.getAwardBudget();
         List<BudgetPeriod> awardBudgetPeriods = newAwardBudgetFromPosted.getBudgetPeriods();
         for (BudgetPeriod budgetPeriod : awardBudgetPeriods) {
@@ -376,17 +340,17 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
                                 awardBudgetPersonnelCalculatedAmountExt.getObligatedAmount().add(
                                         awardBudgetPersonnelCalculatedAmountExt.getCalculatedCost().add(
                                                 awardBudgetPersonnelCalculatedAmountExt.getCalculatedCostSharing())));
-                        awardBudgetPersonnelCalculatedAmountExt.setCalculatedCost(BudgetDecimal.ZERO);
-                        awardBudgetPersonnelCalculatedAmountExt.setCalculatedCostSharing(BudgetDecimal.ZERO);
+                        awardBudgetPersonnelCalculatedAmountExt.setCalculatedCost(ScaleTwoDecimal.ZERO);
+                        awardBudgetPersonnelCalculatedAmountExt.setCalculatedCostSharing(ScaleTwoDecimal.ZERO);
                     }
                     awardBudgetPersonnelDetails.setObligatedAmount(
                          awardBudgetPersonnelDetails.getObligatedAmount().add(
                             awardBudgetPersonnelDetails.getSalaryRequested().add(
                                     awardBudgetPersonnelDetails.getCostSharingAmount())));
-                    awardBudgetPersonnelDetails.setPercentCharged(BudgetDecimal.ZERO);
-                    awardBudgetPersonnelDetails.setPercentEffort(BudgetDecimal.ZERO);
-                    awardBudgetPersonnelDetails.setSalaryRequested(BudgetDecimal.ZERO);
-                    awardBudgetPersonnelDetails.setCostSharingAmount(BudgetDecimal.ZERO);
+                    awardBudgetPersonnelDetails.setPercentCharged(ScaleTwoDecimal.ZERO);
+                    awardBudgetPersonnelDetails.setPercentEffort(ScaleTwoDecimal.ZERO);
+                    awardBudgetPersonnelDetails.setSalaryRequested(ScaleTwoDecimal.ZERO);
+                    awardBudgetPersonnelDetails.setCostSharingAmount(ScaleTwoDecimal.ZERO);
                 }
                 List<AwardBudgetLineItemCalculatedAmountExt> calcAmounts = budgetLineItem.getBudgetCalculatedAmounts();
                 for (AwardBudgetLineItemCalculatedAmountExt budgetLineItemCalculatedAmount : calcAmounts) {
@@ -395,20 +359,20 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
                             budgetLineItemCalculatedAmount.getObligatedAmount().add(
                             budgetLineItemCalculatedAmount.getCalculatedCost().add(
                                     budgetLineItemCalculatedAmount.getCalculatedCostSharing())));
-                    budgetLineItemCalculatedAmount.setCalculatedCost(BudgetDecimal.ZERO);
-                    budgetLineItemCalculatedAmount.setCalculatedCostSharing(BudgetDecimal.ZERO);
+                    budgetLineItemCalculatedAmount.setCalculatedCost(ScaleTwoDecimal.ZERO);
+                    budgetLineItemCalculatedAmount.setCalculatedCostSharing(ScaleTwoDecimal.ZERO);
                 }
                 awardBudgetLineItem.setObligatedAmount(
                         awardBudgetLineItem.getObligatedAmount().add(
                         awardBudgetLineItem.getLineItemCost().add(
                                 awardBudgetLineItem.getCostSharingAmount())));
-                awardBudgetLineItem.setLineItemCost(BudgetDecimal.ZERO);
-                awardBudgetLineItem.setCostSharingAmount(BudgetDecimal.ZERO);
+                awardBudgetLineItem.setLineItemCost(ScaleTwoDecimal.ZERO);
+                awardBudgetLineItem.setCostSharingAmount(ScaleTwoDecimal.ZERO);
             }
             awardBudgetPeriod.setObligatedAmount(awardBudgetPeriod.getObligatedAmount().add(awardBudgetPeriod.getTotalCost()));
-            awardBudgetPeriod.setTotalCost(BudgetDecimal.ZERO);
-            awardBudgetPeriod.setTotalDirectCost(BudgetDecimal.ZERO);
-            awardBudgetPeriod.setTotalIndirectCost(BudgetDecimal.ZERO);
+            awardBudgetPeriod.setTotalCost(ScaleTwoDecimal.ZERO);
+            awardBudgetPeriod.setTotalDirectCost(ScaleTwoDecimal.ZERO);
+            awardBudgetPeriod.setTotalIndirectCost(ScaleTwoDecimal.ZERO);
             awardBudgetPeriod.setTotalCostLimit(obligatedChangeAmount);
         }
 //        getBudgetSummaryService().calculateBudget(newAwardBudgetFromPosted);
@@ -432,24 +396,21 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
                 postedBudget = awardBudgetDocument.getAwardBudget();
             }
             catch (WorkflowException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error(e.getMessage(), e);
             }
         }
         return postedBudget;
     }
 
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#getTotalCostLimit(org.kuali.kra.award.document.AwardDocument)
-     */
-    public BudgetDecimal getTotalCostLimit(AwardDocument awardDocument) {
-        KualiDecimal obligatedTotal = awardDocument.getAward().getObligatedDistributableTotal();
-        KualiDecimal costLimit = awardDocument.getAward().getTotalCostBudgetLimit(); 
-        BudgetDecimal postedTotalAmount = getPostedTotalAmount(awardDocument);
+    @Override
+    public ScaleTwoDecimal getTotalCostLimit(AwardDocument awardDocument) {
+        ScaleTwoDecimal obligatedTotal = awardDocument.getAward().getObligatedDistributableTotal();
+        ScaleTwoDecimal costLimit = awardDocument.getAward().getTotalCostBudgetLimit();
+        ScaleTwoDecimal postedTotalAmount = getPostedTotalAmount(awardDocument);
         if (costLimit == null || costLimit.isGreaterEqual(obligatedTotal)) {
-            return new BudgetDecimal(obligatedTotal.bigDecimalValue()).subtract(postedTotalAmount);
+            return new ScaleTwoDecimal(obligatedTotal.bigDecimalValue()).subtract(postedTotalAmount);
         } else {
-            return new BudgetDecimal(costLimit.bigDecimalValue()).subtract(postedTotalAmount);
+            return new ScaleTwoDecimal(costLimit.bigDecimalValue()).subtract(postedTotalAmount);
         }
     }
     
@@ -458,10 +419,10 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
      * @param awardDocument
      * @return
      */
-    protected BudgetDecimal getPostedTotalAmount(AwardDocument awardDocument) {
+    protected ScaleTwoDecimal getPostedTotalAmount(AwardDocument awardDocument) {
         List<BudgetDocumentVersion> documentVersions = awardDocument.getBudgetDocumentVersions();
         String postedStatusCode = getAwardPostedStatusCode();
-        BudgetDecimal postedTotalAmount = BudgetDecimal.ZERO;
+        ScaleTwoDecimal postedTotalAmount = ScaleTwoDecimal.ZERO;
         for (BudgetDocumentVersion budgetDocumentVersion : documentVersions) {
             AwardBudgetVersionOverviewExt budget = (AwardBudgetVersionOverviewExt)budgetDocumentVersion.getBudgetVersionOverview();
             if(budget.getAwardBudgetStatusCode().equals(postedStatusCode)){
@@ -503,14 +464,6 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return budgetVersionOverview;
     }
 
-    /**
-     * This method...
-     * @param budgetDocument
-     * @param isProposalBudget
-     * @param budget
-     * @param budgetParent
-     * @throws WorkflowException
-     */
     protected void saveBudgetDocument(BudgetDocument<Award> budgetDocument,boolean rebudget) throws WorkflowException {
         AwardBudgetDocument awardBudgetDocument = (AwardBudgetDocument) budgetDocument;
         AwardBudgetExt budgetExt = awardBudgetDocument.getAwardBudget();
@@ -654,9 +607,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return (List) getBusinessObjectService().findMatching(clazz, fieldValues);
     }
     
-    /**
-     * @see org.kuali.kra.award.budget.AwardBudgetService#findBudgetPeriodsFromLinkedProposal(java.lang.String)
-     */
+    @Override
     @SuppressWarnings("unchecked")
     public List<BudgetPeriod> findBudgetPeriodsFromLinkedProposal(String awardNumber) {
         BusinessObjectService businessObjectService = getBusinessObjectService();
@@ -718,10 +669,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return result;
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.award.budget.AwardBudgetService#getInactiveBudgetStatus()
-     */
+    @Override
     public List<String> getInactiveBudgetStatus() {
         List<String> result = new ArrayList<String>();
         result.add(getRejectedBudgetStatus());
@@ -731,10 +679,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return result;
     }
     
-    /**
-     * 
-     * @see org.kuali.kra.award.budget.AwardBudgetService#populateBudgetLimitSummary(org.kuali.kra.award.budget.BudgetLimitSummaryHelper, org.kuali.kra.award.document.AwardDocument)
-     */
+    @Override
     public void populateBudgetLimitSummary(BudgetLimitSummaryHelper summary, AwardDocument awardDocument) {
         
         AwardBudgetExt currentBudget = getCurrentBudget(awardDocument);
@@ -855,15 +800,9 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         return ((AwardBudgetPeriodExt)budgetPeriod).getRateOverrideFlag();
     }
 
-    /**
-     * This method...
-     * @param budgetPeriod
-     * @param budget
-     * @return
-     */
-    private BudgetDecimal getPeriodFringeTotal(BudgetPeriod budgetPeriod, Budget budget) {
-        if(budget.getBudgetSummaryTotals()==null || budget.getBudgetSummaryTotals().get("personnelFringeTotals")==null) return BudgetDecimal.ZERO;
-        BudgetDecimal periodFringeTotal = budget.getBudgetSummaryTotals().get("personnelFringeTotals").get(budgetPeriod.getBudgetPeriod()-1);
+    private ScaleTwoDecimal getPeriodFringeTotal(BudgetPeriod budgetPeriod, Budget budget) {
+        if(budget.getBudgetSummaryTotals()==null || budget.getBudgetSummaryTotals().get("personnelFringeTotals")==null) return ScaleTwoDecimal.ZERO;
+        ScaleTwoDecimal periodFringeTotal = budget.getBudgetSummaryTotals().get("personnelFringeTotals").get(budgetPeriod.getBudgetPeriod()-1);
         return periodFringeTotal;
     }
 
@@ -886,8 +825,8 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         List<BudgetPeriod> awardBudgetPeriods = budget.getBudgetPeriods();
         for (BudgetPeriod awardBudgetPeriod : awardBudgetPeriods) {
             AwardBudgetPeriodExt budgetPeriod = (AwardBudgetPeriodExt)awardBudgetPeriod;
-            BudgetDecimal periodFringeTotal = getPeriodFringeTotal(budgetPeriod, budget);
-            if(!periodFringeTotal.equals(BudgetDecimal.ZERO) || !budgetPeriod.getTotalFringeAmount().equals(BudgetDecimal.ZERO)){
+            ScaleTwoDecimal periodFringeTotal = getPeriodFringeTotal(budgetPeriod, budget);
+            if(!periodFringeTotal.equals(ScaleTwoDecimal.ZERO) || !budgetPeriod.getTotalFringeAmount().equals(ScaleTwoDecimal.ZERO)){
                 budgetPeriod.setTotalDirectCost(budgetPeriod.getTotalDirectCost().subtract(periodFringeTotal).add(budgetPeriod.getTotalFringeAmount()));
                 budgetPeriod.setTotalCost(budgetPeriod.getTotalDirectCost().add(budgetPeriod.getTotalIndirectCost()));
             }
@@ -900,14 +839,14 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
         List<AwardBudgetPeriodSummaryCalculatedAmount> awardBudgetPeriodFringeAmounts = awardBudgetPeriod.getAwardBudgetPeriodFringeAmounts();
         awardBudgetPeriodFringeAmounts.clear();
         if(awardBudgetPeriodFringeAmounts.isEmpty()){
-            Map<String,List<BudgetDecimal>> objectCodePersonnelFringe = budget.getObjectCodePersonnelFringeTotals();
+            Map<String,List<ScaleTwoDecimal>> objectCodePersonnelFringe = budget.getObjectCodePersonnelFringeTotals();
             if(objectCodePersonnelFringe!=null){
                 Iterator<String> objectCodes = objectCodePersonnelFringe.keySet().iterator();
                 while (objectCodes.hasNext()) {
                     String costElement =  objectCodes.next();
                     String[] costElementAndPersonId = costElement.split(",");
 
-                    List<BudgetDecimal> fringeTotals = objectCodePersonnelFringe.get(costElement);;
+                    List<ScaleTwoDecimal> fringeTotals = objectCodePersonnelFringe.get(costElement);;
                     AwardBudgetPeriodSummaryCalculatedAmount oldAwardBudgetPeriodSummaryCalculatedAmount = 
                             getSummaryCalculatedAmountFromList(awardBudgetPeriodFringeAmounts,costElementAndPersonId[0]);
                     if(oldAwardBudgetPeriodSummaryCalculatedAmount==null){
@@ -936,9 +875,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
     }
 
     /**
-     * This method returns the query list after filtering all eb rates
-     * @param AwardBudgetPeriodSummaryCalculatedAmounts
-     * @return
+     * This method returns the query list after filtering all eb rates.
      */
     private QueryList<AwardBudgetPeriodSummaryCalculatedAmount> filterEBRates(AwardBudgetPeriodExt budgetPeriod) {
         QueryList<AwardBudgetPeriodSummaryCalculatedAmount> qlAwardBudgetPeriodSummaryCalculatedAmounts = 
@@ -949,7 +886,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
     }
     
     private AwardBudgetPeriodSummaryCalculatedAmount createNewAwardBudgetPeriodSummaryCalculatedAmount(AwardBudgetPeriodExt budgetPeriodExt,
-                                            String costElement,String rateClassType,BudgetDecimal calculatedCost) {
+                                            String costElement,String rateClassType,ScaleTwoDecimal calculatedCost) {
         AwardBudgetPeriodSummaryCalculatedAmount awardBudgetPeriodSummaryCalculatedAmount = new AwardBudgetPeriodSummaryCalculatedAmount();
         awardBudgetPeriodSummaryCalculatedAmount.setBudgetPeriodId(budgetPeriodExt.getBudgetPeriodId());
         awardBudgetPeriodSummaryCalculatedAmount.setCalculatedCost(calculatedCost);
@@ -986,10 +923,7 @@ public class AwardBudgetServiceImpl implements AwardBudgetService {
 
     }
 
-    /**
-     * 
-     * @see org.kuali.kra.budget.core.BudgetCommonService#validateAddingNewBudget(org.kuali.kra.budget.document.BudgetParentDocument)
-     */
+    @Override
     public boolean validateAddingNewBudget(BudgetParentDocument<Award> parentDocument) {
         return !checkForOutstandingBudgets(parentDocument);
     }

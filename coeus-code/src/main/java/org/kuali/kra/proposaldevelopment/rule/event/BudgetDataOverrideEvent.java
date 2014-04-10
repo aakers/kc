@@ -16,9 +16,10 @@
 package org.kuali.kra.proposaldevelopment.rule.event;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kuali.coeus.propdev.impl.core.ProposalDevelopmentDocument;
+import org.kuali.coeus.propdev.impl.editable.ProposalDataOverrideEvent;
 import org.kuali.coeus.sys.framework.rule.KcDocumentEventBase;
 import org.kuali.kra.proposaldevelopment.budget.bo.BudgetChangedData;
-import org.kuali.kra.proposaldevelopment.document.ProposalDevelopmentDocument;
 import org.kuali.kra.proposaldevelopment.rule.BudgetDataOverrideRule;
 import org.kuali.rice.krad.rules.rule.BusinessRule;
 
@@ -39,32 +40,23 @@ private static final org.apache.commons.logging.Log LOG = org.apache.commons.log
         logEvent();
     }
     
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEventBase#validate()
-     */
+    @Override
     public void validate() {
         super.validate();
     }
     
-    /**
-     * @see org.kuali.coeus.sys.framework.rule.KcDocumentEventBase#logEvent()
-     */
     @Override
     protected void logEvent() {
         StringBuffer logMessage = new StringBuffer(StringUtils.substringAfterLast(this.getClass().getName(), "."));
         LOG.debug(logMessage);
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#getRuleInterfaceClass()
-     */
+    @Override
     public Class getRuleInterfaceClass() {
         return BudgetDataOverrideRule.class;
     }
 
-    /**
-     * @see org.kuali.rice.krad.rules.rule.event.KualiDocumentEvent#invokeRuleMethod(org.kuali.rice.krad.rules.rule.BusinessRule)
-     */
+    @Override
     public boolean invokeRuleMethod(BusinessRule rule) {
         return ((BudgetDataOverrideRule) rule).processBudgetDataOverrideRules(this);
     }

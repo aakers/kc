@@ -26,7 +26,7 @@ import org.kuali.kra.iacuc.IacucProtocol;
 import org.kuali.kra.iacuc.IacucProtocolAction;
 import org.kuali.kra.iacuc.IacucProtocolForm;
 import org.kuali.kra.infrastructure.Constants;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.protocol.ProtocolFormBase;
 import org.kuali.kra.protocol.questionnaire.SaveProtocolQuestionnaireEvent;
 import org.kuali.kra.questionnaire.answer.*;
@@ -116,9 +116,6 @@ public class IacucProtocolQuestionnaireAction extends IacucProtocolAction {
     }
     
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected ActionForward saveOnClose(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         ActionForward forward = mapping.findForward(Constants.MAPPING_BASIC);

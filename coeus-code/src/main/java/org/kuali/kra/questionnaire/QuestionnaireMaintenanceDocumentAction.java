@@ -21,14 +21,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.coeus.common.framework.module.CoeusSubModule;
+import org.kuali.coeus.common.framework.print.util.PrintingUtils;
 import org.kuali.coeus.common.framework.version.VersioningService;
 import org.kuali.coeus.common.impl.version.VersioningServiceImpl;
 import org.kuali.coeus.sys.framework.service.KcServiceLocator;
 import org.kuali.kra.infrastructure.Constants;
 import org.kuali.kra.infrastructure.KeyConstants;
 import org.kuali.kra.infrastructure.PermissionConstants;
-import org.kuali.kra.printing.util.PrintingUtils;
-import org.kuali.kra.proposaldevelopment.bo.AttachmentDataSource;
+import org.kuali.coeus.common.framework.print.AttachmentDataSource;
 import org.kuali.kra.questionnaire.print.QuestionnairePrintingService;
 import org.kuali.kra.questionnaire.question.Question;
 import org.kuali.rice.kns.document.MaintenanceDocumentBase;
@@ -121,14 +121,12 @@ public class QuestionnaireMaintenanceDocumentAction extends KualiMaintenanceDocu
             }
         }
         catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             GlobalVariables.getMessageMap().putError(fieldName, KeyConstants.ERROR_QUESTIONNAIRE_FILENAME_INVALID);
             retVal = false;
         }
         catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
             GlobalVariables.getMessageMap().putError(fieldName, KeyConstants.ERROR_QUESTIONNAIRE_FILENAME_INVALID);
             retVal = false;
         }

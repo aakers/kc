@@ -15,11 +15,11 @@
  */
 package org.kuali.kra.award.contacts;
 
+import org.kuali.coeus.common.framework.unit.UnitContactType;
+import org.kuali.coeus.common.framework.unit.admin.UnitAdministratorType;
 import org.kuali.kra.award.home.ContactRole;
 import org.kuali.kra.award.home.ContactType;
-import org.kuali.kra.bo.UnitAdministratorType;
-import org.kuali.kra.bo.UnitContactType;
-import org.kuali.kra.proposaldevelopment.bo.ProposalPersonRole;
+import org.kuali.coeus.propdev.impl.person.ProposalPersonRole;
 
 /**
  * This class defines some mock AwardContactRoles
